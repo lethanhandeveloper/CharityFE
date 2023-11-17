@@ -16,6 +16,10 @@ const DonatePage = Loader(lazy(() => import('@pages/donate')));
 const LoginPage = Loader(lazy(() => import('@pages/auth/login')));
 const RegisterPage = Loader(lazy(() => import('@pages/auth/register')));
 
+const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
+
+const ManagementUserSetting = Loader(lazy(() => import('@pages/settings')));
+
 const routers: RouteObject[] = [
   {
     path: '/',
@@ -25,6 +29,8 @@ const routers: RouteObject[] = [
       { path: 'map', element: <MapPage /> },
       { path: 'introduction', element: <IntroductionPage /> },
       { path: 'donate', element: <DonatePage /> },
+      { path: 'profile', element: <ManagementUserProfile /> },
+      { path: 'setting', element: <ManagementUserSetting /> },
     ],
   },
   {

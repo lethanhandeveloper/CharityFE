@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Divider, Grid, Typography, IconButton, InputAdornment } from '@mui/material';
@@ -19,7 +19,6 @@ const LoginPage = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigation = useNavigate();
-  const useToken = localStorage.getItem('token');
 
   const onSubmit = async () => {
     const loginInfo = await serviceAPI.auth.login(user);
@@ -28,17 +27,13 @@ const LoginPage = () => {
         'token',
         JSON.stringify({ token: loginInfo.data.token, id: loginInfo.data._id }),
       );
+      navigation('/home');
     }
   };
 
   const handleOnChange = (e: any) => {
     setUserInfo({ ...user, [e.target.name]: e.target.value });
   };
-
-  useEffect(() => {
-    if (!useToken) navigation('/login');
-    else navigation('/home');
-  }, [useToken]);
 
   return (
     <React.Fragment>
