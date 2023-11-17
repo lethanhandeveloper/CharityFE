@@ -1,0 +1,8 @@
+.dotted-border {
+  stroke-dasharray: 4 !important; /* Adjust the length of the dashes as needed */
+  stroke-dashoffset: 0 !important;
+  fill: none;
+  stroke: red !important; /* Adjust the color as needed */
+  stroke-width: 2 !important;
+  background-color: black !important;
+}

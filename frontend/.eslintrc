@@ -1,0 +1,37 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "error",
+      "no-unused-vars": "off", // Remember, this means error!
+      "no-console": "warn",
+      "no-empty": "error",
+      "no-irregular-whitespace": "error",
+      "no-invalid-this": "error",
+      "no-return-assign": "error",
+      "no-unused-expressions": ["error", { "allowTernary": true }],
+      "no-useless-concat": "error",
+      "no-useless-return": "error",
+      "no-use-before-define": "error",
+      "no-undef": "off",
+      "no-mixed-operators": "error",
+      "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+      "no-tabs": "error",
+      "no-unneeded-ternary": "error",
+      "no-whitespace-before-property": "error",
+      "nonblock-statement-body-position": "error",
+      "no-confusing-arrow": "error",
+      "no-duplicate-imports": "error",
+      "no-var": "error",
+      "no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/ban-ts-comment": "off"
+    }
+  }
+  
