@@ -39,6 +39,7 @@ const LoginPage = () => {
     if (!useToken) navigation('/login');
     else navigation('/home');
   }, [useToken]);
+
   return (
     <React.Fragment>
       <Grid container>
