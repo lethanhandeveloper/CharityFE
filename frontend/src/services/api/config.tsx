@@ -1,8 +1,10 @@
 import axios from 'axios';
 const token = localStorage.getItem('token');
+console.log('token', token);
 const apiService = axios.create({
   baseURL: process.env.REACT_APP_DOMAIN,
 });
+
 apiService.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 apiService.defaults.timeout = 2500;
 apiService.defaults.headers['Access-Control-Allow-Origin'] = '*';

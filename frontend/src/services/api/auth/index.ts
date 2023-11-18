@@ -8,7 +8,11 @@ const login = async (user: UserAPI) => {
 const register = async () => {
   return await apiService.post(apiEndPoint.register, {});
 };
+const getProfile = async () => {
+  return await apiService.get(apiEndPoint.getProfile, {});
+};
 export default {
   login,
   register,
+  getProfile,
 };

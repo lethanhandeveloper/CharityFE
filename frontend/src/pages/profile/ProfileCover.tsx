@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import PropTypes from 'prop-types';
 import { Box, Typography, Card, Avatar, CardMedia, Button, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
 import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
+import { UserUI } from '@services/models/user';
+import Upload from '@services/firebase';
 
 const Input = styled('input')({
   display: 'none',
@@ -68,7 +70,7 @@ const CardCoverAction = styled(Box)(
 `,
 );
 interface ProfileCoverProps {
-  user: any;
+  user: UserUI;
 }
 const ProfileCover = (props: ProfileCoverProps) => {
   const { user } = props;
@@ -84,7 +86,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
             component='h3'
             gutterBottom
           >
-            Profile for {user.name}
+            Profile for {user.fullname}
           </Typography>
           <Typography variant='subtitle2'>
             This is a profile page. Easy to modify, always blazing fast
@@ -92,16 +94,17 @@ const ProfileCover = (props: ProfileCoverProps) => {
         </Box>
       </Box>
       <CardCover>
-        <CardMedia image={user.coverImg} />
+        <CardMedia image={''} />
         <CardCoverAction></CardCoverAction>
       </CardCover>
       <AvatarWrapper>
         <Avatar
           variant='rounded'
-          alt={user.name}
-          src={user.avatar}
+          alt={user.fullname}
+          // src={user.avatar}
         />
-        <ButtonUploadWrapper>
+        <Upload />
+        {/* <ButtonUploadWrapper>
           <Input
             accept='image/*'
             id='icon-button-file'
@@ -116,7 +119,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
               <UploadTwoToneIcon />
             </IconButton>
           </label>
-        </ButtonUploadWrapper>
+        </ButtonUploadWrapper> */}
       </AvatarWrapper>
       <Box
         py={2}
@@ -127,15 +130,15 @@ const ProfileCover = (props: ProfileCoverProps) => {
           gutterBottom
           variant='h4'
         >
-          {user.name}
+          {user.fullname}
         </Typography>
-        <Typography variant='subtitle2'>{user.description}</Typography>
+        <Typography variant='subtitle2'>{'gender'}</Typography>
         <Typography
           sx={{ py: 2 }}
           variant='subtitle2'
           color='text.primary'
         >
-          {user.jobtitle} | {user.location} | {user.followers} followers
+          {/* {user.jobtitle} | {user.location} | {user.followers} followers */}
         </Typography>
         <Box
           display={{ xs: 'block', md: 'flex' }}
@@ -163,14 +166,6 @@ const ProfileCover = (props: ProfileCoverProps) => {
               <MoreHorizTwoToneIcon />
             </IconButton>
           </Box>
-          <Button
-            sx={{ mt: { xs: 2, md: 0 } }}
-            size='small'
-            variant='text'
-            endIcon={<ArrowForwardTwoToneIcon />}
-          >
-            See all {user.followers} connections
-          </Button>
         </Box>
       </Box>
     </>

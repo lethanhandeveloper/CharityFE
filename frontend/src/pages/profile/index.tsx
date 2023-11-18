@@ -1,34 +1,25 @@
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import {
-  Grid,
-  Container,
-  Card,
-  Box,
-  Typography,
-  Button,
-  CardContent,
-  Divider,
-} from '@mui/material';
+import { Grid, Container, Card, Box, Typography, CardContent, Divider } from '@mui/material';
 
 import ProfileCover from './ProfileCover';
 import RecentActivity from './RecentActivity';
 import PopularTags from './PopularTags';
 import Text from '@common/Text';
-import { EditTwoTone } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import serviceAPI from '@services/api';
+import { UserUI } from '@services/models/user';
+import { mapUserUI } from '@services/mapdata/user';
+import EditInfoDialog from './EditInfo';
 const ManagementUserProfile = () => {
-  const user = {
-    savedCards: 7,
-    name: 'Catherine Pike',
-    coverImg: '/static/images/placeholders/covers/5.jpg',
-    avatar: '/static/images/avatars/4.jpg',
-    description:
-      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage",
-    jobtitle: 'Web Developer',
-    location: 'Barcelona, Spain',
-    followers: '465',
-  };
-
+  const [user, setUserData] = useState<UserUI>();
+  useEffect(() => {
+    const initData = async () => {
+      const response = await serviceAPI.auth.getProfile();
+      setUserData(mapUserUI(response.data.result));
+    };
+    initData();
+  }, []);
   return (
     <>
       <HelmetProvider>
@@ -51,7 +42,7 @@ const ManagementUserProfile = () => {
               xs={12}
               md={8}
             >
-              <ProfileCover user={user} />
+              {user && <ProfileCover user={user} />}
             </Grid>
             <Grid
               item
@@ -82,12 +73,7 @@ const ManagementUserProfile = () => {
                       Manage informations related to your personal details
                     </Typography>
                   </Box>
-                  <Button
-                    variant='text'
-                    startIcon={<EditTwoTone />}
-                  >
-                    Edit
-                  </Button>
+                  <EditInfoDialog />
                 </Box>
                 <Divider />
                 <CardContent sx={{ p: 4 }}>

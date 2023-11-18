@@ -8,8 +8,7 @@ const MainLayout = () => {
   return (
     <React.Fragment>
       <Header />
-      <div style={{ marginTop: '100px' }}> {children}</div>
-
+      <div style={{ marginTop: '80px' }}> {children}</div>
       <Footer />
     </React.Fragment>
   );

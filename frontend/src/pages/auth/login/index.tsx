@@ -19,19 +19,23 @@ const LoginPage = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigation = useNavigate();
-
+  const [messageError, setMessageError] = useState<string>('');
   const onSubmit = async () => {
-    const loginInfo = await serviceAPI.auth.login(user);
-    if (loginInfo.status === 200) {
-      localStorage.setItem(
-        'token',
-        JSON.stringify({ token: loginInfo.data.token, id: loginInfo.data._id }),
-      );
-      navigation('/home');
+    try {
+      const loginInfo = await serviceAPI.auth.login(user);
+      if (loginInfo.status === 200) {
+        localStorage.setItem('token', loginInfo.data.result.token);
+        navigation('/home');
+      } else {
+        setMessageError('test');
+      }
+    } catch (error) {
+      setMessageError('Thông tin không chính xác!');
     }
   };
 
   const handleOnChange = (e: any) => {
+    setMessageError('');
     setUserInfo({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -120,7 +124,7 @@ const LoginPage = () => {
                 Đăng nhập
               </ButtonStyle2>
             </BoxColum>
-
+            <Typography>{messageError}</Typography>
             <Typography
               style={{ color: '8d8d8d', fontSize: '12px' }}
               textAlign={'center'}

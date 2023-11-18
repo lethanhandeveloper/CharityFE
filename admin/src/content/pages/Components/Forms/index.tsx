@@ -358,13 +358,13 @@ function Forms() {
                     <TextField
                       id="standard-select-currency-native"
                       select
-                      label="Native select"
+                      label="Giới tính"
+                      fullWidth
                       value={currency}
                       onChange={handleChange}
                       SelectProps={{
                         native: true
                       }}
-                      helperText="Please select your currency"
                       variant="standard"
                     >
                       {currencies.map((option) => (
