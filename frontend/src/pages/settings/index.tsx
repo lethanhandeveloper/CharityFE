@@ -1,5 +1,5 @@
-import { useState, ChangeEvent } from 'react';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import React, { useState, ChangeEvent } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 import { Container, Tabs, Tab, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -32,7 +32,7 @@ function ManagementUserSettings() {
   };
 
   return (
-    <HelmetProvider>
+    <React.Fragment>
       <Helmet>
         <title>User Settings - Applications</title>
       </Helmet>
@@ -77,7 +77,7 @@ function ManagementUserSettings() {
           </Grid>
         </Grid>
       </Container>
-    </HelmetProvider>
+    </React.Fragment>
   );
 }
 

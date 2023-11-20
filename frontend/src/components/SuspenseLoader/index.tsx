@@ -12,6 +12,11 @@ const SuspenseLoader = () => {
       }}
     >
       <CircularProgress
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          right: '50%',
+        }}
         size={64}
         disableShrink
         thickness={3}

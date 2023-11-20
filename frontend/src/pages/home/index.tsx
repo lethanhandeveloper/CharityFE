@@ -33,6 +33,13 @@ const HomePage = () => {
       <AccountSection CardAccount={data.CardAccount} />
 
       <ShareSection ShareCard={data.CardShare} />
+
+      <div id='fb-root'></div>
+
+      <div
+        id='fb-customer-chat'
+        className='fb-customerchat'
+      ></div>
     </React.Fragment>
   );
 };

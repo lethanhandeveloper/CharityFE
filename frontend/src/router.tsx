@@ -15,9 +15,9 @@ const IntroductionPage = Loader(lazy(() => import('@pages/introduction')));
 const DonatePage = Loader(lazy(() => import('@pages/donate')));
 const LoginPage = Loader(lazy(() => import('@pages/auth/login')));
 const RegisterPage = Loader(lazy(() => import('@pages/auth/register')));
-
+const ErrorRouter = Loader(lazy(() => import('@pages/error/ErrorRouter')));
 const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
-
+const CampainPage = Loader(lazy(() => import('@pages/campaign')));
 const ManagementUserSetting = Loader(lazy(() => import('@pages/settings')));
 
 const routers: RouteObject[] = [
@@ -31,6 +31,7 @@ const routers: RouteObject[] = [
       { path: 'donate', element: <DonatePage /> },
       { path: 'profile', element: <ManagementUserProfile /> },
       { path: 'setting', element: <ManagementUserSetting /> },
+      { path: 'campaign', element: <CampainPage /> },
     ],
   },
   {
@@ -40,6 +41,10 @@ const routers: RouteObject[] = [
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '*',
+    element: <ErrorRouter />,
   },
 ];
 export default routers;
