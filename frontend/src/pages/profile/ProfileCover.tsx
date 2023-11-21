@@ -145,7 +145,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
           alignItems='center'
           justifyContent='space-between'
         >
-          <Box>
+          {/* <Box>
             <Button
               size='small'
               variant='contained'
@@ -165,7 +165,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
             >
               <MoreHorizTwoToneIcon />
             </IconButton>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </>

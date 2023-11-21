@@ -3,6 +3,37 @@ import React, { useState } from 'react';
 import { storage } from './config';
 import { Box, IconButton, styled } from '@mui/material';
 import { UploadTwoTone } from '@mui/icons-material';
+import CircularProgress, { CircularProgressProps } from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+
+function CircularProgressWithLabel(props: CircularProgressProps & { value: number }) {
+  return (
+    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+      <CircularProgress
+        variant='determinate'
+        {...props}
+      />
+      <Box
+        sx={{
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography
+          variant='caption'
+          component='div'
+          color='text.secondary'
+        >{`${Math.round(props.value)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
 
 const Input = styled('input')({
   display: 'none',
@@ -30,47 +61,54 @@ const ButtonUploadWrapper = styled(Box)(
     }
 `,
 );
+type typeUpload = 'image/*' | 'application/pdf';
+type folderUpload = 'file' | 'avatar';
 interface UploadProps {
   setUrl?: (url: string) => void;
+  type?: typeUpload;
+  folder?: folderUpload;
+  className?: string;
 }
 const Upload = (props: UploadProps) => {
-  const { setUrl } = props;
+  const { setUrl, type, folder, className } = props;
+
   const [progress, setProgress] = useState<number>(0);
+  const [showProgress, setShowProgress] = useState<boolean>(false);
   const handleSubmit = (e: any) => {
     const file = e.target.files[0];
-    console.log(file, 'file');
     if (!file) return;
-    const storageRef = ref(storage, `avatar/${file.name}`);
+    setShowProgress(true);
+    const storageRef = ref(storage, `${folder}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
       'state_changed',
       (snapshot) => {
         const process = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setProgress(process);
-        console.log(progress);
       },
       (error) => {
         alert(error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log(downloadURL, 'link dơnload');
           if (setUrl) setUrl(downloadURL);
+          setShowProgress(false);
         });
       },
     );
   };
   return (
     <React.Fragment>
+      {showProgress && <CircularProgressWithLabel value={progress} />}
       <ButtonUploadWrapper>
         <Input
-          accept='image/*'
-          id='icon-button-file'
-          name='icon-button-file'
+          accept={type}
+          id={className}
+          name={className}
           type='file'
           onChange={handleSubmit}
         />
-        <label htmlFor='icon-button-file'>
+        <label htmlFor={className}>
           <IconButton
             component='span'
             color='primary'

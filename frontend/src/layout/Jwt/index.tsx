@@ -13,8 +13,8 @@ const JWTProvider = (props: JWTProviderProps) => {
       setLoading(true);
       const token = localStorage.getItem('token');
       config.headers['Authorization'] = `Bearer ${token}`;
-      config.headers['Accept'] = 'application/json';
-      config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      config.headers['Accept'] = '*/*';
+      config.headers['Content-Type'] = 'application/json';
       config.headers['Access-Control-Allow-Origin'] = '*';
 
       return config;
@@ -29,6 +29,7 @@ const JWTProvider = (props: JWTProviderProps) => {
     },
     (error) => {
       if (error.response.status === 401) {
+        localStorage.removeItem('token');
         navigate('/login');
       }
       return Promise.reject(error);
@@ -36,7 +37,7 @@ const JWTProvider = (props: JWTProviderProps) => {
   );
   return (
     <>
-      {isLoading && <p>zxcxzcz</p>}
+      {isLoading && <></>}
       {props.children}
     </>
   );

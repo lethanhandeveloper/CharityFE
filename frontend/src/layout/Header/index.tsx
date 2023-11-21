@@ -4,6 +4,7 @@ import HeaderUserbox from './User';
 import HeaderMenu from './Menu';
 import HeaderSearch from './SearchBox';
 import HeaderNotifications from './Notifications';
+import { Link } from 'react-router-dom';
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -23,7 +24,7 @@ const HeaderWrapper = styled(Box)(
 
 function Header() {
   const theme = useTheme();
-
+  const token = localStorage.getItem('token');
   return (
     <HeaderWrapper
       display='flex'
@@ -67,15 +68,32 @@ function Header() {
       >
         <Box sx={{ mr: 1 }}>
           <HeaderSearch />
-          <Box
-            sx={{ mx: 0.5 }}
-            component='span'
-          >
-            <HeaderNotifications />
-          </Box>
+          {!!token && (
+            <Box
+              sx={{ mx: 0.5 }}
+              component='span'
+            >
+              <HeaderNotifications />
+            </Box>
+          )}
         </Box>
+        {!token ? (
+          <Link
+            to={'/login'}
+            style={{
+              textDecoration: 'none',
+              color: 'white',
+              backgroundImage: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+              padding: 10,
+              borderRadius: 30,
+            }}
+          >
+            Đăng nhập
+          </Link>
+        ) : (
+          <HeaderUserbox />
+        )}
 
-        <HeaderUserbox />
         <Box
           component='span'
           sx={{

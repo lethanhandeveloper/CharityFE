@@ -10,23 +10,34 @@ import { TextFieldStyle1 } from '@common/TextField';
 import style from '../auth.module.scss';
 import serviceAPI from '@services/api';
 import { SimpleValueKey } from '@services/models/meta';
+import { useNavigate } from 'react-router';
 
 export type RegisterValue = {
   email: string;
   password: string;
-  fullname: string;
+  name: string;
+  phoneNumber: string;
+  gender: string;
+  age: number;
   provinceId: string;
   districtId: string;
   communeId: string;
+  image_url: string;
+  specificAddress: string;
 };
 const RegisterPage = () => {
   const [data, setData] = useState<RegisterValue>({
     email: '',
     password: '',
-    fullname: '',
+    name: '',
     districtId: '',
     provinceId: '',
     communeId: '',
+    gender: 'male',
+    age: 20,
+    phoneNumber: '',
+    specificAddress: '',
+    image_url: 'https://i.pinimg.com/originals/6e/a6/f8/6ea6f87bd1266879a59c6d133d861616.png',
   });
   const [districtList, setDistrictList] = useState<SimpleValueKey[]>([]);
   const [communeList, setCommuneList] = useState<SimpleValueKey[]>([]);
@@ -34,13 +45,18 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
-
+  const navigative = useNavigate();
   const handleSubmit = async () => {
-    const response = await serviceAPI.auth.register(data);
-    if (response.status === 200) {
-      console.log('');
-    } else {
-      console.log('');
+    try {
+      const response = await serviceAPI.auth.register(data);
+      if (response.status === 200) {
+        //alert successs
+        navigative('/login');
+      } else {
+        console.log('');
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -118,14 +134,14 @@ const RegisterPage = () => {
               <TextFieldStyle1
                 required
                 size='small'
-                name='fullname'
+                name='name'
                 onChange={handleOnChange}
               />
               <Typography className={style['mt-20']}>Số điện thoại</Typography>
               <TextFieldStyle1
                 required
                 size='small'
-                name='phonenumber'
+                name='phoneNumber'
                 onChange={handleOnChange}
               />
               <Grid
@@ -141,6 +157,8 @@ const RegisterPage = () => {
                     label='Giới tính'
                     select
                     fullWidth
+                    name='gender'
+                    onChange={handleOnChange}
                     variant='standard'
                   >
                     {[
@@ -164,6 +182,8 @@ const RegisterPage = () => {
                     id='standard-select-currency'
                     label='Tuổi'
                     select
+                    name='age'
+                    onChange={handleOnChange}
                     fullWidth
                     variant='standard'
                   >

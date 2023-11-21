@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { NavLink } from 'react-router-dom';
 
@@ -22,6 +22,9 @@ import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
+import serviceAPI from '@services/api';
+import { mapUserUI } from '@services/mapdata/user';
+import { UserUI } from '@services/models/user';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -59,12 +62,8 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const user = {
-    name: 'Văn Hiểu',
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: 'Cá nhân',
-  };
-
+  const token = localStorage.getItem('token');
+  const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
@@ -75,6 +74,14 @@ function HeaderUserbox() {
   const handleClose = (): void => {
     setOpen(false);
   };
+  useEffect(() => {
+    if (!token) return;
+    const initData = async () => {
+      const data = await serviceAPI.auth.getProfile();
+      setUser(mapUserUI(data.data.result));
+    };
+    initData();
+  }, [token]);
 
   return (
     <>
@@ -85,13 +92,13 @@ function HeaderUserbox() {
       >
         <Avatar
           variant='rounded'
-          alt={user.name}
-          src={user.avatar}
+          alt={user?.fullname}
+          src={user?.imageUrl}
         />
         <Hidden mdDown>
           <UserBoxText>
-            <UserBoxLabel variant='body1'>{user.name}</UserBoxLabel>
-            <UserBoxDescription variant='body2'>{user.jobtitle}</UserBoxDescription>
+            <UserBoxLabel variant='body1'>{user?.fullname}</UserBoxLabel>
+            <UserBoxDescription variant='body2'>{user?.age}</UserBoxDescription>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
@@ -117,12 +124,12 @@ function HeaderUserbox() {
         >
           <Avatar
             variant='rounded'
-            alt={user.name}
-            src={user.avatar}
+            alt={user?.fullname}
+            src={user?.imageUrl}
           />
           <UserBoxText>
-            <UserBoxLabel variant='body1'>{user.name}</UserBoxLabel>
-            <UserBoxDescription variant='body2'>{user.jobtitle}</UserBoxDescription>
+            <UserBoxLabel variant='body1'>{user?.fullname}</UserBoxLabel>
+            <UserBoxDescription variant='body2'>{user?.age}</UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />

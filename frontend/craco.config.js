@@ -13,6 +13,7 @@ module.exports = {
       '@layout': path.resolve(__dirname, 'src/layout'),
       '@services': path.resolve(__dirname, 'src/services'),
       '@constants': path.resolve(__dirname, 'src/constants'),
+      '@store': path.resolve(__dirname, 'src/store'),
     },
   },
   jest: {

@@ -8,6 +8,7 @@ export interface Campain {
   endDate: Date;
   description: string;
   thumbnail: string;
+  fileUrl: string;
 }
 export interface CampainUI {
   creatorId: string;

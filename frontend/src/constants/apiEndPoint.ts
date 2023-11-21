@@ -4,6 +4,8 @@ const apiEndPoint = {
     login: '/user/login/',
     register: '/user/register/',
     getProfile: '/user',
+    updateProfile: '/user',
+    updateAvatar: '/user/avatar',
   },
 
   location: {

@@ -8,7 +8,6 @@ const Loader = (Component: any) => (props: any) => (
   </Suspense>
 );
 const MainLayout = Loader(lazy(() => import('@layout/index')));
-
 const HomePage = Loader(lazy(() => import('@pages/home')));
 const MapPage = Loader(lazy(() => import('@pages/map')));
 const IntroductionPage = Loader(lazy(() => import('@pages/introduction')));
@@ -42,6 +41,7 @@ const routers: RouteObject[] = [
     path: '/register',
     element: <RegisterPage />,
   },
+
   {
     path: '*',
     element: <ErrorRouter />,

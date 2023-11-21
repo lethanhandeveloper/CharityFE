@@ -78,7 +78,7 @@ const ManagementUserProfile = () => {
                     Manage informations related to your personal details
                   </Typography>
                 </Box>
-                <EditInfoDialog />
+                {user && <EditInfoDialog data={user} />}
               </Box>
               <Divider />
               <CardContent sx={{ p: 4 }}>
