@@ -11,12 +11,13 @@ const MainLayout = Loader(lazy(() => import('@layout/index')));
 const HomePage = Loader(lazy(() => import('@pages/home')));
 const MapPage = Loader(lazy(() => import('@pages/map')));
 const IntroductionPage = Loader(lazy(() => import('@pages/introduction')));
-const DonatePage = Loader(lazy(() => import('@pages/donate')));
+const DonatePage = Loader(lazy(() => import('@pages/campaign/donate')));
 const LoginPage = Loader(lazy(() => import('@pages/auth/login')));
 const RegisterPage = Loader(lazy(() => import('@pages/auth/register')));
 const ErrorRouter = Loader(lazy(() => import('@pages/error/ErrorRouter')));
 const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
-const CampainPage = Loader(lazy(() => import('@pages/campaign')));
+const CampainFormPage = Loader(lazy(() => import('@pages/campaign/create')));
+const CampainPage = Loader(lazy(() => import('@pages/campaign/')));
 const ManagementUserSetting = Loader(lazy(() => import('@pages/settings')));
 
 const routers: RouteObject[] = [
@@ -27,10 +28,12 @@ const routers: RouteObject[] = [
       { path: 'home', element: <HomePage /> },
       { path: 'map', element: <MapPage /> },
       { path: 'introduction', element: <IntroductionPage /> },
-      { path: 'donate', element: <DonatePage /> },
+
       { path: 'profile', element: <ManagementUserProfile /> },
       { path: 'setting', element: <ManagementUserSetting /> },
+      { path: 'campaign/create', element: <CampainFormPage /> },
       { path: 'campaign', element: <CampainPage /> },
+      { path: 'campaign/donate/:id', element: <DonatePage /> },
     ],
   },
   {

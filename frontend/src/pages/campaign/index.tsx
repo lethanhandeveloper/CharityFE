@@ -1,290 +1,340 @@
+import { ButtonStyle1 } from '@common/Button';
+import ProgressCustom from '@common/Progess';
+
+import TypographyTitle from '@common/Typography';
+import { SearchTwoTone } from '@mui/icons-material';
 import {
   Box,
-  CardMedia,
-  Typography,
   Card,
-  Divider,
-  Grid,
   CardContent,
-  TextField,
+  CardMedia,
+  Grid,
+  InputAdornment,
   MenuItem,
-  CardActions,
+  TextField,
+  Typography,
 } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
-import { DateCalendar } from '@mui/x-date-pickers';
-import { SimpleValueKey } from '@services/models/meta';
 import serviceAPI from '@services/api';
-import Upload from '@services/firebase';
-import { Campain } from '@services/models/campain';
-import { ButtonStyle1 } from '@common/Button';
-import { setInfoAlert } from '@store/redux/alert';
-import { useAppDispatch, useAppSelector } from '@store/hook';
+import { mapCampainUIs } from '@services/mapdata/campain';
+import { CampainUI } from '@services/models/campain';
+import { SimpleValueKey } from '@services/models/meta';
 
-function CampainPage() {
+import React, { useEffect, useState } from 'react';
+export interface SearchStructure {
+  page: number;
+  no_item_per_page: number;
+  categoryId: string;
+  provinceId: string;
+  search_text: string;
+}
+const CampainPage = () => {
+  const [campainList, setCampainList] = useState<CampainUI[]>([]);
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
-  const [itemTypeList, setItemTypeList] = useState<SimpleValueKey[]>([]);
-
-  const [url, setUrl] = useState<string>();
-  const dispatch = useAppDispatch();
-  const alert = useAppSelector((state) => state.alert);
-  const [fileUrl, setFileUrl] = useState<string>();
-  const [data, setData] = useState<Campain>({
+  const [searchConfig, setSearchConfig] = useState<SearchStructure>({
+    page: 1,
+    no_item_per_page: 9,
     categoryId: '',
-    creatorId: '',
-    description: '',
-    endDate: new Date(),
-    itemTypeId: '',
     provinceId: '',
-    targetValue: 0,
-    thumbnail: '',
-    title: '',
-    fileUrl: '',
+    search_text: '',
   });
-
+  const calculatePercent = (current: number, target: number): number => {
+    return Number(((current / target) * 100).toFixed(2));
+  };
+  const initData = async () => {
+    const response = await serviceAPI.campain.getCampainPendingByPage(searchConfig);
+    const dataMapUI = mapCampainUIs(response.data.result);
+    setCampainList([...campainList, ...dataMapUI]);
+  };
+  useEffect(() => {
+    initData();
+  }, []);
   useEffect(() => {
     const initProvince = async () => {
-      const [provinceAPI, categoryAPI, itemAPI] = await Promise.all([
+      const [provinceAPI, categoryAPI] = await Promise.all([
         serviceAPI.location.getAllProvince(),
         serviceAPI.campain.getCategory(),
-        serviceAPI.campain.getItemType(),
       ]);
       setProvinceList(
         provinceAPI.data.result.map((item: any) => ({ id: item._id, value: item.name })),
       );
-
       setCategoryList(
         categoryAPI.data.result.map((item: any) => ({ id: item._id, value: item.name })),
       );
-
-      setItemTypeList(itemAPI.data.result.map((item: any) => ({ id: item._id, value: item.name })));
     };
     initProvince();
   }, []);
-
-  useEffect(() => {
-    if (!url) return;
-    setData({ ...data, thumbnail: url });
-  }, [url]);
-
-  useEffect(() => {
-    if (!fileUrl) return;
-    setData({ ...data, fileUrl: fileUrl });
-  }, [fileUrl]);
-
-  useEffect(() => {
-    console.log(alert);
-  }, [alert]);
-
-  const handleSubmit = () => {
-    // const response = await serviceAPI.campain.createCampain(data);
-    // if (response.status === 200) {
-    //   console.log(response.data.message);
-    // }
-    dispatch(setInfoAlert({ open: true, title: 'test test test test ', type: 'success' }));
+  const handleGetMoreItem = () => {
+    setSearchConfig({ ...searchConfig, page: searchConfig.page + 1 });
+    initData();
   };
+  const handleChange = (e: any) => {
+    setSearchConfig({ ...searchConfig, [e.target.name]: e.target.value });
+  };
+  const calculateDayCountDown = (endDate: Date): number => {
+    return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
+  };
+  const renderCard = (data: CampainUI) => (
+    <Card
+      variant='outlined'
+      sx={{
+        margin: '10px 10px 20px',
+        boxShadow: '0 8px 24px hsla(210,8%,62%,.2)',
+        borderRadius: '10px',
+      }}
+    >
+      <CardMedia
+        sx={{ height: 200 }}
+        image={data.thumbnail}
+      />
+      <CardContent>
+        <Typography
+          sx={{
+            background: '#f4f4f4',
+            padding: '3px 15px',
+            position: 'absolute',
+            borderRadius: '12px',
+            top: '10px',
+            margin: '5px 0 0 5px',
+          }}
+          fontSize={'13px'}
+        >
+          Còn {calculateDayCountDown(data.endDate)} ngày
+        </Typography>
 
+        <Typography
+          sx={{
+            fontSize: '20px',
+            lineHeight: '22px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            WebkitLineClamp: 2,
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            textAlign: 'start',
+            fontWeight: 'bold',
+          }}
+        >
+          {data.title}
+        </Typography>
+
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>
+          <Typography
+            fontSize={16}
+            variant='body2'
+            color='text.secondary'
+          >
+            Tạo bởi
+          </Typography>
+          <Typography
+            fontSize={14}
+            color='#f54a00'
+            fontWeight='bold'
+          >
+            {data.creatorId}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            marginTop: '30px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Typography
+              fontSize={16}
+              color='#f54a00'
+              fontWeight='bold'
+            >
+              {data.targetValue?.toLocaleString()} VNĐ
+            </Typography>
+            <Typography
+              variant='body2'
+              fontSize={16}
+              color='text.secondary'
+            >
+              đã đạt được
+            </Typography>
+          </Box>
+
+          <Typography fontSize={16}>{calculatePercent(data.targetValue, 10000000000)}%</Typography>
+        </Box>
+        <ProgressCustom
+          variant='determinate'
+          value={calculatePercent(data.targetValue, 10000000000)}
+          sx={{ height: '10px', borderRadius: '10px', marginTop: '10px' }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            marginTop: '10px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            fontSize={16}
+          >
+            của mục tiêu {data.targetValue.toLocaleString()} VNĐ
+          </Typography>
+
+          <Typography fontSize={16}>953 người ủng hộ</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
   return (
     <React.Fragment>
-      <Card>
-        <CardMedia
-          sx={{ minHeight: 280 }}
-          image='/static/images/placeholders/covers/6.jpg'
-          title='Card Cover'
-        />
-      </Card>
-      <Grid
-        container
-        spacing={3}
-      >
+      <Grid container>
         <Grid
           item
           xs={12}
+          sx={{
+            textAlign: 'center',
+          }}
         >
-          <Card>
-            <Box
-              p={3}
-              display='flex'
-              alignItems='center'
-              justifyContent='space-between'
+          <TypographyTitle>Chiến dịch nổi bật</TypographyTitle>
+          <Grid
+            container
+            justifyContent={'center'}
+            spacing={3}
+            padding={'30px'}
+          >
+            <Grid
+              item
+              xs={2}
             >
-              <Box>
-                <Typography
-                  variant='h4'
-                  gutterBottom
-                >
-                  Thông tin chi tiết
-                </Typography>
-                <Typography variant='subtitle2'>
-                  Manage informations related to your personal details
-                </Typography>
-              </Box>
-            </Box>
-            <Divider />
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant='subtitle2'>
-                <Grid container>
-                  <Grid
-                    item
-                    xs={12}
+              <TextField
+                id='standard-select-currency'
+                label='Tỉnh/TP'
+                select
+                fullWidth
+                name='provinceId'
+                onChange={handleChange}
+                variant='standard'
+              >
+                {provinceList.map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    value={option.id}
                   >
-                    <Typography>Tiêu điều</Typography>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      id='name'
-                      fullWidth
-                      name='title'
-                      variant='standard'
-                    />
-                    <Typography>Mục tiêu</Typography>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      id='name'
-                      type='number'
-                      fullWidth
-                      name='target'
-                      variant='standard'
-                    />
-                    <Typography>Ngày kết thúc</Typography>
-                    <DateCalendar
-                      disablePast
-                      defaultValue={new Date()}
-                    />
-                    <Typography>Loại</Typography>
-                    <Grid
-                      container
-                      spacing={3}
-                    >
-                      <Grid
-                        item
-                        xs={4}
-                      >
-                        <TextField
-                          id='standard-select-currency'
-                          label='Tỉnh/TP'
-                          select
-                          fullWidth
-                          variant='standard'
-                        >
-                          {provinceList.map((option) => (
-                            <MenuItem
-                              key={option.id}
-                              value={option.id}
-                            >
-                              {option.value}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={4}
-                      >
-                        <TextField
-                          id='standard-select-currency'
-                          label='Danh mục'
-                          select
-                          fullWidth
-                          variant='standard'
-                        >
-                          {categoryList.map((option) => (
-                            <MenuItem
-                              key={option.id}
-                              value={option.id}
-                            >
-                              {option.value}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={4}
-                      >
-                        <TextField
-                          id='standard-select-currency'
-                          label='Loại'
-                          select
-                          fullWidth
-                          variant='standard'
-                        >
-                          {itemTypeList.map((option) => (
-                            <MenuItem
-                              key={option.id}
-                              value={option.id}
-                            >
-                              {option.value}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </Grid>
-                    </Grid>
-                    <Typography>Ảnh banner</Typography>
-                    <Box
-                      sx={{
-                        position: 'relative',
-                      }}
-                    >
-                      <CardMedia
-                        sx={{ minHeight: 280 }}
-                        image={url}
-                        title='Card Cover'
-                      />
-                      <Upload
-                        className='image'
-                        setUrl={setUrl}
-                        type='image/*'
-                        folder='avatar'
-                      />
-                    </Box>
-                    <Typography>File xác thực của địa phương</Typography>
-                    <Box
-                      sx={{
-                        position: 'relative',
-                      }}
-                    >
-                      <object
-                        data={fileUrl}
-                        style={{
-                          width: '100%',
-                          height: '30vh',
-                        }}
-                        type='application/pdf'
-                      />
-                      <Upload
-                        className='pdf'
-                        setUrl={setFileUrl}
-                        type='application/pdf'
-                        folder='file'
-                      />
-                    </Box>
-                    <Typography>Mô tả chi tiết</Typography>
-                    <Editor
-                      apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
-                      init={{
-                        plugins:
-                          'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                        toolbar:
-                          'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                      }}
-                      initialValue='Welcome to TinyMCE!'
-                    />
-                  </Grid>
-                </Grid>
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <ButtonStyle1 onClick={handleSubmit}>Xác thực</ButtonStyle1>
-            </CardActions>
-          </Card>
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+            >
+              <TextField
+                id='standard-select-currency'
+                label='Danh mục'
+                select
+                name='categoryId'
+                onChange={handleChange}
+                fullWidth
+                variant='standard'
+              >
+                {categoryList.map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    value={option.id}
+                  >
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+            >
+              <TextField
+                id='standard-select-currency'
+                label='Trạng thái'
+                select
+                name='status'
+                onChange={handleChange}
+                fullWidth
+                variant='standard'
+              >
+                {[
+                  { id: 'FINISH', value: 'Kết thúc' },
+                  { id: 'PENDING', value: 'Đang thực hiện' },
+                  { id: 'TARGET', value: 'Đã đủ chỉ tiêu' },
+                ].map((option) => (
+                  <MenuItem
+                    key={option.id}
+                    value={option.id}
+                  >
+                    {option.value}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+            >
+              <TextField
+                id='standard-select-currency'
+                label='Search ...'
+                name='search_text'
+                onChange={handleChange}
+                fullWidth
+                variant='standard'
+                sx={{
+                  width: '50%',
+                }}
+                onKeyDown={(e) => {
+                  if (e.code === 'Enter') initData();
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <SearchTwoTone />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        {campainList.map((item: any) => (
+          <Grid
+            item
+            xs={4}
+          >
+            {renderCard(item)}
+          </Grid>
+        ))}
+        <Grid
+          item
+          xs={12}
+          sx={{
+            justifyContent: 'center',
+            display: 'flex',
+          }}
+        >
+          <ButtonStyle1
+            onClick={handleGetMoreItem}
+            sx={{
+              marginBottom: '20px',
+            }}
+          >
+            Xem thêm
+          </ButtonStyle1>
         </Grid>
       </Grid>
     </React.Fragment>
   );
-}
-
+};
 export default CampainPage;

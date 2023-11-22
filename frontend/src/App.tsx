@@ -9,22 +9,29 @@ import routers from './router';
 import ThemeProviderWrapper from '@theme/ThemeProvider';
 import { HelmetProvider } from 'react-helmet-async';
 import JWTProvider from '@layout/Jwt';
+import StatusMaintenance from '@pages/error/Maintenance';
 
 function App() {
   const content = useRoutes(routers);
 
   return (
     <ThemeProviderWrapper>
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <HelmetProvider>
+      <HelmetProvider>
+        <ErrorBoundary
+          fallback={
+            <div>
+              <StatusMaintenance />
+            </div>
+          }
+        >
           <JWTProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns as any}>
               <CssBaseline />
               {content}
             </LocalizationProvider>
           </JWTProvider>
-        </HelmetProvider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </HelmetProvider>
     </ThemeProviderWrapper>
   );
 }

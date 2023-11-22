@@ -2,6 +2,8 @@ import TypographyTitle from '@common/Typography';
 import CardSlice from '@components/Card';
 import AliceCarousel from 'react-alice-carousel';
 import { Box, Grid, Typography } from '@mui/material';
+
+import { LinkCustom } from '@common/Link';
 const categoryList = [
   'Tất cả',
   'Trẻ em',
@@ -115,8 +117,18 @@ const FeatureSection = (props: FeatureSectionProps) => {
           disableButtonsControls={true}
           autoPlay={true}
           disableDotsControls={true}
-          animationDuration={3000}
+          animationDuration={6000}
         />
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        justifyContent={'center'}
+        display={'flex'}
+        flexDirection={'row'}
+        marginBottom={'20px'}
+      >
+        <LinkCustom href={'/campaign'}>Xem thêm</LinkCustom>
       </Grid>
     </Grid>
   );

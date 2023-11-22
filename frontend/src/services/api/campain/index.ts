@@ -11,8 +11,12 @@ const getItemType = async () => {
 const createCampain = async (data: Campain) => {
   return await apiService.post(apiEndPoint.campain.create, { ...data });
 };
+const getCampainPendingByPage = async (data: any) => {
+  return await apiService.post(apiEndPoint.campain.getCampainPendingList, { ...data });
+};
 export default {
   getCategory,
   getItemType,
   createCampain,
+  getCampainPendingByPage,
 };

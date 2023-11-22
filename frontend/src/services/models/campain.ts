@@ -20,4 +20,5 @@ export interface CampainUI {
   endDate: Date;
   description: string;
   thumbnail: string;
+  countdown: number;
 }

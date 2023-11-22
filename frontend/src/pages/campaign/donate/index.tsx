@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import data from '../home/data';
+import data from '../../home/data';
 import ProgressCustom from '@common/Progess';
 import TableRender from '@components/Table';
 import SearchField from '@common/SearchField';

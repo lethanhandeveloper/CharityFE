@@ -19,6 +19,7 @@ const apiEndPoint = {
     category: '/campaign/category',
     itemType: '/campaign/itemtype',
     getCampainList: '/campaign',
+    getCampainPendingList: '/campaign/filter',
     create: '/campaign',
   },
   getInforHome: '',
