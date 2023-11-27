@@ -69,7 +69,7 @@ function HeaderMenu() {
     },
     {
       title: 'Chiến dịch',
-      link: '/donate',
+      link: '/campaign',
     },
     {
       title: 'Bản đồ',

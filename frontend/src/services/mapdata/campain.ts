@@ -1,5 +1,6 @@
 import { Campain, CampainUI } from '@services/models/campain';
 export const mapCampain = (data: Campain): CampainUI => ({
+  id: data._id,
   categoryId: data.categoryId,
   countdown: 0,
   creatorId: data.creatorId,

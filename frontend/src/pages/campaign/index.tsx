@@ -21,6 +21,7 @@ import { CampainUI } from '@services/models/campain';
 import { SimpleValueKey } from '@services/models/meta';
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 export interface SearchStructure {
   page: number;
   no_item_per_page: number;
@@ -116,7 +117,7 @@ const CampainPage = () => {
             fontWeight: 'bold',
           }}
         >
-          {data.title}
+          <Link to={`donate/${data.id}`}>{data.title}</Link>
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>

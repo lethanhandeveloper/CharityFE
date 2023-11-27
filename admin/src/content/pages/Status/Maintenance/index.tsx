@@ -63,7 +63,7 @@ function StatusMaintenance() {
           >
             <Box>
               <Typography component="span" variant="subtitle1">
-                Phone:{' '}
+                Phone:
               </Typography>
               <Typography
                 component="span"

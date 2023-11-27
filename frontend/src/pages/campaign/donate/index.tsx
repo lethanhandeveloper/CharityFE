@@ -1,16 +1,35 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import data from '../../home/data';
+
 import ProgressCustom from '@common/Progess';
 import TableRender from '@components/Table';
 import SearchField from '@common/SearchField';
+import { useParams } from 'react-router';
+import serviceAPI from '@services/api';
+import { mapCampain } from '@services/mapdata/campain';
+import { CampainUI } from '@services/models/campain';
+// import EthereumComponent from '@services/ethers';
+import ProductSaleComponent from '@services/ethers/tesst';
 const DonatePage = () => {
-  const [detail, setDetail] = useState(data.CardCampaign[0]);
+  const { id } = useParams();
+  const [openMetaMask, setOpenMetaMask] = useState<boolean>(false);
+  const [detail, setDetail] = useState<CampainUI>();
   useEffect(() => {
-    setDetail(data.CardCampaign[0]);
+    const initData = async () => {
+      if (id) {
+        const response = await serviceAPI.campain.getCampainDetail(id);
+        if (response.status === 200) {
+          setDetail(mapCampain(response.data.result));
+        }
+      }
+    };
+    initData();
   }, []);
+
   return (
     <React.Fragment>
+      {openMetaMask && <ProductSaleComponent />}
+
       <Grid
         container
         spacing={5}
@@ -21,7 +40,7 @@ const DonatePage = () => {
           xs={8}
         >
           <img
-            src={detail.imageUrl}
+            src={detail?.thumbnail}
             style={{
               height: '500px',
               width: '100%',
@@ -43,7 +62,7 @@ const DonatePage = () => {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, textAlign: 'left' }}>
               <img
-                src={detail.imageUrl}
+                src={detail?.thumbnail}
                 style={{
                   width: '55px',
                   height: '55px',
@@ -54,28 +73,28 @@ const DonatePage = () => {
               />
               <div>
                 <Typography>Tiền ủng hộ được chuyển đến</Typography>
-                <Typography fontWeight={'bold'}>{detail.createdBy}</Typography>
+                <Typography fontWeight={'bold'}>{detail?.creatorId}</Typography>
               </div>
             </Box>
 
             <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
             <Typography>
-              Đã đạt được <span style={{ color: '#f54a00' }}>{detail.count}</span>{' '}
-              <b> {detail.percent}%</b>
+              Đã đạt được <span style={{ color: '#f54a00' }}>{detail?.targetValue}</span>{' '}
+              <b> {50}%</b>
             </Typography>
-            <ProgressCustom value={detail.percent} />
+            <ProgressCustom value={50} />
             <Box sx={{ display: 'flex', gap: 2, textAlign: 'left' }}>
               <Typography
                 fontSize={'13px'}
                 color={'#999'}
               >
-                Của mục tiêu {detail.target}
+                Của mục tiêu {detail?.targetValue}
               </Typography>
               <Typography
                 fontSize={'13px'}
                 color={'#999'}
               >
-                {detail.totalUser} người đã ủng hộ
+                953 người đã ủng hộ
               </Typography>
             </Box>
 
@@ -97,6 +116,9 @@ const DonatePage = () => {
                   borderRadius: '20px',
                   border: '1px solid #f54a00',
                   background: '#f54a00',
+                }}
+                onClick={() => {
+                  setOpenMetaMask(true);
                 }}
               >
                 Ủng hộ

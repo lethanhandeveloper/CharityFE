@@ -30,6 +30,7 @@ function CampainFormPage() {
   const dispatch = useAppDispatch();
 
   const [data, setData] = useState<Campain>({
+    _id: '',
     categoryId: '',
     creatorId: '',
     description: '',

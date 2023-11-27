@@ -1,4 +1,5 @@
 export interface Campain {
+  _id: string;
   creatorId: string;
   categoryId: string;
   itemTypeId: string;
@@ -11,6 +12,7 @@ export interface Campain {
   fileUrl: string;
 }
 export interface CampainUI {
+  id: string;
   creatorId: string;
   categoryId: string;
   itemTypeId: string;

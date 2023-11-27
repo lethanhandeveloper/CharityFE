@@ -21,6 +21,7 @@ const apiEndPoint = {
     getCampainList: '/campaign',
     getCampainPendingList: '/campaign/filter',
     create: '/campaign',
+    getDetail: (id: string) => `/campaign/${id}`,
   },
   getInforHome: '',
   getDetails: '',
