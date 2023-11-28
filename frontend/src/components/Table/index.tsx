@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 interface Column {
-  id: 'name' | 'code' | 'population' | 'size' | 'density';
+  id: 'user' | 'amount' | 'time' | 'size' | 'density';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -18,42 +18,31 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'user', label: 'Tài khoản', minWidth: 170 },
   {
-    id: 'population',
-    label: 'Population',
-    minWidth: 170,
-    align: 'right',
+    id: 'amount',
+    label: 'Số tiền',
+    minWidth: 100,
     format: (value: number) => value.toLocaleString('en-US'),
   },
   {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
+    id: 'time',
+    label: 'Thời gian',
     minWidth: 170,
     align: 'right',
-    format: (value: number) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
-    format: (value: number) => value.toFixed(2),
   },
 ];
 
 interface Data {
-  name: string;
-  code: string;
-  population: number;
+  user: string;
+  amount: number;
+  time: string;
   size: number;
   density: number;
 }
 
-function createData(name: string, code: string, population: number, size: number): Data {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(user: string, time: string, amount: number, size: number): Data {
+  return { user, amount, time, size, density: 0 };
 }
 
 const rows = [
@@ -114,7 +103,6 @@ export default function TableRender() {
                   hover
                   role='checkbox'
                   tabIndex={-1}
-                  key={row.code}
                 >
                   {columns.map((column) => {
                     const value = row[column.id];

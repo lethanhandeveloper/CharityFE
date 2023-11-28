@@ -1,4 +1,5 @@
 import SuspenseLoader from '@components/SuspenseLoader';
+import Role from '@pages/auth/updateRole';
 import React, { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router';
 
@@ -34,6 +35,7 @@ const routers: RouteObject[] = [
       { path: 'campaign/create', element: <CampainFormPage /> },
       { path: 'campaign', element: <CampainPage /> },
       { path: 'campaign/donate/:id', element: <DonatePage /> },
+      { path: 'register/account/fund', element: <Role /> },
     ],
   },
   {

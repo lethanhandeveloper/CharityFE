@@ -1,7 +1,7 @@
-import { ButtonStyle1 } from '@common/Button';
 import TypographyTitle from '@common/Typography';
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
+import { LinkCustom } from '@common/Link';
 interface FundCardProps {
   fundlist: any;
 }
@@ -50,7 +50,7 @@ const FundSection = (props: FundCardProps) => {
             margin: '0 auto',
           }}
         >
-          <ButtonStyle1>Đăng ký ngay</ButtonStyle1>
+          <LinkCustom to={'/register/account/fund'}>Đăng ký ngay</LinkCustom>
         </Grid>
       </Grid>
     </React.Fragment>

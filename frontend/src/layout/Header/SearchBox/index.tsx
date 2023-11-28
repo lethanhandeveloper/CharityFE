@@ -53,7 +53,7 @@ const DialogWrapper = styled(Dialog)(
 `,
 );
 
-const SearchInputWrapper = styled(TextField)(
+export const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
     background: ${theme.colors.alpha.white[100]};
 

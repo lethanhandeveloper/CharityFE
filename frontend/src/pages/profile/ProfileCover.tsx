@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import PropTypes from 'prop-types';
-import { Box, Typography, Card, Avatar, CardMedia, Button, IconButton } from '@mui/material';
+import { Box, Typography, Card, Avatar, CardContent, Divider, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
-
-import UploadTwoToneIcon from '@mui/icons-material/UploadTwoTone';
-import MoreHorizTwoToneIcon from '@mui/icons-material/MoreHorizTwoTone';
+import Text from '@common/Text';
 import { UserUI } from '@services/models/user';
 import Upload from '@services/firebase';
-
-const Input = styled('input')({
-  display: 'none',
-});
+import EditInfoDialog from './EditInfo';
 
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
@@ -28,30 +23,6 @@ const AvatarWrapper = styled(Card)(
 `,
 );
 
-const ButtonUploadWrapper = styled(Box)(
-  ({ theme }) => `
-    position: absolute;
-    width: ${theme.spacing(4)};
-    height: ${theme.spacing(4)};
-    bottom: -${theme.spacing(1)};
-    right: -${theme.spacing(1)};
-
-    .MuiIconButton-root {
-      border-radius: 100%;
-      background: ${theme.colors.primary.main};
-      color: ${theme.palette.primary.contrastText};
-      box-shadow: ${theme.colors.shadows.primary};
-      width: ${theme.spacing(4)};
-      height: ${theme.spacing(4)};
-      padding: 0;
-  
-      &:hover {
-        background: ${theme.colors.primary.dark};
-      }
-    }
-`,
-);
-
 const CardCover = styled(Card)(
   ({ theme }) => `
     position: relative;
@@ -62,13 +33,6 @@ const CardCover = styled(Card)(
 `,
 );
 
-const CardCoverAction = styled(Box)(
-  ({ theme }) => `
-    position: absolute;
-    right: ${theme.spacing(2)};
-    bottom: ${theme.spacing(2)};
-`,
-);
 interface ProfileCoverProps {
   user: UserUI;
 }
@@ -76,50 +40,111 @@ const ProfileCover = (props: ProfileCoverProps) => {
   const { user } = props;
   return (
     <>
-      <Box
-        display='flex'
-        mb={3}
-      >
-        <Box>
-          <Typography
-            variant='h3'
-            component='h3'
-            gutterBottom
-          >
-            Profile for {user.fullname}
-          </Typography>
-          <Typography variant='subtitle2'>
-            This is a profile page. Easy to modify, always blazing fast
-          </Typography>
-        </Box>
-      </Box>
       <CardCover>
-        <CardMedia image={''} />
-        <CardCoverAction></CardCoverAction>
+        <Card>
+          <Box
+            p={3}
+            display='flex'
+            alignItems='center'
+            justifyContent='space-between'
+          >
+            <Box>
+              <Typography
+                variant='h4'
+                gutterBottom
+              >
+                Personal Details
+              </Typography>
+              <Typography variant='subtitle2'>
+                Manage informations related to your personal details
+              </Typography>
+            </Box>
+            {user && <EditInfoDialog data={user} />}
+          </Box>
+          <Divider />
+          <CardContent sx={{ p: 4 }}>
+            <Typography variant='subtitle2'>
+              <Grid
+                container
+                spacing={0}
+              >
+                <Grid xs={2}></Grid>
+                <Grid
+                  item
+                  xs={5}
+                  textAlign={{ sm: 'right' }}
+                >
+                  <Box
+                    pr={3}
+                    pb={2}
+                  >
+                    Name:
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={5}
+                >
+                  <Text color='black'>
+                    <b>{user.fullname}</b>
+                  </Text>
+                </Grid>
+                <Grid xs={2}></Grid>
+                <Grid
+                  item
+                  xs={5}
+                  textAlign={{ sm: 'right' }}
+                >
+                  <Box
+                    pr={3}
+                    pb={2}
+                  >
+                    Date of birth:
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={5}
+                >
+                  <Text color='black'>
+                    <b>15 March 1977</b>
+                  </Text>
+                </Grid>
+                <Grid xs={2}></Grid>
+                <Grid
+                  item
+                  xs={5}
+                  textAlign={{ sm: 'right' }}
+                >
+                  <Box
+                    pr={3}
+                    pb={2}
+                  >
+                    Address:
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={5}
+                >
+                  <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
+                    <Text color='black'>
+                      1749 High Meadow Lane, SEQUOIA NATIONAL PARK, California, 93262
+                    </Text>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Typography>
+          </CardContent>
+        </Card>
       </CardCover>
       <AvatarWrapper>
         <Avatar
           variant='rounded'
           alt={user.fullname}
-          // src={user.avatar}
+          src={user.imageUrl}
         />
         <Upload />
-        {/* <ButtonUploadWrapper>
-          <Input
-            accept='image/*'
-            id='icon-button-file'
-            name='icon-button-file'
-            type='file'
-          />
-          <label htmlFor='icon-button-file'>
-            <IconButton
-              component='span'
-              color='primary'
-            >
-              <UploadTwoToneIcon />
-            </IconButton>
-          </label>
-        </ButtonUploadWrapper> */}
       </AvatarWrapper>
       <Box
         py={2}
@@ -127,46 +152,15 @@ const ProfileCover = (props: ProfileCoverProps) => {
         mb={3}
       >
         <Typography
-          gutterBottom
-          variant='h4'
-        >
-          {user.fullname}
-        </Typography>
-        <Typography variant='subtitle2'>{'gender'}</Typography>
-        <Typography
           sx={{ py: 2 }}
           variant='subtitle2'
           color='text.primary'
-        >
-          {/* {user.jobtitle} | {user.location} | {user.followers} followers */}
-        </Typography>
+        ></Typography>
         <Box
           display={{ xs: 'block', md: 'flex' }}
           alignItems='center'
           justifyContent='space-between'
-        >
-          {/* <Box>
-            <Button
-              size='small'
-              variant='contained'
-            >
-              Follow
-            </Button>
-            <Button
-              size='small'
-              sx={{ mx: 1 }}
-              variant='outlined'
-            >
-              View website
-            </Button>
-            <IconButton
-              color='primary'
-              sx={{ p: 0.5 }}
-            >
-              <MoreHorizTwoToneIcon />
-            </IconButton>
-          </Box> */}
-        </Box>
+        ></Box>
       </Box>
     </>
   );

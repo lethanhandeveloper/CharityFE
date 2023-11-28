@@ -128,7 +128,7 @@ const FeatureSection = (props: FeatureSectionProps) => {
         flexDirection={'row'}
         marginBottom={'20px'}
       >
-        <LinkCustom href={'/campaign'}>Xem thêm</LinkCustom>
+        <LinkCustom to={'/campaign'}>Xem thêm</LinkCustom>
       </Grid>
     </Grid>
   );
