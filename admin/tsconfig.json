@@ -1,5 +1,4 @@
 {
-  "extends": "./tsconfig.path.json",
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es6",
@@ -18,5 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "craco.config.js"]
+  "extends": "./tsconfig.path.json",
+  "include": ["src"]
 }
