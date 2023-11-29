@@ -2,6 +2,7 @@ import TypographyTitle from '@common/Typography';
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
 import { LinkCustom } from '@common/Link';
+import Can from '@pages/auth/login/can';
 interface FundCardProps {
   fundlist: any;
 }
@@ -50,7 +51,12 @@ const FundSection = (props: FundCardProps) => {
             margin: '0 auto',
           }}
         >
-          <LinkCustom to={'/register/account/fund'}>Đăng ký ngay</LinkCustom>
+          <Can
+            I='view'
+            a='ProductsListRoute'
+          >
+            <LinkCustom to={'/register/account/fund'}>Đăng ký ngay</LinkCustom>
+          </Can>
         </Grid>
       </Grid>
     </React.Fragment>

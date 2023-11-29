@@ -6,6 +6,8 @@ import Text from '@common/Text';
 import { UserUI } from '@services/models/user';
 import Upload from '@services/firebase';
 import EditInfoDialog from './EditInfo';
+import { useState } from 'react';
+import serviceAPI from '@services/api';
 
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
@@ -38,6 +40,10 @@ interface ProfileCoverProps {
 }
 const ProfileCover = (props: ProfileCoverProps) => {
   const { user } = props;
+
+  const handleUpdateAvatar = async (url: string) => {
+    await serviceAPI.auth.updateAvatar(url);
+  };
   return (
     <>
       <CardCover>
@@ -144,7 +150,14 @@ const ProfileCover = (props: ProfileCoverProps) => {
           alt={user.fullname}
           src={user.imageUrl}
         />
-        <Upload />
+        <Upload
+          className='image'
+          setUrl={(url: string) => {
+            handleUpdateAvatar(url);
+          }}
+          type='image/*'
+          folder='avatar'
+        />
       </AvatarWrapper>
       <Box
         py={2}

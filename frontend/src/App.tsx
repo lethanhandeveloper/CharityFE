@@ -11,9 +11,17 @@ import { HelmetProvider } from 'react-helmet-async';
 import JWTProvider from '@layout/Jwt';
 import StatusMaintenance from '@pages/error/Maintenance';
 
+import React from 'react';
+import { buildAbilityFor } from '@pages/auth/login/ability';
+import { AbilityContext } from '@pages/auth/login/can';
+
 function App() {
   const content = useRoutes(routers);
-
+  const [ability, seAbility] = React.useState(buildAbilityFor('member'));
+  const role = localStorage.getItem('role');
+  React.useEffect(() => {
+    seAbility(buildAbilityFor((role || '').toString()));
+  }, [role]);
   return (
     <ThemeProviderWrapper>
       <HelmetProvider>
@@ -27,7 +35,7 @@ function App() {
           <JWTProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns as any}>
               <CssBaseline />
-              {content}
+              <AbilityContext.Provider value={ability}>{content}</AbilityContext.Provider>
             </LocalizationProvider>
           </JWTProvider>
         </ErrorBoundary>

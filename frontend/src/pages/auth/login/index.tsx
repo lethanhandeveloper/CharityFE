@@ -25,6 +25,7 @@ const LoginPage = () => {
       const loginInfo = await serviceAPI.auth.login(user);
       if (loginInfo.status === 200) {
         localStorage.setItem('token', loginInfo.data.result.token);
+        localStorage.setItem('role', loginInfo.data.result.role);
         navigation('/home');
       } else {
         setMessageError('test');

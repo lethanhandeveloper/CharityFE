@@ -83,6 +83,10 @@ function HeaderUserbox() {
     initData();
   }, [token]);
 
+  const handleLogOut = () => {
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
+  };
   return (
     <>
       <UserBoxButton
@@ -167,6 +171,7 @@ function HeaderUserbox() {
           <Button
             color='primary'
             fullWidth
+            onClick={handleLogOut}
           >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
             Sign out
