@@ -12,8 +12,8 @@ import JWTProvider from '@layout/Jwt';
 import StatusMaintenance from '@pages/error/Maintenance';
 
 import React from 'react';
-import { buildAbilityFor } from '@pages/auth/login/ability';
-import { AbilityContext } from '@pages/auth/login/can';
+import { buildAbilityFor } from '@services/casl/ability';
+import { AbilityContext } from '@services/casl/can';
 
 function App() {
   const content = useRoutes(routers);

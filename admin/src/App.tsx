@@ -1,21 +1,47 @@
-import { useRoutes } from 'react-router-dom';
-import router from 'src/router';
+import './App.css';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { CssBaseline } from '@mui/material';
-import ThemeProvider from './theme/ThemeProvider';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { useRoutes } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
+import routers from './router';
+import ThemeProviderWrapper from '@theme/ThemeProvider';
+import { HelmetProvider } from 'react-helmet-async';
+import JWTProvider from '@layout/Jwt';
+import StatusMaintenance from '@pages/error/Maintenance';
+
+import React from 'react';
+import { buildAbilityFor } from '@services/casl/ability';
+import { AbilityContext } from '@services/casl/can';
 
 function App() {
-  const content = useRoutes(router);
-
+  const content = useRoutes(routers);
+  const [ability, seAbility] = React.useState(buildAbilityFor('member'));
+  const role = localStorage.getItem('role');
+  React.useEffect(() => {
+    seAbility(buildAbilityFor((role || '').toString()));
+  }, [role]);
   return (
-    <ThemeProvider>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <CssBaseline />
-        {content}
-      </LocalizationProvider>
-    </ThemeProvider>
+    <ThemeProviderWrapper>
+      <HelmetProvider>
+        <ErrorBoundary
+          fallback={
+            <div>
+              <StatusMaintenance />
+            </div>
+          }
+        >
+          <JWTProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns as any}>
+              <CssBaseline />
+              <AbilityContext.Provider value={ability}>{content}</AbilityContext.Provider>
+            </LocalizationProvider>
+          </JWTProvider>
+        </ErrorBoundary>
+      </HelmetProvider>
+    </ThemeProviderWrapper>
   );
 }
+
 export default App;

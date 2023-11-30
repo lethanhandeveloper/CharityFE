@@ -16,7 +16,7 @@ const updateProfile = async (data: RegisterValue) => {
   return await apiService.patch(apiEndPoint.user.getProfile, { ...data });
 };
 const updateAvatar = async (image_url: string) => {
-  return await apiService.patch(apiEndPoint.user.getProfile, { image_url: image_url });
+  return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
 export default {
   login,

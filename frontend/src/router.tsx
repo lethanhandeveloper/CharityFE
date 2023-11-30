@@ -1,5 +1,5 @@
 import SuspenseLoader from '@components/SuspenseLoader';
-import Role from '@pages/auth/updateRole';
+
 import React, { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router';
 
@@ -20,7 +20,7 @@ const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
 const CampainFormPage = Loader(lazy(() => import('@pages/campaign/create')));
 const CampainPage = Loader(lazy(() => import('@pages/campaign/')));
 const ManagementUserSetting = Loader(lazy(() => import('@pages/settings')));
-
+const RoleUpdate = Loader(lazy(() => import('@pages/auth/updateRole')));
 const routers: RouteObject[] = [
   {
     path: '/',
@@ -35,7 +35,7 @@ const routers: RouteObject[] = [
       { path: 'campaign/create', element: <CampainFormPage /> },
       { path: 'campaign', element: <CampainPage /> },
       { path: 'campaign/donate/:id', element: <DonatePage /> },
-      { path: 'register/account/fund', element: <Role /> },
+      { path: 'register/account/fund', element: <RoleUpdate /> },
     ],
   },
   {

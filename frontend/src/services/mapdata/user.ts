@@ -5,10 +5,14 @@ export const mapUserUI = (userAPI: any): UserUI => {
     age: userAPI?.age,
     email: userAPI?.email,
     fullname: userAPI?.name,
-    gender: '',
-    imageUrl: '',
-    phoneNumber: '',
-    role: 'Normal',
+    gender: userAPI.gender,
+    imageUrl: userAPI.image_url,
+    phoneNumber: userAPI.phoneNumber,
+    communeId: userAPI.communeId,
+    userName: userAPI.userName,
+    district: userAPI.district,
+    province: userAPI.province,
+    specificAddress: userAPI.specificAddress,
   };
 };
 export const mapUsersUI = (userAPI: any): UserUI[] => {

@@ -11,5 +11,9 @@ export interface UserUI {
   phoneNumber: string;
   gender: string;
   age: number;
-  role: UserRole;
+  communeId: string;
+  userName: string;
+  specificAddress: string;
+  province: string;
+  district: string;
 }

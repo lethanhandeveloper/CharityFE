@@ -1,0 +1,27 @@
+.backgound-login {
+  background-image: url(https://thiennguyen.app/_next/static/media/bg-left-login.3b63f65b.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  width: 100%;
+}
+.divider {
+  margin: 0 auto;
+  color: #f54a00;
+  text-decoration: none;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.box-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.mt-40 {
+  margin-top: 40px !important;
+}
+.mt-20 {
+  margin-top: 20px !important;
+}
+.icon {
+  font-size: 50px;
+}
