@@ -1,27 +1,32 @@
+import { useEffect } from 'react';
+import NProgress from 'nprogress';
 import { Box, CircularProgress } from '@mui/material';
 
-const SuspenseLoader = () => {
+function SuspenseLoader() {
+  useEffect(() => {
+    NProgress.start();
+
+    return () => {
+      NProgress.done();
+    };
+  }, []);
+
   return (
     <Box
       sx={{
-        position: 'flex',
+        position: 'fixed',
+        left: 0,
         top: 0,
-        right: 0,
         width: '100%',
-        height: '100%',
+        height: '100%'
       }}
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
     >
-      <CircularProgress
-        sx={{
-          position: 'absolute',
-          top: '50%',
-          right: '50%',
-        }}
-        size={64}
-        disableShrink
-        thickness={3}
-      />
+      <CircularProgress size={64} disableShrink thickness={3} />
     </Box>
   );
-};
+}
+
 export default SuspenseLoader;
