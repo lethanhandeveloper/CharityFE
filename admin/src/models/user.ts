@@ -17,3 +17,16 @@ export interface UserUI {
   province: string;
   district: string;
 }
+export type RegisterValue = {
+  email: string;
+  password: string;
+  name: string;
+  phoneNumber: string;
+  gender: string;
+  age: number;
+  provinceId: string;
+  districtId: string;
+  communeId: string;
+  image_url: string;
+  specificAddress: string;
+};

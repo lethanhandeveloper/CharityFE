@@ -9,7 +9,7 @@ import routers from './router';
 import ThemeProviderWrapper from '@theme/ThemeProvider';
 import { HelmetProvider } from 'react-helmet-async';
 import JWTProvider from '@layout/Jwt';
-import StatusMaintenance from '@pages/error/Maintenance';
+import StatusMaintenance from '@pages/Status/Maintenance';
 
 import React from 'react';
 import { buildAbilityFor } from '@services/casl/ability';

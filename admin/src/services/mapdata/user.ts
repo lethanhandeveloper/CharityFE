@@ -1,4 +1,4 @@
-import { UserUI } from '@services/models/user';
+import { UserUI } from '@models/user';
 
 export const mapUserUI = (userAPI: any): UserUI => {
   return {

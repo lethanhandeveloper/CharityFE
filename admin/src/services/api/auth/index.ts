@@ -1,7 +1,6 @@
 import apiEndPoint from '@constants/apiEndPoint';
 import apiService from '../config';
-import { UserAPI } from '@services/models/user';
-import { RegisterValue } from '@pages/auth/register';
+import { UserAPI, RegisterValue } from '@models/user';
 
 const login = async (user: UserAPI) => {
   return await apiService.post(apiEndPoint.user.login, { ...user });

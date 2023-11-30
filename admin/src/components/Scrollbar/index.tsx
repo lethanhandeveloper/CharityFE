@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import PropTypes from 'prop-types';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
@@ -17,7 +17,7 @@ const Scrollbar = (props: ScrollbarProps) => {
       <Scrollbars
         autoHide
         style={{
-          height: '90vh'
+          height: '90vh',
         }}
         renderThumbVertical={() => {
           return (
@@ -29,8 +29,8 @@ const Scrollbar = (props: ScrollbarProps) => {
                 transition: `${theme.transitions.create(['background'])}`,
 
                 '&:hover': {
-                  background: `${theme.colors.alpha.black[30]}`
-                }
+                  background: `${theme.colors.alpha.black[30]}`,
+                },
               }}
             />
           );
@@ -45,7 +45,7 @@ const Scrollbar = (props: ScrollbarProps) => {
 
 Scrollbar.propTypes = {
   children: PropTypes.node,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Scrollbar;

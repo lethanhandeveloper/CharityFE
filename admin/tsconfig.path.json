@@ -9,7 +9,8 @@
       "@layout/*": ["layout/*"],
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"],
-      "@store/*": ["store/*"]
+      "@store/*": ["store/*"],
+      "@models/*": ["models/*"]
     }
   }
 }

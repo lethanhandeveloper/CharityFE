@@ -1,6 +1,6 @@
 import apiEndPoint from '@constants/apiEndPoint';
 import apiService from '../config';
-import { Campain } from '@services/models/campain';
+import { Campain } from '@models/campain';
 
 const getCategory = async () => {
   return await apiService.get(apiEndPoint.campain.category);
