@@ -17,6 +17,7 @@ const updateProfile = async (data: RegisterValue) => {
 const updateAvatar = async (image_url: string) => {
   return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
+
 export default {
   login,
   register,

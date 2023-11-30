@@ -17,7 +17,7 @@ const SiderLink = [
     children: [
       {
         title: 'Province',
-        link: '/provine',
+        link: '/province',
       },
       {
         title: 'District',

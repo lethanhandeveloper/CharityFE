@@ -6,6 +6,8 @@ const apiEndPoint = {
     getProfile: '/user',
     updateProfile: '/user',
     updateAvatar: '/user/avatar',
+    getActiveList: '/user/list',
+    getInActiveList: '/user/listinactive',
   },
 
   location: {

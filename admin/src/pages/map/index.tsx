@@ -9,7 +9,7 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import hoangsa from '../../images/hoangsa.png';
+import hoangsa from './hoangsa.png';
 interface IMap {
   lat: number;
   long: number;

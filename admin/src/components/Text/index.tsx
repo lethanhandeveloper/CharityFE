@@ -5,14 +5,7 @@ import clsx from 'clsx';
 
 interface TextProps {
   className?: string;
-  color?:
-    | 'primary'
-    | 'secondary'
-    | 'error'
-    | 'warning'
-    | 'success'
-    | 'info'
-    | 'black';
+  color?: 'primary' | 'secondary' | 'error' | 'warning' | 'success' | 'info' | 'black';
   flex?: boolean;
   children?: ReactNode;
 }
@@ -56,19 +49,13 @@ const TextWrapper = styled('span')(
           color: ${theme.palette.info.main}
         }
       }
-`
+`,
 );
 
-const Text: FC<TextProps> = ({
-  className,
-  color = 'secondary',
-  flex,
-  children,
-  ...rest
-}) => {
+const Text: FC<TextProps> = ({ className, color = 'secondary', flex, children, ...rest }) => {
   return (
     <TextWrapper
-      className={clsx('MuiText-' + color, { flexItem: flex })}
+      className={clsx('MuiText-' + color + className, { flexItem: flex })}
       {...rest}
     >
       {children}
@@ -79,15 +66,7 @@ const Text: FC<TextProps> = ({
 Text.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  color: PropTypes.oneOf([
-    'primary',
-    'secondary',
-    'error',
-    'warning',
-    'success',
-    'info',
-    'black'
-  ])
+  color: PropTypes.oneOf(['primary', 'secondary', 'error', 'warning', 'success', 'info', 'black']),
 };
 
 export default Text;

@@ -4,10 +4,10 @@ import apiEndPoint from '@constants/apiEndPoint';
 import serviceAPI from '@services/api';
 
 import { useEffect, useState } from 'react';
-interface UserTableProps {
+interface ProvinceTableProps {
   isActive: boolean;
 }
-const UserTable = (props: UserTableProps) => {
+const ProvinceTable = (props: ProvinceTableProps) => {
   const [openDetail, setOpenDetail] = useState({
     id: '',
     open: false,
@@ -51,4 +51,4 @@ const UserTable = (props: UserTableProps) => {
     </>
   );
 };
-export default UserTable;
+export default ProvinceTable;
