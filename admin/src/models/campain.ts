@@ -23,4 +23,5 @@ export interface CampainUI {
   description: string;
   thumbnail: string;
   countdown: number;
+  fileUrl: string;
 }

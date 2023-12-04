@@ -6,6 +6,7 @@ import banner from './banner';
 import province from './province';
 import district from './district';
 import commune from './commune';
+import map from './map';
 const serviceAPI = {
   auth,
   location,
@@ -15,5 +16,6 @@ const serviceAPI = {
   province,
   district,
   commune,
+  map,
 };
 export default serviceAPI;

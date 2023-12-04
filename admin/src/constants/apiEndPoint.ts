@@ -48,5 +48,9 @@ const apiEndPoint = {
     list: '/area/district/list',
     getByProvince: (id: string) => `/district/${id}/province`,
   },
+  map: {
+    create: '/map/create',
+    update: '/map/update',
+  },
 };
 export default apiEndPoint;

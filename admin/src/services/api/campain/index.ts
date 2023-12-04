@@ -17,10 +17,14 @@ const getCampainPendingByPage = async (data: any) => {
 const getCampainDetail = async (id: string) => {
   return await apiService.get(apiEndPoint.campain.getDetail(id));
 };
+const getCampaignList = async () => {
+  return await apiService.get(apiEndPoint.campain.getCampainList);
+};
 export default {
   getCategory,
   getCampainDetail,
   getItemType,
   createCampain,
   getCampainPendingByPage,
+  getCampaignList,
 };
