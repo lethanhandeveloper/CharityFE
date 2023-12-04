@@ -1,6 +1,6 @@
 import apiEndPoint from '@constants/apiEndPoint';
 import apiService from '../config';
-import { Campain } from '@services/models/campain';
+import { Campain } from 'models/campain';
 
 const getCategory = async () => {
   return await apiService.get(apiEndPoint.campain.category);
@@ -14,6 +14,9 @@ const createCampain = async (data: Campain) => {
 const getCampainPendingByPage = async (data: any) => {
   return await apiService.post(apiEndPoint.campain.getCampainPendingList, { ...data });
 };
+const getListForHome = async () => {
+  return await apiService.get(apiEndPoint.campain.home);
+};
 const getCampainDetail = async (id: string) => {
   return await apiService.get(apiEndPoint.campain.getDetail(id));
 };
@@ -23,4 +26,5 @@ export default {
   getItemType,
   createCampain,
   getCampainPendingByPage,
+  getListForHome,
 };

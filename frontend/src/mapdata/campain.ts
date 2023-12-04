@@ -1,4 +1,4 @@
-import { Campain, CampainUI } from '@services/models/campain';
+import { Campain, CampainUI } from 'models/campain';
 export const mapCampain = (data: Campain): CampainUI => ({
   id: data._id,
   categoryId: data.categoryId,

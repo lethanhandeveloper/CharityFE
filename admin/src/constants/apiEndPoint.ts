@@ -11,9 +11,7 @@ const apiEndPoint = {
   },
 
   location: {
-    getProvince: '/area/province',
-    getDistrict: '/area/district',
-    getCommune: '/area/commune',
+    getProvince: '/area/province/list',
     getCommuneByDistrict: (id: string) => `/area/commune/${id}/district`,
     getDistrictByProvince: (id: string) => `/area/district/${id}/province`,
   },
@@ -24,9 +22,31 @@ const apiEndPoint = {
     getCampainPendingList: '/campaign/filter',
     create: '/campaign',
     getDetail: (id: string) => `/campaign/${id}`,
+    list: '/campaign/list',
   },
-  getInforHome: '',
-  getDetails: '',
-  updateUserInfor: '',
+  banner: {
+    create: '/banner/create',
+    update: '/banner/update',
+    list: '/banner/all',
+    active: '/banner/active',
+  },
+
+  commune: {
+    create: '/area/commune/create',
+    update: '/area/commune/update',
+    list: '/area/commune/list',
+    getByDistrict: (id: string) => `/commune/${id}/district`,
+  },
+  province: {
+    create: '/area/province/create',
+    update: '/area/province/update',
+    list: '/area/province/list',
+  },
+  district: {
+    create: '/area/district/create',
+    update: '/area/district/update',
+    list: '/area/district/list',
+    getByProvince: (id: string) => `/district/${id}/province`,
+  },
 };
 export default apiEndPoint;

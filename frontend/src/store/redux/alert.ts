@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { AlertRedux } from '@services/models/meta';
+import { AlertRedux } from 'models/meta';
 const initialState: AlertRedux = {
   title: '',
   type: 'error',

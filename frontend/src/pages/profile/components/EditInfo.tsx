@@ -8,9 +8,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { EditTwoTone } from '@mui/icons-material';
 import { Grid, MenuItem } from '@mui/material';
-import { UserUI } from '@services/models/user';
+import { UserUI } from 'models/user';
 import { RegisterValue } from '@pages/auth/register';
-import { SimpleValueKey } from '@services/models/meta';
+import { SimpleValueKey } from 'models/meta';
 import serviceAPI from '@services/api';
 interface EditInfoDialogProps {
   data: UserUI;

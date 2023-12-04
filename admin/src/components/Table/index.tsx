@@ -31,6 +31,7 @@ interface Data {
 export interface Column {
   title: string;
   nameField: string;
+  isShowImage?: boolean;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -122,6 +123,7 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  buttons: React.ReactNode;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -138,6 +140,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
+      {props.buttons}
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
@@ -180,6 +183,7 @@ interface EnhancedTableProps {
   loadTable: (page: number, noItemPerPage: number, searchText: string) => void;
   onRowEvent?: (data: any) => void;
   onToggle?: () => void;
+  buttons?: React.ReactNode;
 }
 
 export default function EnhancedTable(props: EnhancedTableProps) {
@@ -191,6 +195,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
 
   React.useEffect(() => {
     setDataTable(props.data);
+    console.log('change');
   }, [props.data]);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -208,25 +213,6 @@ export default function EnhancedTable(props: EnhancedTableProps) {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -257,7 +243,10 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, minHeight: 600 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          buttons={props.buttons}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -281,7 +270,11 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id as number)}
+                    onClick={() => {
+                      if (typeof props.onRowEvent === 'function') {
+                        props.onRowEvent(row);
+                      }
+                    }}
                     role='checkbox'
                     aria-checked={isItemSelected}
                     tabIndex={-1}

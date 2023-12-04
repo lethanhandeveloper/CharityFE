@@ -6,10 +6,10 @@ import TableRender from '@components/Table';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
 import { useParams } from 'react-router';
 import serviceAPI from '@services/api';
-import { mapCampain } from '@services/mapdata/campain';
-import { CampainUI } from '@services/models/campain';
-// import EthereumComponent from '@services/ethers';
-import ProductSaleComponent from '@services/ethers/tesst';
+import { mapCampain } from 'mapdata/campain';
+import { CampainUI } from 'models/campain';
+import parse from 'html-react-parser';
+import YourComponent from '@services/ethers/sale';
 
 const DonatePage = () => {
   const { id } = useParams();
@@ -33,7 +33,7 @@ const DonatePage = () => {
         container
         marginBottom={'40px'}
       >
-        {openMetaMask && <ProductSaleComponent />}
+        {openMetaMask && <YourComponent />}
       </Grid>
 
       <Grid
@@ -144,9 +144,7 @@ const DonatePage = () => {
               </Button>
             </Box>
           </Box>
-          <Box>
-            <span>{detail?.description}</span>
-          </Box>
+          <Box> {parse(detail?.description || '')}</Box>
         </Grid>
         <Grid
           item

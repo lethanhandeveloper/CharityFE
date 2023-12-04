@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Box, Typography, Card, Avatar, CardContent, Divider, Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Text from '@common/Text';
-import { UserUI } from '@services/models/user';
+import { UserUI } from 'models/user';
 import Upload from '@services/firebase';
 import EditInfoDialog from './EditInfo';
 import { useState } from 'react';

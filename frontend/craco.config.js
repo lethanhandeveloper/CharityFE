@@ -14,6 +14,7 @@ module.exports = {
       '@services': path.resolve(__dirname, 'src/services'),
       '@constants': path.resolve(__dirname, 'src/constants'),
       '@store': path.resolve(__dirname, 'src/store'),
+      '@abi': path.resolve(__dirname, 'src/abi'),
     },
   },
   jest: {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -22,48 +22,33 @@ const Transition = React.forwardRef(function Transition(
     />
   );
 });
-
-export default function AlertDialogSlide() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+interface PanelDetailProps {
+  buttonChildren: React.ReactNode;
+  open: boolean;
+  children?: React.ReactNode;
+  title: string;
+}
+export default function PanelDetail(props: PanelDetailProps) {
   return (
     <React.Fragment>
-      <Button
-        variant='outlined'
-        onClick={handleClickOpen}
-      >
-        Slide in alert dialog
-      </Button>
       <Dialog
-        open={open}
+        open={props.open}
         TransitionComponent={Transition}
         fullScreen
         sx={{
-          width: 500,
+          width: '50%',
           marginLeft: 'auto', // Set marginLeft to 'auto' for right positioning
           marginRight: 0,
         }}
         aria-describedby='alert-dialog-slide-description'
       >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle>{props.title}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-slide-description'>
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
+            {props.children}
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose}>Agree</Button>
-        </DialogActions>
+        <DialogActions>{props.buttonChildren}</DialogActions>
       </Dialog>
     </React.Fragment>
   );

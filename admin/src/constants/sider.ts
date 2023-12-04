@@ -58,6 +58,7 @@ const SiderLink = [
         title: 'Statistical',
         link: '/statistical',
       },
+      { title: 'Map', link: '/map' },
     ],
   },
 ];

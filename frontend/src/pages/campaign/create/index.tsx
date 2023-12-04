@@ -14,10 +14,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { DateCalendar } from '@mui/x-date-pickers';
-import { SimpleValueKey } from '@services/models/meta';
+import { SimpleValueKey } from 'models/meta';
 import serviceAPI from '@services/api';
 import Upload from '@services/firebase';
-import { Campain } from '@services/models/campain';
+import { Campain } from 'models/campain';
 import { ButtonStyle1 } from '@common/Button';
 import { setInfoAlert } from '@store/redux/alert';
 import { useAppDispatch } from '@store/hook';

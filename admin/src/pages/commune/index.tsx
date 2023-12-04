@@ -1,54 +1,83 @@
-import AlertDialogSlide from '@common/Panel';
 import EnhancedTable, { Column } from '@components/Table';
 import apiEndPoint from '@constants/apiEndPoint';
+import Button from '@mui/material/Button';
 import serviceAPI from '@services/api';
 
 import { useEffect, useState } from 'react';
-interface CommuneTableProps {
+
+import DetailCommune from './detail';
+import { Grid } from '@mui/material';
+import { CommuneUI } from '@models/area';
+import { mapCommuneUI } from '@services/mapdata/area';
+
+interface CampaignTableProps {
   isActive: boolean;
 }
-const CommuneTable = (props: CommuneTableProps) => {
-  const [openDetail, setOpenDetail] = useState({
-    id: '',
-    open: false,
-  });
-  const [data, setData] = useState();
+
+const CampaignTable = (props: CampaignTableProps) => {
+  const [openDetail, setOpenDetail] = useState<boolean>(false);
+  const [dataTable, setDataTable] = useState();
+  const [data, setData] = useState<CommuneUI>();
   const columns: Column[] = [
     {
-      title: 'Email',
-      nameField: 'email',
-    },
-
-    { title: 'Họ và tên', nameField: 'name' },
-    {
-      title: 'Tuổi',
-      nameField: 'age',
-    },
-    {
-      title: 'Sđt liên hệ',
-      nameField: 'phoneNumber',
+      title: 'Tên',
+      nameField: 'name',
+      isShowImage: true,
     },
   ];
   const loadData = async (page: number, noItemPerPage: number, searchText: string) => {
-    const link = props.isActive ? apiEndPoint.user.getActiveList : apiEndPoint.user.getInActiveList;
+    const link = apiEndPoint.commune.list;
     const api = await serviceAPI.common.getAPIList(link, page, noItemPerPage, searchText);
-    setData(api.data.result);
+    setDataTable(api.data.result);
+  };
+
+  const handleRowEvent = (row: any) => {
+    setData(mapCommuneUI(row));
+    setOpenDetail(true);
+  };
+
+  const handleClose = () => {
+    setOpenDetail(false);
   };
   useEffect(() => {
     loadData(1, 10, '');
   }, [props.isActive]);
-
+  const renderButton = () => {
+    return (
+      <Grid container>
+        <Grid item>
+          <Button
+            onClick={() => {
+              setOpenDetail(true);
+              setData(mapCommuneUI({}));
+            }}
+          >
+            Tạo mới
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
   return (
     <>
-      {openDetail.open && <div></div>}
       <EnhancedTable
         columns={columns}
-        data={data}
+        data={dataTable}
         loadTable={loadData}
-        onRowEvent={setOpenDetail}
+        onRowEvent={handleRowEvent}
+        buttons={<> {renderButton()}</>}
       />
-      <AlertDialogSlide />
+      {openDetail && data && (
+        <DetailCommune
+          openDetail={openDetail}
+          data={data}
+          loadTable={() => {
+            loadData(1, 10, '');
+          }}
+          onClose={handleClose}
+        />
+      )}
     </>
   );
 };
-export default CommuneTable;
+export default CampaignTable;

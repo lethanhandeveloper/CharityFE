@@ -11,7 +11,7 @@ import { TextFieldStyle1 } from '@common/TextField';
 
 import style from '../auth.module.scss';
 import serviceAPI from '@services/api/index';
-import { UserAPI } from '@services/models/user';
+import { UserAPI } from 'models/user';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);

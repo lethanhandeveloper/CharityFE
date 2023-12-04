@@ -1,5 +1,5 @@
-import { Campain, CampainUI } from '@models/campain';
-export const mapCampain = (data: Campain): CampainUI => ({
+import { CampainUI } from '@models/campain';
+export const mapCampainUI = (data?: any): CampainUI => ({
   id: data._id,
   categoryId: data.categoryId,
   countdown: 0,
@@ -13,5 +13,5 @@ export const mapCampain = (data: Campain): CampainUI => ({
   title: data.title,
 });
 export const mapCampainUIs = (list: any): CampainUI[] => {
-  return list.map((item: any) => mapCampain(item));
+  return list.map((item: any) => mapCampainUI(item));
 };

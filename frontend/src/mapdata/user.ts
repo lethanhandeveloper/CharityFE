@@ -1,4 +1,4 @@
-import { UserUI } from '@services/models/user';
+import { UserUI } from 'models/user';
 
 export const mapUserUI = (userAPI: any): UserUI => {
   return {
@@ -16,13 +16,5 @@ export const mapUserUI = (userAPI: any): UserUI => {
   };
 };
 export const mapUsersUI = (userAPI: any): UserUI[] => {
-  return userAPI?.map((item: any) => ({
-    age: item?.age,
-    email: userAPI?.email,
-    fullname: userAPI,
-    gender: '',
-    imageUrl: '',
-    phoneNumber: '',
-    role: 'Normal',
-  }));
+  return userAPI?.map((item: any) => mapUserUI(item));
 };

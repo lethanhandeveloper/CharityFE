@@ -2,7 +2,6 @@ import { Box, List, ListItem, ListItemText, Menu, MenuItem } from '@mui/material
 import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -76,9 +75,6 @@ function HeaderMenu() {
       link: '/map',
     },
   ];
-  const handleOpen = (): void => {
-    setOpen(true);
-  };
 
   const handleClose = (): void => {
     setOpen(false);
@@ -113,32 +109,6 @@ function HeaderMenu() {
               />
             </ListItem>
           ))}
-
-          <ListItem
-            classes={{ root: 'MuiListItem-indicators' }}
-            button
-            ref={ref}
-            onClick={handleOpen}
-          >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
-              primary={
-                <Box
-                  display='flex'
-                  alignItems='center'
-                >
-                  Others
-                  <Box
-                    display='flex'
-                    alignItems='center'
-                    pl={0.3}
-                  >
-                    <ExpandMoreTwoToneIcon fontSize='small' />
-                  </Box>
-                </Box>
-              }
-            />
-          </ListItem>
         </List>
       </ListWrapper>
       <Menu

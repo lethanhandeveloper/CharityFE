@@ -9,7 +9,7 @@ import { TextFieldStyle1 } from '@common/TextField';
 
 import style from '../auth.module.scss';
 import serviceAPI from '@services/api';
-import { SimpleValueKey } from '@services/models/meta';
+import { SimpleValueKey } from 'models/meta';
 import { useNavigate } from 'react-router';
 
 export type RegisterValue = {

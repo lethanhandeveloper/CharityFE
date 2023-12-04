@@ -1,55 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ethers } from 'ethers';
 import ProductOrder from './test.json'; // Replace with the actual path to your compiled smart contract ABI
+import { Button } from '@mui/material';
 interface ExtendedWindow extends Window {
   ethereum?: any;
 }
-const contractAddress = '0xd9145CCE52D386f254917e481eB44e9943F39138'; // Replace with the actual address of your deployed smart contract
+const contractAddress = '0xBCb65f807bC01A7f5FedFCF48aE9E05a13A6EDe5'; // Replace with the actual address of your deployed smart contract
 const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
 const signer = provider.getSigner();
 const contract = new ethers.Contract(contractAddress, ProductOrder.abi, signer);
-
-const ProductSaleComponent: React.FC = () => {
-  const [isPaid, setIsPaid] = useState(false);
-  const [isShipped, setIsShipped] = useState(false);
-
-  const handlePay = async () => {
-    console.log('check');
+interface ProductSaleComponentProps {
+  id: string;
+  createUser: string;
+  title: string;
+  currentValue: number;
+  targetValue: number;
+  endDate: Date;
+}
+const ProductSaleComponent = (props: ProductSaleComponentProps) => {
+  const createContract = async () => {
     try {
-      const transaction = await contract.pay({ value: ethers.utils.parseEther('1') }); // Replace '1' with the actual amount you want to pay
-      await transaction.wait();
-      setIsPaid(true);
-    } catch (error) {
-      console.error('Error paying for the product:', error);
+      console.log('zxcxz');
+      const transaction = await contract.addNewCampaign(
+        props.id,
+        props.createUser,
+        props.title,
+        props.currentValue,
+        props.targetValue,
+        props.endDate,
+      );
+      await transaction.wait(props);
+    } catch (e) {
+      console.error('Error creating the contract');
     }
   };
-
-  const handleShipProduct = async () => {
-    try {
-      const transaction = await contract.shipProduct();
-      await transaction.wait();
-      setIsShipped(true);
-    } catch (error) {
-      console.error('Error shipping the product:', error);
-    }
-  };
-
   return (
     <div>
       <h1>Product Sale</h1>
-      <p>Is Paid: {isPaid.toString()}</p>
-      <p>Is Shipped: {isShipped.toString()}</p>
-      {!isPaid && (
-        <button
-          onClick={() => {
-            console.log('checlzxczxc');
-            handlePay();
-          }}
-        >
-          Pay for Product
-        </button>
-      )}
-      {isPaid && !isShipped && <button onClick={handleShipProduct}>Ship Product</button>}
+      <Button onClick={createContract}>tọa</Button>
     </div>
   );
 };

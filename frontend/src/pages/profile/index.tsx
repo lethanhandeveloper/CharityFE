@@ -7,8 +7,8 @@ import RecentActivity from './components/RecentActivity';
 
 import { useEffect, useState } from 'react';
 import serviceAPI from '@services/api';
-import { UserUI } from '@services/models/user';
-import { mapUserUI } from '@services/mapdata/user';
+import { UserUI } from 'models/user';
+import { mapUserUI } from 'mapdata/user';
 
 const ManagementUserProfile = () => {
   const [user, setUserData] = useState<UserUI>();

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
@@ -10,12 +10,59 @@ import {
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import { styled, alpha } from '@mui/material/styles';
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
+
 interface IMap {
   lat: number;
   long: number;
 }
 interface IMapComponent {
   setLagLog: (data: IMap) => void;
+  isOn: boolean;
 }
 const icon = L.icon({
   iconSize: [13, 20],
@@ -25,18 +72,21 @@ const icon = L.icon({
 });
 const MapComponent: FC<IMapComponent> = (props) => {
   useMapEvents({
-    click: (e) => {
-      props.setLagLog({ lat: e.latlng.lat, long: e.latlng.lng });
-      alert(e.latlng.lng + ',' + e.latlng.lat);
-    },
-    locationfound(e) {
-      console.log(e.latlng);
+    click(e) {
+      if (props.isOn) {
+        props.setLagLog({ lat: e.latlng.lat, long: e.latlng.lng });
+        alert(e.latlng.lng + ',' + e.latlng.lat);
+      }
     },
   });
-  return null;
+  return <></>;
 };
 const MapPage = () => {
   const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
+  const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
+  const [search, setSearch] = useState<string>('');
+  const mapRef = useRef(null);
+  const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
   const isLandSeaGeoJSON = {
     type: 'Feature',
     properties: {
@@ -81,42 +131,119 @@ const MapPage = () => {
       ],
     },
   };
+  useEffect(() => {
+    const initCurrentAddress = () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentPosition({
+            lat: latitude,
+            long: longitude,
+          });
+        });
+      }
+    };
+    initCurrentAddress();
+  });
 
+  const getAddress = async (text: string) => {
+    const api = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${text}`;
+    const response = await fetch(api);
+    const data = await response.json();
+
+    setPostionSearch({ lat: data[0].boundingbox[0], long: data[0].boundingbox[2] });
+  };
+  useEffect(() => {
+    try {
+      (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [postionSearch]);
   return (
     <React.Fragment>
-      <MapContainer
-        className='leaflet-map'
-        style={{
-          height: '100vh',
-          width: '100%',
-        }}
-        center={[15.432026740690574, 107.8439179532812]}
-        zoom={12}
-      >
-        <MapComponent setLagLog={setLocation} />
-        <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-        <GeoJSON
-          data={isLandSeaGeoJSON as any}
-          style={() => ({ fillColor: '#aad3df', fillOpacity: 1, color: '#aad3df' })}
-        />
-        <GeoJSON
-          data={isLand2SeaGeoJSON as any}
-          style={() => ({ fillColor: '#aad3df', fillOpacity: 1, color: '#aad3df' })}
-        />
-        <ImageOverlay
-          url={hoangsa}
-          opacity={1}
-          zIndex={999}
-          bounds={[
-            [17.371528178207253, 110.72021484375001],
-            [15.2639399771884, 113.20312500000001],
-          ]}
-        />
-        <Marker
-          position={[dataMap.lat, dataMap.long]}
-          icon={icon}
-        ></Marker>
-      </MapContainer>
+      {currentPosition.lat > 0 && (
+        <MapContainer
+          className='leaflet-map'
+          ref={mapRef}
+          style={{
+            height: '100vh',
+            width: '100%',
+          }}
+          center={[currentPosition.lat, currentPosition.long]}
+          zoom={12}
+          zoomControl={false}
+        >
+          <MapComponent
+            setLagLog={setLocation}
+            isOn={false}
+          />
+          <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+
+          <GeoJSON
+            data={isLandSeaGeoJSON as any}
+            style={() => ({ fillColor: '#aad3df', fillOpacity: 1, color: '#aad3df' })}
+          />
+          <GeoJSON
+            data={isLand2SeaGeoJSON as any}
+            style={() => ({ fillColor: '#aad3df', fillOpacity: 1, color: '#aad3df' })}
+          />
+          <ImageOverlay
+            url={hoangsa}
+            opacity={1}
+            zIndex={999}
+            bounds={[
+              [17.371528178207253, 110.72021484375001],
+              [15.2639399771884, 113.20312500000001],
+            ]}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: '10px',
+              left: '10px',
+              backgroundColor: 'white',
+              padding: '5px',
+              zIndex: 9999999999,
+              borderRadius: '50px',
+            }}
+          >
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder='Search…'
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSearch(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.code === 'Enter') {
+                    getAddress(search);
+                  }
+                }}
+              />
+            </Search>
+          </div>
+          <Marker
+            position={[postionSearch.lat, postionSearch.long]}
+            icon={icon}
+          />
+          <MarkerClusterGroup chunkedLoading>
+            <Marker
+              position={[dataMap.lat, dataMap.long]}
+              icon={icon}
+            />
+            <Marker
+              position={[dataMap.lat + 1, dataMap.long]}
+              icon={icon}
+            />
+          </MarkerClusterGroup>
+        </MapContainer>
+      )}
     </React.Fragment>
   );
 };

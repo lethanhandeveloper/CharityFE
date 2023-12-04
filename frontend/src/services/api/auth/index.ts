@@ -1,6 +1,6 @@
 import apiEndPoint from '@constants/apiEndPoint';
 import apiService from '../config';
-import { UserAPI } from '@services/models/user';
+import { UserAPI } from 'models/user';
 import { RegisterValue } from '@pages/auth/register';
 
 const login = async (user: UserAPI) => {
@@ -18,10 +18,15 @@ const updateProfile = async (data: RegisterValue) => {
 const updateAvatar = async (image_url: string) => {
   return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
+const getListForHome = async () => {
+  return await apiService.get(apiEndPoint.user.home);
+};
+
 export default {
   login,
   register,
   getProfile,
   updateAvatar,
   updateProfile,
+  getListForHome,
 };
