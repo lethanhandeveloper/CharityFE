@@ -15,6 +15,9 @@ module.exports = {
       '@constants': path.resolve(__dirname, 'src/constants'),
       '@store': path.resolve(__dirname, 'src/store'),
       '@abi': path.resolve(__dirname, 'src/abi'),
+      '@caslConfig': path.resolve(__dirname, 'src/caslConfig'),
+      '@mapdata': path.resolve(__dirname, 'src/mapdata'),
+      '@models': path.resolve(__dirname, 'src/models'),
     },
   },
   jest: {

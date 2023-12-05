@@ -2,7 +2,7 @@ import TypographyTitle from '@common/Typography';
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
 import { LinkCustom } from '@common/Link';
-import Can from '@services/casl/can';
+import Can from '@caslConfig/can';
 interface FundCardProps {
   fundlist: any;
 }

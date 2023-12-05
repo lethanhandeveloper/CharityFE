@@ -10,7 +10,10 @@
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"],
       "@store/*": ["store/*"],
-      "@abi/*": ["abi/*"]
+      "@abi/*": ["abi/*"],
+      "@caslConfig/*": ["caslConfig/*"],
+      "@mapdata/*": ["mapdata/*"],
+      "@models/*": ["models/*"]
     }
   }
 }

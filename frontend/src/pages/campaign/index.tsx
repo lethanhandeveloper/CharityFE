@@ -16,9 +16,9 @@ import {
 } from '@mui/material';
 
 import serviceAPI from '@services/api';
-import { mapCampainUIs } from 'mapdata/campain';
-import { CampainUI } from 'models/campain';
-import { SimpleValueKey } from 'models/meta';
+import { mapCampainUIs } from '@mapdata/campain';
+import { CampainUI } from '@models/campain';
+import { SimpleValueKey } from '@models/meta';
 
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';

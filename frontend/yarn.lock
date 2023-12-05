@@ -1402,6 +1402,11 @@
   resolved "https://registry.npmjs.org/@emotion/weak-memoize/-/weak-memoize-0.3.1.tgz"
   integrity sha512-EsBwpc7hBUJWAsNPBmJy4hxWx12v6bshQsldrVmjxJoc3isbxhOrF2IcCpaXxfvq03NwkI7sbsOLXbYuqF/8Ww==
 
+"@enzoferey/ethers-error-parser@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/@enzoferey/ethers-error-parser/-/ethers-error-parser-0.2.3.tgz"
+  integrity sha512-Xt5DPAwJP/Czvw6bVLuWpk+y3M5z1fKWUy3w8nLV7WLfDxoN+HmtqQ1+vgG4lvmD2Xr/bW2mBvHPyI3bKDkuXA==
+
 "@esbuild/win32-x64@0.18.20":
   version "0.18.20"
   resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.18.20.tgz"

@@ -6,10 +6,9 @@ import TableRender from '@components/Table';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
 import { useParams } from 'react-router';
 import serviceAPI from '@services/api';
-import { mapCampain } from 'mapdata/campain';
-import { CampainUI } from 'models/campain';
+import { mapCampain } from '@mapdata/campain';
+import { CampainUI } from '@models/campain';
 import parse from 'html-react-parser';
-import YourComponent from '@services/ethers/sale';
 
 const DonatePage = () => {
   const { id } = useParams();
@@ -33,7 +32,7 @@ const DonatePage = () => {
         container
         marginBottom={'40px'}
       >
-        {openMetaMask && <YourComponent />}
+        {openMetaMask && <></>}
       </Grid>
 
       <Grid

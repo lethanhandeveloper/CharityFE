@@ -20,9 +20,7 @@ const TableHistoryComponent = (props: TableHistoryComponentProps) => {
         );
 
         const tx = await contract.getAllTransaction();
-        console.log('sucess');
-        await tx.wait();
-        console.log('sucess');
+        console.log('sucess', tx);
       } catch (err) {
         console.log(err);
       }

@@ -1,4 +1,4 @@
-import { AbilityBuilder, Ability, AbilityClass } from '@casl/ability';
+import { AbilityBuilder, AbilityClass,Ability } from '@casl/ability';
 
 export type Actions = 'view' | 'manage' | 'create' | 'read' | 'update' | 'delete';
 type Subjects = 'Todo' | 'ProductsListRoute';
@@ -21,6 +21,6 @@ export default function defineRulesFor(role: string) {
 
 export function buildAbilityFor(role: string): AppAbility {
   return new appAbility(defineRulesFor(role), {
-    detectSubjectType: (object) => object,
+    detectSubjectType: (object: any) => object,
   });
 }

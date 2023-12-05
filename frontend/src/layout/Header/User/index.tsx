@@ -23,8 +23,8 @@ import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import serviceAPI from '@services/api';
-import { mapUserUI } from 'mapdata/user';
-import { UserUI } from 'models/user';
+import { mapUserUI } from '@mapdata/user';
+import { UserUI } from '@models/user';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
