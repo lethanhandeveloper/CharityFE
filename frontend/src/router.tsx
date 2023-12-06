@@ -1,7 +1,7 @@
-import SuspenseLoader from '@components/SuspenseLoader';
-
 import React, { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router';
+
+import SuspenseLoader from '@components/SuspenseLoader';
 
 const Loader = (Component: any) => (props: any) => (
   <Suspense fallback={<SuspenseLoader />}>

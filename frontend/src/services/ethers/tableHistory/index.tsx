@@ -2,9 +2,10 @@ import { Contract, ethers } from 'ethers';
 import ExtendedWindow from 'models/ether';
 import { useEffect } from 'react';
 import transactionHistory from '@abi/transactionHistory.json';
-
+type TypeHistory = 'user' | 'campaign';
 interface TableHistoryComponentProps {
-  campaignID: string;
+  id: string;
+  type: TypeHistory;
 }
 const TableHistoryComponent = (props: TableHistoryComponentProps) => {
   useEffect(() => {
@@ -18,17 +19,20 @@ const TableHistoryComponent = (props: TableHistoryComponentProps) => {
           transactionHistory.abi,
           signer,
         );
-
-        const tx = await contract.getAllTransaction();
-        console.log('sucess');
-        await tx.wait();
-        console.log('sucess');
+        let tx;
+        // const tx = await contract.getAllTransaction();
+        if (props.type === 'user') {
+          tx = await contract.getDonateByUser(props.id);
+        } else {
+          tx = await contract.getTransactionHistoryByCampaignId(props.id);
+        }
+        console.log(tx);
       } catch (err) {
         console.log(err);
       }
     };
     initData();
-  }, [props.campaignID]);
+  }, [props.id]);
   return <></>;
 };
 export default TableHistoryComponent;

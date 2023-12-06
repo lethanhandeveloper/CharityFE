@@ -1,7 +1,6 @@
-import { ButtonStyle1 } from '@common/Button';
-import ProgressCustom from '@common/Progess';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import TypographyTitle from '@common/Typography';
 import { SearchTwoTone } from '@mui/icons-material';
 import {
   Box,
@@ -19,9 +18,10 @@ import serviceAPI from '@services/api';
 import { mapCampainUIs } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import { SimpleValueKey } from '@models/meta';
+import { ButtonStyle1 } from '@common/Button';
+import ProgressCustom from '@common/Progess';
 
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import TypographyTitle from '@common/Typography';
 export interface SearchStructure {
   page: number;
   no_item_per_page: number;
@@ -33,6 +33,7 @@ const CampainPage = () => {
   const [campainList, setCampainList] = useState<CampainUI[]>([]);
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
+  const refInput = useRef<HTMLInputElement | null>(null);
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
     page: 1,
     no_item_per_page: 9,
@@ -40,17 +41,37 @@ const CampainPage = () => {
     provinceId: '',
     search_text: '',
   });
+
   const calculatePercent = (current: number, target: number): number => {
     return Number(((current / target) * 100).toFixed(2));
   };
+
   const initData = async () => {
     const response = await serviceAPI.campain.getCampainPendingByPage(searchConfig);
     const dataMapUI = mapCampainUIs(response.data.result);
-    setCampainList([...campainList, ...dataMapUI]);
+    if (searchConfig.page === 1) {
+      setCampainList([...dataMapUI]);
+    } else {
+      setCampainList([...campainList, ...dataMapUI]);
+    }
   };
+
+  const handleGetMoreItem = () => {
+    setSearchConfig({ ...searchConfig, page: searchConfig.page + 1 });
+  };
+
+  const handleChange = (e: any) => {
+    setSearchConfig({ ...searchConfig, [e.target.name]: e.target.value });
+  };
+
+  const calculateDayCountDown = (endDate: Date): number => {
+    return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
+  };
+
   useEffect(() => {
     initData();
-  }, []);
+  }, [searchConfig]);
+
   useEffect(() => {
     const initProvince = async () => {
       const [provinceAPI, categoryAPI] = await Promise.all([
@@ -66,16 +87,7 @@ const CampainPage = () => {
     };
     initProvince();
   }, []);
-  const handleGetMoreItem = () => {
-    setSearchConfig({ ...searchConfig, page: searchConfig.page + 1 });
-    initData();
-  };
-  const handleChange = (e: any) => {
-    setSearchConfig({ ...searchConfig, [e.target.name]: e.target.value });
-  };
-  const calculateDayCountDown = (endDate: Date): number => {
-    return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
-  };
+
   const renderCard = (data: CampainUI) => (
     <Card
       variant='outlined'
@@ -191,6 +203,7 @@ const CampainPage = () => {
       </CardContent>
     </Card>
   );
+
   return (
     <React.Fragment>
       <Grid container>
@@ -289,14 +302,20 @@ const CampainPage = () => {
                 id='standard-select-currency'
                 label='Search ...'
                 name='search_text'
-                onChange={handleChange}
+                inputRef={refInput}
+                onKeyUp={(e) => {
+                  if (e.code === 'Enter') {
+                    setSearchConfig({
+                      ...searchConfig,
+                      search_text: refInput.current?.value || '',
+                      page: 1,
+                    });
+                  }
+                }}
                 fullWidth
                 variant='standard'
                 sx={{
                   width: '50%',
-                }}
-                onKeyDown={(e) => {
-                  if (e.code === 'Enter') initData();
                 }}
                 InputProps={{
                   endAdornment: (
