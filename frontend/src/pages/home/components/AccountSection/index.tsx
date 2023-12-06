@@ -1,4 +1,5 @@
 import TypographyTitle from '@common/Typography';
+import { UserUI } from '@models/user';
 import {
   Card,
   Typography,
@@ -11,10 +12,10 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 interface AccountSectionProps {
-  CardAccount: any;
+  list: UserUI[];
 }
 const AccountSection: FC<AccountSectionProps> = (props) => {
-  const renderCardAccount = (account: any) => (
+  const renderCardAccount = (account: UserUI) => (
     <Card style={{ textAlign: 'left' }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -28,7 +29,7 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
               // color='text.secondary'
               gutterBottom
             >
-              {account.fullName}
+              {account.fullname}
             </Typography>
             <Typography sx={{ fontSize: 13 }}>{account.userName}</Typography>
           </div>
@@ -38,15 +39,9 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
           style={{ background: '#f54a00' }}
         />
 
-        <Typography>
-          Tài khoản thiện nguyện số: <b>{account.accountNumber}</b>
-        </Typography>
-        <Typography>
-          Số tiền gây quĩ: <b>{account.money}</b>
-        </Typography>
-        <Typography>
-          Tham gia từ: <b>{account.createdDate}</b>
-        </Typography>
+        <Typography>Tài khoản thiện nguyện số: {account.email}</Typography>
+        <Typography>Số tiền gây quĩ:{0}</Typography>
+        <Typography>Tham gia từ: {new Date().toString()}</Typography>
       </CardContent>
       <CardActions>
         <Button size='small'>Xem chi tiết</Button>
@@ -71,7 +66,7 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
         <TypographyTitle>Tin dùng bởi 900+ tổ chức và cá nhân thiện nguyện</TypographyTitle>
       </Grid>
 
-      {props.CardAccount?.map((item: any) => (
+      {props.list?.map((item) => (
         <Grid
           item
           xs={4}

@@ -4,6 +4,7 @@ import AliceCarousel from 'react-alice-carousel';
 import { Box, Grid, Typography } from '@mui/material';
 
 import { LinkCustom } from '@common/Link';
+import { CampainUI } from '@models/campain';
 const categoryList = [
   'Tất cả',
   'Trẻ em',
@@ -15,7 +16,7 @@ const categoryList = [
 ];
 const handleDragStart = (e: { preventDefault: () => any }) => e.preventDefault();
 interface FeatureSectionProps {
-  campaignList: any;
+  list: CampainUI[];
 }
 const FeatureSection = (props: FeatureSectionProps) => {
   return (
@@ -108,7 +109,7 @@ const FeatureSection = (props: FeatureSectionProps) => {
             1024: { items: 3 },
           }}
           mouseTracking
-          items={props.campaignList.map((item: any) => (
+          items={props.list.map((item) => (
             <CardSlice
               handleDragStart={handleDragStart}
               data={item}

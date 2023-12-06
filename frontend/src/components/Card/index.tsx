@@ -2,12 +2,16 @@ import { Box, CardContent, CardMedia, Typography } from '@mui/material';
 import Card from '@mui/material/Card/Card';
 import ProgressCustom from '@common/Progess';
 import React, { FC } from 'react';
+import { CampainUI } from '@models/campain';
 interface ICardSlide {
   handleDragStart: (e: { preventDefault: () => any }) => void;
-  data: any;
+  data: CampainUI;
 }
 const CardSlice: FC<ICardSlide> = (props) => {
   const { handleDragStart, data } = props;
+  const handleGetDay = (endDate: Date): number => {
+    return (endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24;
+  };
   return (
     <React.Fragment>
       <Card
@@ -21,7 +25,7 @@ const CardSlice: FC<ICardSlide> = (props) => {
       >
         <CardMedia
           sx={{ height: 200 }}
-          image={data.imageUrl}
+          image={data.thumbnail}
         />
         <CardContent>
           <Typography
@@ -35,7 +39,7 @@ const CardSlice: FC<ICardSlide> = (props) => {
             }}
             fontSize={'13px'}
           >
-            Còn {data.countDay} ngày
+            Còn {handleGetDay(data.endDate)} ngày
           </Typography>
 
           <Typography
@@ -67,13 +71,13 @@ const CardSlice: FC<ICardSlide> = (props) => {
               color='#f54a00'
               fontWeight='bold'
             >
-              {data.createdBy}
+              {data.creatorId}
             </Typography>
           </Box>
 
           <ProgressCustom
             variant='determinate'
-            value={data.percent}
+            value={0}
             sx={{ height: '10px', borderRadius: '10px' }}
           />
           <Box
@@ -95,9 +99,9 @@ const CardSlice: FC<ICardSlide> = (props) => {
               color='#f54a00'
               fontWeight='bold'
             >
-              {data.count} VNĐ
+              {0} VNĐ
             </Typography>
-            <Typography>{data.percent}%</Typography>
+            <Typography>{0}%</Typography>
           </Box>
         </CardContent>
       </Card>

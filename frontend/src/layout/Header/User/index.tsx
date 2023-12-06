@@ -159,11 +159,11 @@ function HeaderUserbox() {
           </ListItem>
           <ListItem
             button
-            to='/management/profile/settings'
+            to='/user/updaterole'
             component={NavLink}
           >
             <AccountTreeTwoToneIcon fontSize='small' />
-            <ListItemText primary='Account Settings' />
+            <ListItemText primary='Mở tài khoản cộng tác viên' />
           </ListItem>
         </List>
         <Divider />

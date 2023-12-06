@@ -17,3 +17,30 @@ export interface UserUI {
   province: string;
   district: string;
 }
+export interface PersonalUI {
+  name: string;
+  dateOfBirth: Date;
+  phoneNumber: string;
+  email: string;
+  socialNetworkLink: string;
+  address: string;
+  roleOnClub: number;
+  clubName: string;
+  logo: string;
+  underOrg: string;
+  actionDescSociaLink: string;
+  achivementDoc: string;
+}
+export interface OrganizationUI {
+  description: string;
+  representativeEmail: string;
+  representativePhoneNumber: string;
+  representativeName: string;
+  achivementDoc: string;
+  actionDescSocialLink: string;
+  address: string;
+  operationField: string;
+  website: string;
+  establishedDate: Date;
+  name: string;
+}
