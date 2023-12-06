@@ -1,165 +1,119 @@
-import {
-  Box,
-  CardMedia,
-  Typography,
-  Card,
-  Divider,
-  Grid,
-  CardContent,
-  TextField,
-  CardActions,
-} from '@mui/material';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
-import React, { useState } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
+const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-import serviceAPI from '@services/api';
-import Upload from '@services/firebase';
-import { Campain } from 'models/campain';
-import { ButtonStyle1 } from '@common/Button';
-import { setInfoAlert } from '@store/redux/alert';
-import { useAppDispatch } from '@store/hook';
+export default function HorizontalLinearStepper() {
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [skipped, setSkipped] = React.useState(new Set<number>());
 
-const RoleUpdate = () => {
-  const dispatch = useAppDispatch();
-
-  const [data, setData] = useState<Campain>({
-    _id: '',
-    categoryId: '',
-    creatorId: '',
-    description: '',
-    endDate: new Date(),
-    itemTypeId: '',
-    provinceId: '',
-    targetValue: 0,
-    thumbnail: '',
-    title: '',
-    fileUrl: '',
-  });
-
-  const handleSubmit = async () => {
-    const response = await serviceAPI.campain.createCampain(data);
-    if (response.status === 200) {
-      dispatch(setInfoAlert({ open: true, title: 'test test test test ', type: 'success' }));
-    }
+  const isStepOptional = (step: number) => {
+    return step === 1;
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+
+  const isStepSkipped = (step: number) => {
+    return skipped.has(step);
+  };
+
+  const handleNext = () => {
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleSkip = () => {
+    if (!isStepOptional(activeStep)) {
+      // You probably want to guard against something like this,
+      // it should never occur unless someone's actively trying to break something.
+      throw new Error("You can't skip a step that isn't optional.");
+    }
+
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped((prevSkipped) => {
+      const newSkipped = new Set(prevSkipped.values());
+      newSkipped.add(activeStep);
+      return newSkipped;
+    });
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
   };
 
   return (
-    <React.Fragment>
-      <Card>
-        <CardMedia
-          sx={{ minHeight: 280 }}
-          image='/static/images/placeholders/covers/6.jpg'
-          title='Card Cover'
-        />
-      </Card>
-      <Grid
-        container
-        spacing={3}
-      >
-        <Grid
-          item
-          xs={12}
-        >
-          <Card>
-            <Box
-              p={3}
-              display='flex'
-              alignItems='center'
-              justifyContent='space-between'
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label, index) => {
+          const stepProps: { completed?: boolean } = {};
+          const labelProps: {
+            optional?: React.ReactNode;
+          } = {};
+          if (isStepOptional(index)) {
+            labelProps.optional = <Typography variant='caption'>Optional</Typography>;
+          }
+          if (isStepSkipped(index)) {
+            stepProps.completed = false;
+          }
+          return (
+            <Step
+              key={label}
+              {...stepProps}
             >
-              <Box>
-                <Typography
-                  variant='h4'
-                  gutterBottom
-                >
-                  Thông tin chi tiết
-                </Typography>
-                <Typography variant='subtitle2'>
-                  Manage informations related to your personal details
-                </Typography>
-              </Box>
-            </Box>
-            <Divider />
-            <CardContent sx={{ p: 4 }}>
-              <Typography variant='subtitle2'>
-                <Grid container>
-                  <Grid
-                    item
-                    xs={12}
-                  >
-                    <Typography>Tiêu điều</Typography>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      onChange={handleChange}
-                      fullWidth
-                      name='title'
-                      variant='standard'
-                    />
-                    <Typography>Mục tiêu</Typography>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      onChange={handleChange}
-                      type='number'
-                      fullWidth
-                      name='target'
-                      variant='standard'
-                    />
-
-                    <Typography>File xác thực của địa phương</Typography>
-                    <Box
-                      sx={{
-                        position: 'relative',
-                      }}
-                    >
-                      <object
-                        data={data.fileUrl}
-                        style={{
-                          width: '100%',
-                          height: '30vh',
-                        }}
-                        type='application/pdf'
-                      />
-                      <Upload
-                        className='pdf'
-                        setUrl={(url: string) => {
-                          setData({ ...data, fileUrl: url });
-                        }}
-                        type='application/pdf'
-                        folder='file'
-                      />
-                    </Box>
-                    <Typography>Mô tả chi tiết</Typography>
-                    <Editor
-                      apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
-                      onEditorChange={(e) => {
-                        setData({ ...data, description: e });
-                      }}
-                      init={{
-                        plugins:
-                          'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                        toolbar:
-                          'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-                      }}
-                      initialValue='Welcome to TinyMCE!'
-                    />
-                  </Grid>
-                </Grid>
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <ButtonStyle1 onClick={handleSubmit}>Xác thực</ButtonStyle1>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </React.Fragment>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Box sx={{ flex: '1 1 auto' }} />
+            <Button onClick={handleReset}>Reset</Button>
+          </Box>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button
+              color='inherit'
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+            {isStepOptional(activeStep) && (
+              <Button
+                color='inherit'
+                onClick={handleSkip}
+                sx={{ mr: 1 }}
+              >
+                Skip
+              </Button>
+            )}
+            <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
   );
-};
-
-export default RoleUpdate;
+}
