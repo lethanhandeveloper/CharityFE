@@ -103,9 +103,6 @@ function CampainFormPage() {
                 >
                   Thông tin chi tiết
                 </Typography>
-                <Typography variant='subtitle2'>
-                  Manage informations related to your personal details
-                </Typography>
               </Box>
             </Box>
             <Divider />

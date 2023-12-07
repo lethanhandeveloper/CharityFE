@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -26,9 +26,7 @@ export default function AlertSnackbar() {
     }
     dispatch(setInfoAlert({ title: '', open: false, type: 'error' }));
   };
-  useEffect(() => {
-    console.log(alertRedux);
-  }, [alertRedux]);
+
   return (
     <Stack
       spacing={2}

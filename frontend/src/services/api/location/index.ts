@@ -5,10 +5,10 @@ const getAllProvince = async () => {
   return await apiService.get(apiEndPoint.location.getProvince, {});
 };
 const getDistrictByProvince = async (id: string) => {
-  return await apiService.get(apiEndPoint.location.getDistrictByProvince(id), {});
+  return await apiService.get(apiEndPoint.location.getDistrictByProvince(id));
 };
 const getCommuneByDistrict = async (id: string) => {
-  return await apiService.get(apiEndPoint.location.getCommuneByDistrict(id), {});
+  return await apiService.get(apiEndPoint.location.getCommuneByDistrict(id));
 };
 export default {
   getAllProvince,

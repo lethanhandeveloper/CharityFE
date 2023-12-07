@@ -52,5 +52,9 @@ const apiEndPoint = {
     create: '/map/create',
     update: '/map/update',
   },
+  request: {
+    update: (id: string) => `/user/verification/${id}`,
+    list: '/user/verification/paginate',
+  },
 };
 export default apiEndPoint;

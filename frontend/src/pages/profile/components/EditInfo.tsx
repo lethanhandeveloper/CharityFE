@@ -12,6 +12,8 @@ import { UserUI } from 'models/user';
 import { RegisterValue } from '@pages/auth/register';
 import { SimpleValueKey } from 'models/meta';
 import serviceAPI from '@services/api';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 interface EditInfoDialogProps {
   data: UserUI;
 }
@@ -22,6 +24,7 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
   const [districtList, setDistrictList] = useState<SimpleValueKey[]>([]);
   const [communeList, setCommuneList] = useState<SimpleValueKey[]>([]);
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
+  const dispatch = useAppDispatch();
   const [userData, setUserData] = React.useState<RegisterValue>({
     age: data.age,
     email: data.email,
@@ -48,11 +51,13 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
   const handleUpdateProfile = async () => {
     try {
       const response = await serviceAPI.auth.updateProfile(userData);
-      console.log(response.data);
+      dispatch(setInfoAlert({ open: true, title: response.data.message, type: 'success' }));
+      handleClose();
     } catch (error) {
-      console.log(error);
+      dispatch(setInfoAlert({ open: true, title: 'Không thể cập nhật ảnh', type: 'error' }));
     }
   };
+
   useEffect(() => {
     const initDistrict = async () => {
       const districtAPI = await serviceAPI.location.getDistrictByProvince(userData.provinceId);
@@ -82,6 +87,19 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
     };
     initProvince();
   }, []);
+
+  const handleGetProvinceID = () => {
+    const provinceID = provinceList.find((item) => item.value === data.province)?.id;
+    if (provinceID) setUserData({ ...userData, provinceId: provinceID });
+    return provinceID;
+  };
+
+  const handleGetDistrictID = () => {
+    const districtID = districtList.find((item) => item.value === data.district)?.id;
+    if (districtID) setUserData({ ...userData, districtId: districtID });
+    return districtID;
+  };
+
   return (
     <React.Fragment>
       <Button
@@ -203,10 +221,7 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
                 select
                 fullWidth
                 onChange={handleChange}
-                value={
-                  userData.provinceId ||
-                  provinceList.find((item) => item.value === data.province)?.id
-                }
+                value={userData.provinceId || handleGetProvinceID()}
                 name='provinceId'
                 variant='standard'
               >
@@ -231,10 +246,7 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
                 fullWidth
                 name='districtId'
                 onChange={handleChange}
-                value={
-                  userData.districtId ||
-                  provinceList.find((item) => item.value === data.district)?.id
-                }
+                value={userData.districtId || handleGetDistrictID()}
                 variant='standard'
               >
                 {districtList.map((option) => (

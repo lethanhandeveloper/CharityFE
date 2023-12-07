@@ -48,6 +48,15 @@ const SiderLink = [
     ],
   },
   {
+    title: 'Request',
+    children: [
+      {
+        title: 'Request',
+        link: '/request',
+      },
+    ],
+  },
+  {
     title: 'Setting',
     children: [
       {

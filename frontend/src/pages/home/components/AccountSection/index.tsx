@@ -9,6 +9,7 @@ import {
   Divider,
   Grid,
   Box,
+  Avatar,
 } from '@mui/material';
 import { FC } from 'react';
 interface AccountSectionProps {
@@ -18,12 +19,16 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
   const renderCardAccount = (account: UserUI) => (
     <Card style={{ textAlign: 'left' }}>
       <CardContent>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <img
+        <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <Avatar
             src={account.imageUrl}
-            style={{ width: '48px', height: '48px' }}
+            sx={{
+              width: '48px',
+              height: '48px',
+              marginRight: '10px',
+            }}
           />
-          <div>
+          <Box>
             <Typography
               sx={{ fontSize: 14, fontWeight: 'bold' }}
               // color='text.secondary'
@@ -32,16 +37,21 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
               {account.fullname}
             </Typography>
             <Typography sx={{ fontSize: 13 }}>{account.userName}</Typography>
-          </div>
+          </Box>
         </Box>
         <Divider
           variant='middle'
           style={{ background: '#f54a00' }}
         />
-
-        <Typography>Tài khoản thiện nguyện số: {account.email}</Typography>
-        <Typography>Số tiền gây quĩ:{0}</Typography>
-        <Typography>Tham gia từ: {new Date().toString()}</Typography>
+        <Box
+          sx={{
+            marginLeft: '10px',
+          }}
+        >
+          <Typography>Tài khoản thiện nguyện số: {account.email}</Typography>
+          <Typography>Số tiền gây quỹ:{0}</Typography>
+          <Typography>Tham gia từ: {new Date().toString()}</Typography>
+        </Box>
       </CardContent>
       <CardActions>
         <Button size='small'>Xem chi tiết</Button>

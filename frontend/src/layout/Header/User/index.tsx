@@ -21,7 +21,6 @@ import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
 import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import serviceAPI from '@services/api';
 import { mapUserUI } from '@mapdata/user';
 import { UserUI } from '@models/user';
@@ -147,7 +146,7 @@ function HeaderUserbox() {
             component={NavLink}
           >
             <AccountBoxTwoToneIcon fontSize='small' />
-            <ListItemText primary='My Profile' />
+            <ListItemText primary='Thông tin' />
           </ListItem>
           <ListItem
             button
@@ -155,15 +154,7 @@ function HeaderUserbox() {
             component={NavLink}
           >
             <InboxTwoToneIcon fontSize='small' />
-            <ListItemText primary='Messenger' />
-          </ListItem>
-          <ListItem
-            button
-            to='/user/updaterole'
-            component={NavLink}
-          >
-            <AccountTreeTwoToneIcon fontSize='small' />
-            <ListItemText primary='Mở tài khoản cộng tác viên' />
+            <ListItemText primary='Tài khoản cộng tác' />
           </ListItem>
         </List>
         <Divider />

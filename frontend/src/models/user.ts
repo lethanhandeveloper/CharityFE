@@ -16,6 +16,7 @@ export interface UserUI {
   specificAddress: string;
   province: string;
   district: string;
+  commune: string;
 }
 export interface PersonalUI {
   name: string;

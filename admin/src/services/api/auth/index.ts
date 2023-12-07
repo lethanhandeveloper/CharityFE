@@ -18,10 +18,15 @@ const updateAvatar = async (image_url: string) => {
   return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
 
+const updateRequest = async (id: string) => {
+  return await apiService.patch(apiEndPoint.request.update(id), { status: 2 });
+};
+
 export default {
   login,
   register,
   getProfile,
   updateAvatar,
   updateProfile,
+  updateRequest,
 };

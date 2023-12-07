@@ -21,7 +21,7 @@ interface TabPanelProps {
   value: number;
 }
 
-function CustomTabPanel(props: TabPanelProps) {
+export function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -41,7 +41,7 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
+export function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
@@ -115,15 +115,15 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               aria-label='basic tabs example'
             >
               <Tab
-                label='Item One'
+                label='Thông tin chi tiết'
                 {...a11yProps(0)}
               />
               <Tab
-                label='Item Two'
+                label='Lịch sử giao dịch'
                 {...a11yProps(1)}
               />
               <Tab
-                label='Item Three'
+                label='Biểu đồ'
                 {...a11yProps(2)}
               />
             </Tabs>
@@ -173,6 +173,45 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 <TextField
                   value={detail.description}
                   label='Mô tả'
+                  fullWidth
+                  name='description'
+                  size='small'
+                  onChange={handleChangeData}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <TextField
+                  value={detail.creatorId}
+                  label='Người tạo'
+                  fullWidth
+                  name='description'
+                  size='small'
+                  onChange={handleChangeData}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <TextField
+                  value={detail.categoryId}
+                  label='Danh mục'
+                  fullWidth
+                  name='description'
+                  size='small'
+                  onChange={handleChangeData}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <TextField
+                  value={detail.endDate.toString()}
+                  label='Ngày kết thúc'
                   fullWidth
                   name='description'
                   size='small'

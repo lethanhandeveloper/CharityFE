@@ -8,6 +8,8 @@ import Upload from '@services/firebase';
 import EditInfoDialog from './EditInfo';
 import { useState } from 'react';
 import serviceAPI from '@services/api';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
@@ -40,9 +42,16 @@ interface ProfileCoverProps {
 }
 const ProfileCover = (props: ProfileCoverProps) => {
   const { user } = props;
-
+  const [data, setData] = useState<UserUI>(user);
+  const dispatch = useAppDispatch();
   const handleUpdateAvatar = async (url: string) => {
-    await serviceAPI.auth.updateAvatar(url);
+    try {
+      const response = await serviceAPI.auth.updateAvatar(url);
+      setData({ ...data, imageUrl: url });
+      dispatch(setInfoAlert({ open: true, title: response.data.message, type: 'success' }));
+    } catch (errors) {
+      dispatch(setInfoAlert({ open: false, title: 'Không thể cập nhật!', type: 'error' }));
+    }
   };
   return (
     <>
@@ -59,10 +68,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                 variant='h4'
                 gutterBottom
               >
-                Personal Details
-              </Typography>
-              <Typography variant='subtitle2'>
-                Manage informations related to your personal details
+                Thông tin cá nhân
               </Typography>
             </Box>
             {user && <EditInfoDialog data={user} />}
@@ -84,7 +90,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                     pr={3}
                     pb={2}
                   >
-                    Name:
+                    Họ và tên:
                   </Box>
                 </Grid>
                 <Grid
@@ -92,7 +98,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                   xs={5}
                 >
                   <Text color='black'>
-                    <b>{user.fullname}</b>
+                    <b>{data.fullname}</b>
                   </Text>
                 </Grid>
                 <Grid xs={2}></Grid>
@@ -105,7 +111,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                     pr={3}
                     pb={2}
                   >
-                    Ages:
+                    Tuổi:
                   </Box>
                 </Grid>
                 <Grid
@@ -113,7 +119,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                   xs={5}
                 >
                   <Text color='black'>
-                    <b>{user.age}</b>
+                    <b>{data.age}</b>
                   </Text>
                 </Grid>
                 <Grid xs={2}></Grid>
@@ -126,7 +132,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
                     pr={3}
                     pb={2}
                   >
-                    Address:
+                    Địa chỉ:
                   </Box>
                 </Grid>
                 <Grid
@@ -135,9 +141,29 @@ const ProfileCover = (props: ProfileCoverProps) => {
                 >
                   <Box sx={{ maxWidth: { xs: 'auto', sm: 300 } }}>
                     <Text color='black'>
-                      {user.province} - {user.district} - {user.specificAddress}
+                      {data.province} - {data.district} - {data.commune}
+                      {data.specificAddress}
                     </Text>
                   </Box>
+                </Grid>
+                <Grid xs={2}></Grid>
+                <Grid
+                  item
+                  xs={5}
+                  textAlign={{ sm: 'right' }}
+                >
+                  <Box
+                    pr={3}
+                    pb={2}
+                  >
+                    Số điện thoại:
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={5}
+                >
+                  <Text color='black'>{data.phoneNumber}</Text>
                 </Grid>
               </Grid>
             </Typography>
@@ -147,8 +173,8 @@ const ProfileCover = (props: ProfileCoverProps) => {
       <AvatarWrapper>
         <Avatar
           variant='rounded'
-          alt={user.fullname}
-          src={user.imageUrl}
+          alt={data.fullname}
+          src={data.imageUrl}
         />
         <Upload
           className='image'

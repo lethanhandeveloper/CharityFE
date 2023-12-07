@@ -7,6 +7,7 @@ const apiEndPoint = {
     updateProfile: '/user',
     updateAvatar: '/user/avatar',
     home: '/user/home',
+    request: (type: string) => `/user/verification/${type}`,
   },
 
   location: {
@@ -14,7 +15,7 @@ const apiEndPoint = {
     getDistrict: '/area/district/list',
     getCommune: '/area/commune/list',
     getCommuneByDistrict: (id: string) => `/area/commune/${id}/district`,
-    getDistrictByProvince: (id: string) => `/area/district/${id}/prov/listince`,
+    getDistrictByProvince: (id: string) => `/area/district/${id}/province`,
   },
   campain: {
     category: '/campaign/category',

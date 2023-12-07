@@ -16,8 +16,9 @@ const CarouselSection = (props: CarouselSectionProps) => {
           1024: { items: 3 },
         }}
         mouseTracking
-        items={props.list.map((item) => (
+        items={props.list.slice(0, 5).map((item, key) => (
           <CardMedia
+            key={key}
             image={item.imgUrl}
             onDragStart={handleDragStart}
           />

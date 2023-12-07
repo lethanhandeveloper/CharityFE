@@ -22,6 +22,9 @@ const getListForHome = async () => {
   return await apiService.get(apiEndPoint.user.home);
 };
 
+const submitRequest = async (data: any) => {
+  return await apiService.post(apiEndPoint.user.request(data.type), { ...DataTransferItem });
+};
 export default {
   login,
   register,
@@ -29,4 +32,5 @@ export default {
   updateAvatar,
   updateProfile,
   getListForHome,
+  submitRequest,
 };

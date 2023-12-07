@@ -1,9 +1,10 @@
 import { Contract, ethers } from 'ethers';
 import ExtendedWindow from 'models/ether';
 import campaign from '@abi/campaign.json';
-import { getParsedEthersError, EthersError } from '@enzoferey/ethers-error-parser';
+import { CampainUI } from '@models/campain';
+import campaignAddress from './campaignAddress';
 
-const donateCampaign = async (value: number) => {
+const donateCampaign = async (id: string, value: number) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
@@ -14,33 +15,28 @@ const donateCampaign = async (value: number) => {
       campaign.abi,
       signer,
     );
-    const campaignId = '123';
 
-    const tx = await contract.donate(campaignId, {
+    const tx = await contract.donate(id, {
       value: valueInWei,
     });
     await tx.wait();
+    return true;
   } catch (error) {
-    const parsedEthersError = getParsedEthersError(error as EthersError);
-    console.log(parsedEthersError.context, parsedEthersError.errorCode);
+    return false;
   }
 };
 
-const addNew = async () => {
+const addNew = async (data: CampainUI) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(
-      process.env.REACT_APP_CONTRACT_ADDRESS || '',
-      campaign.abi,
-      signer,
-    );
-    const id = '123';
-    const creatorUserName = 'JohnDoe';
-    const title = 'My Campaign';
+    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
+    const id = data.id;
+    const creatorUserName = data.categoryId;
+    const title = data.title;
     const currentValue = 0;
-    const targetValue = 100;
+    const targetValue = data.targetValue;
     const endDate = Math.floor(Date.now() / 1000) + 3600;
     const tx = await contract.addNewCampaign(
       id,
@@ -51,13 +47,27 @@ const addNew = async () => {
       endDate,
     );
     await tx.wait();
-    console.log('sucess');
+    return true;
   } catch (err) {
-    console.log(err);
+    return false;
   }
 };
+const setHistoryAddress = async () => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
 
+    const tx = await contract.setTransactionHistoryAddress(campaignAddress.historyAddress);
+    await tx.wait();
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 export default {
   donateCampaign,
   addNew,
+  setHistoryAddress,
 };

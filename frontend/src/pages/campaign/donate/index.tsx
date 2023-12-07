@@ -1,19 +1,21 @@
-import { Box, Button, Divider, Grid, InputAdornment, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+
 import ProgressCustom from '@common/Progess';
 import TableRender from '@components/Table';
-import { SearchInputWrapper } from '@layout/Header/SearchBox';
+
 import { useParams } from 'react-router';
 import serviceAPI from '@services/api';
 import { mapCampain } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import parse from 'html-react-parser';
+import campaign from '@services/ethers/campaign';
 
 const DonatePage = () => {
   const { id } = useParams();
-  const [openMetaMask, setOpenMetaMask] = useState<boolean>(false);
+
   const [detail, setDetail] = useState<CampainUI>();
+
   useEffect(() => {
     const initData = async () => {
       if (id) {
@@ -28,13 +30,6 @@ const DonatePage = () => {
 
   return (
     <React.Fragment>
-      <Grid
-        container
-        marginBottom={'40px'}
-      >
-        {openMetaMask && <></>}
-      </Grid>
-
       <Grid
         container
         spacing={5}
@@ -124,6 +119,12 @@ const DonatePage = () => {
                   border: '1px solid #f54a00',
                   padding: '5px 25px 5px 25px',
                 }}
+                onClick={() => {
+                  if (detail) {
+                    campaign.addNew(detail);
+                    campaign.setHistoryAddress();
+                  }
+                }}
               >
                 Chia sẻ
               </Button>
@@ -136,7 +137,7 @@ const DonatePage = () => {
                   background: '#f54a00',
                 }}
                 onClick={() => {
-                  setOpenMetaMask(true);
+                  if (detail) campaign.donateCampaign(detail?.id, 200);
                 }}
               >
                 Ủng hộ
@@ -152,19 +153,6 @@ const DonatePage = () => {
             boxShadow: '0px 1px 16px 0px #00000026',
           }}
         >
-          <SearchInputWrapper
-            autoFocus={true}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchTwoToneIcon />
-                </InputAdornment>
-              ),
-            }}
-            placeholder='Search terms here...'
-            fullWidth
-            label='Search'
-          />
           <TableRender />
         </Grid>
       </Grid>

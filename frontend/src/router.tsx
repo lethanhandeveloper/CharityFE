@@ -19,7 +19,6 @@ const ErrorRouter = Loader(lazy(() => import('@pages/error/ErrorRouter')));
 const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
 const CampainFormPage = Loader(lazy(() => import('@pages/campaign/create')));
 const CampainPage = Loader(lazy(() => import('@pages/campaign/')));
-const ManagementUserSetting = Loader(lazy(() => import('@pages/settings')));
 const RoleUpdate = Loader(lazy(() => import('@pages/auth/updateRole')));
 const routers: RouteObject[] = [
   {
@@ -31,7 +30,7 @@ const routers: RouteObject[] = [
       { path: 'introduction', element: <IntroductionPage /> },
 
       { path: 'profile', element: <ManagementUserProfile /> },
-      { path: 'setting', element: <ManagementUserSetting /> },
+
       { path: 'campaign/create', element: <CampainFormPage /> },
       { path: 'campaign', element: <CampainPage /> },
       { path: 'campaign/donate/:id', element: <DonatePage /> },

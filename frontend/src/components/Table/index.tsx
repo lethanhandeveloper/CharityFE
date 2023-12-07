@@ -8,7 +8,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import { SearchInputWrapper } from '@layout/Header/SearchBox';
+import { InputAdornment } from '@mui/material';
 interface Column {
   id: 'user' | 'amount' | 'time' | 'size' | 'density';
   label: string;
@@ -63,10 +65,10 @@ const rows = [
   createData('Brazil', 'BR', 210147125, 8515767),
 ];
 
-export default function TableRender() {
+export default function TableRender({ list }: { list: any }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+  console.log(list);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -78,6 +80,19 @@ export default function TableRender() {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+      <SearchInputWrapper
+        autoFocus={true}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position='start'>
+              <SearchTwoToneIcon />
+            </InputAdornment>
+          ),
+        }}
+        placeholder='Search terms here...'
+        fullWidth
+        label='Search'
+      />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table
           stickyHeader

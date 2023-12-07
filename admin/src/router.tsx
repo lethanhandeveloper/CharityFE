@@ -20,6 +20,7 @@ const CommunePage = Loader(lazy(() => import('@pages/commune')));
 const DashboardPage = Loader(lazy(() => import('@pages/dashboards/Crypto')));
 const CampaignPage = Loader(lazy(() => import('@pages/campaign')));
 const BannerPage = Loader(lazy(() => import('@pages/banner')));
+const RequestPage = Loader(lazy(() => import('@pages/request')));
 const routers: RouteObject[] = [
   {
     path: '/',
@@ -66,6 +67,10 @@ const routers: RouteObject[] = [
       {
         path: 'banner',
         element: <BannerPage isActive={false} />,
+      },
+      {
+        path: 'request',
+        element: <RequestPage isActive={false} />,
       },
     ],
   },

@@ -5,13 +5,22 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import OrginazationForm from './form/orginazation';
+import { Grid } from '@mui/material';
+import Upload from '@services/firebase';
+import CommonForm from './form/common';
+import PersonalForm from './form/personal';
+import serviceAPI from '@services/api';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+const steps = ['Thông tin cơ bản', 'Thông tin tổ chức', 'Cập nhật file xác thực'];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-
+  const [data, setData] = React.useState<any>();
+  const dispatch = useAppDispatch();
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -35,23 +44,13 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
+  const handleSubmit = async () => {
+    try {
+      const response = await serviceAPI.auth.submitRequest(data);
+      dispatch(setInfoAlert({ open: true, title: response.data.result.message, type: 'success' }));
+    } catch (error) {
+      dispatch(setInfoAlert({ open: true, title: 'Không thể gửi yêu câu', type: 'error' }));
     }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
   };
 
   return (
@@ -78,42 +77,75 @@ export default function HorizontalLinearStepper() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
+      {activeStep === steps.length - 1 ? (
+        <Grid container>
+          <Typography>File xác thực</Typography>
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+            }}
+          >
+            <object
+              data={data?.achivementDoc}
+              style={{
+                width: '100%',
+                height: '30vh',
+              }}
+              type='application/pdf'
+            />
+            <Upload
+              className='pdf'
+              setUrl={(url: string) => {
+                setData({ ...data, achivementDoc: url });
+              }}
+              type='application/pdf'
+              folder='file'
+            />
           </Box>
-        </React.Fragment>
+        </Grid>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color='inherit'
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            {isStepOptional(activeStep) && (
-              <Button
-                color='inherit'
-                onClick={handleSkip}
-                sx={{ mr: 1 }}
-              >
-                Skip
-              </Button>
-            )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box>
+          {activeStep === 0 ? (
+            <CommonForm
+              data={data}
+              setData={setData}
+            />
+          ) : (
+            <>
+              {data?.type === '1' ? (
+                <PersonalForm
+                  data={data}
+                  setData={setData}
+                />
+              ) : (
+                <OrginazationForm
+                  data={data}
+                  setData={setData}
+                />
+              )}
+            </>
+          )}
         </React.Fragment>
       )}
+      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+        {activeStep !== 0 && (
+          <Button
+            color='inherit'
+            onClick={handleBack}
+            sx={{ mr: 1 }}
+          >
+            Quay lại
+          </Button>
+        )}
+
+        <Box sx={{ flex: '1 1 auto' }} />
+        {activeStep === steps.length - 1 ? (
+          <Button onClick={handleSubmit}>Gửi yêu cầu</Button>
+        ) : (
+          <Button onClick={handleNext}>Tiếp theo</Button>
+        )}
+      </Box>
     </Box>
   );
 }

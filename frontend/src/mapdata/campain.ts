@@ -5,7 +5,7 @@ export const mapCampain = (data: Campain): CampainUI => ({
   countdown: 0,
   creatorId: data.creatorId,
   description: data.description,
-  endDate: data.endDate,
+  endDate: new Date(data.endDate),
   itemTypeId: data.itemTypeId,
   provinceId: data.provinceId,
   targetValue: data.targetValue,

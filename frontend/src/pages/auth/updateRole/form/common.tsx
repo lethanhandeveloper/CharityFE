@@ -1,19 +1,16 @@
-import { Box, Grid, TextField, Typography } from '@mui/material';
-import { DateCalendar } from '@mui/x-date-pickers';
-import Upload from '@services/firebase';
+import { FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
-interface PersonalFormProps {
+interface CommonFormProps {
   setData: (data: any) => void;
   data: any;
 }
 
-const PersonalForm = (props: PersonalFormProps) => {
+const CommonForm = (props: CommonFormProps) => {
   const { data, setData } = props;
   const [helperText, setHelperText] = useState<string>('');
   const checkLinkExistence = async (url: string) => {
     try {
       const response = await fetch(url, { method: 'HEAD' });
-
       if (response.ok) {
         setHelperText('');
       } else {
@@ -25,7 +22,7 @@ const PersonalForm = (props: PersonalFormProps) => {
   };
   const handleChange = (event: any) => {
     setData({ ...data, [event.target.name]: event.target.value });
-    if (event.target.name === 'socialNetworkLink') {
+    if (event.target.name === 'actionDescSocialLink') {
       checkLinkExistence(event.target.value);
     }
   };
@@ -34,68 +31,75 @@ const PersonalForm = (props: PersonalFormProps) => {
     <>
       <Grid
         container
-        sx={{ padding: '0 60px 0' }}
+        sx={{
+          padding: '0 60px 0',
+        }}
       >
         <Grid
           item
           xs={12}
         >
-          <Typography>Ngày sinh:</Typography>
-          <DateCalendar
-            disableFuture
-            onChange={(e) => {
-              setData({ ...data, dateOfBirth: e || new Date() });
-            }}
-            defaultValue={new Date()}
-          />
-          <Typography>Số điện thoại</Typography>
+          <Typography>Tên tổ chức</Typography>
           <TextField
             autoFocus
             margin='dense'
             onChange={handleChange}
             fullWidth
-            name='phoneNumber'
+            name='name'
             variant='standard'
           />
 
-          <Typography>Mạng xã hội nhóm:</Typography>
+          <Typography>Địa chỉ</Typography>
           <TextField
             autoFocus
             margin='dense'
             onChange={handleChange}
             fullWidth
-            name='socialNetworkLink'
+            name='address'
+            variant='standard'
+          />
+
+          <Typography>Mạng xã hội</Typography>
+          <TextField
+            autoFocus
+            margin='dense'
+            onChange={handleChange}
+            fullWidth
+            name='actionDescSocialLink'
             variant='standard'
             helperText={helperText}
           />
 
-          <Typography>Tên nhóm:</Typography>
+          <Typography>Email:</Typography>
           <TextField
             autoFocus
             margin='dense'
             onChange={handleChange}
             fullWidth
-            name='clubName'
+            name='representativeEmail'
             variant='standard'
           />
-          <Typography>Logo</Typography>
-          <Box
-            sx={{
-              position: 'relative',
-            }}
+          <RadioGroup
+            row
+            aria-labelledby='demo-row-radio-buttons-group-label'
+            name='personal'
+            value={data?.personal}
+            onChange={handleChange}
           >
-            <Upload
-              className='image-upload'
-              setUrl={(url: string) => {
-                setData({ ...data, logo: url });
-              }}
-              type='image/*'
-              folder='avatar'
+            <FormControlLabel
+              value='1'
+              control={<Radio />}
+              label='Cá nhân'
             />
-          </Box>
+            <FormControlLabel
+              value='2'
+              control={<Radio />}
+              label='Tổ chức'
+            />
+          </RadioGroup>
         </Grid>
       </Grid>
     </>
   );
 };
-export default PersonalForm;
+export default CommonForm;

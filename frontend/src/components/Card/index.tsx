@@ -9,8 +9,8 @@ interface ICardSlide {
 }
 const CardSlice: FC<ICardSlide> = (props) => {
   const { handleDragStart, data } = props;
-  const handleGetDay = (endDate: Date): number => {
-    return (endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24;
+  const handleGetDay = (endDate: Date): string => {
+    return Math.floor((endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24).toFixed(0);
   };
   return (
     <React.Fragment>

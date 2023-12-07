@@ -15,7 +15,7 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Avatar } from '@mui/material';
 
@@ -141,38 +141,12 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       }}
     >
       {props.buttons}
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color='inherit'
-          variant='subtitle1'
-          component='div'
-        >
-          {numSelected} bản ghi được chọn
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant='h6'
-          id='tableTitle'
-          component='div'
-        >
-          Chọn bản ghi
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title='Delete'>
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title='Filter list'>
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+
+      <Tooltip title='Filter list'>
+        <IconButton>
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   );
 }
@@ -195,7 +169,6 @@ export default function EnhancedTable(props: EnhancedTableProps) {
 
   React.useEffect(() => {
     setDataTable(props.data);
-    console.log('change');
   }, [props.data]);
 
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -239,6 +212,24 @@ export default function EnhancedTable(props: EnhancedTableProps) {
       ),
     [order, orderBy, page, rowsPerPage, dataTable?.length],
   );
+  const handleGetData = (row: any, name: string) => {
+    const spilitName = name.split('.');
+    if (spilitName.length > 1) {
+      const data = row[spilitName[0]];
+      return data?.[spilitName[1]];
+    } else {
+      return row[name];
+    }
+  };
+  const handleGetDataImage = (row: any, name: string) => {
+    const spilitName = name.split('.');
+    if (spilitName.length > 1) {
+      const data = row[spilitName[0]];
+      return data?.image_url;
+    } else {
+      return row.image_url;
+    }
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -303,15 +294,15 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                           >
                             <Avatar
                               alt='Remy Sharp'
-                              src={(row as any).image_url}
+                              src={handleGetDataImage(row, item.nameField)}
                             />
                             <Typography marginLeft={'10px'}>
-                              {(row as any)[item.nameField]}
+                              {handleGetData(row, item.nameField)}
                             </Typography>
                           </Box>
                         ) : (
                           <Typography marginLeft={'10px'}>
-                            {(row as any)[item.nameField]}
+                            {handleGetData(row, item.nameField)}
                           </Typography>
                         )}
                       </TableCell>
