@@ -16,14 +16,14 @@ interface DialogChooseCampaignProps {
   lat: number;
   long: number;
   campaignId?: string;
+  open: boolean;
+  handleClose: () => void;
 }
 export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
-  const [open, setOpen] = React.useState(false);
   const [campaignList, setCampaignList] = React.useState<CampainUI[]>([]);
+  const [campaign, setCampaign] = React.useState<string>('');
   const dispatch = useAppDispatch();
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+
   React.useEffect(() => {
     const initData = async () => {
       const response = await serviceAPI.campain.getCampaignList();
@@ -31,12 +31,15 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
     };
     initData();
   }, []);
-  const handleClose = () => {
-    setOpen(false);
-  };
+
   const create = async () => {
     try {
-      const response = await serviceAPI.map.create({ lat: props.lat });
+      const response = await serviceAPI.map.create({
+        lat: props.lat,
+        long: props.long,
+        campaignId: campaign,
+        type: '1',
+      });
       if (response.status === 200) {
         dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
       } else {
@@ -61,15 +64,9 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
 
   return (
     <React.Fragment>
-      <Button
-        variant='outlined'
-        onClick={handleClickOpen}
-      >
-        Open alert dialog
-      </Button>
       <Dialog
-        open={open}
-        onClose={handleClose}
+        open={props.open}
+        onClose={props.handleClose}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
@@ -81,6 +78,7 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
               sx={{ width: 300 }}
               options={campaignList}
               autoHighlight
+              onChange={(e, value) => setCampaign(value?.id || '')}
               getOptionLabel={(option) => option.id}
               renderOption={(props, option) => (
                 <Box
@@ -107,18 +105,18 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={props.handleClose}>Đóng</Button>
           <Button
             onClick={create}
             autoFocus
           >
-            Agree
+            Tạo mới
           </Button>
           <Button
             onClick={update}
             autoFocus
           >
-            Agree
+            Cập nhật
           </Button>
         </DialogActions>
       </Dialog>

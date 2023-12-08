@@ -54,7 +54,7 @@ const DetailDistrict = (props: DetailDistrictProps) => {
   return (
     <>
       <PanelDetail
-        title={'Chi tiết banner'}
+        title={'Chi tiết district'}
         buttonChildren={
           <Grid container>
             <Grid item>

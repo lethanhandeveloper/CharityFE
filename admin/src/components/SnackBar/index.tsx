@@ -34,7 +34,7 @@ export default function AlertSnackbar() {
     >
       <Snackbar
         open={alertRedux.open}
-        autoHideDuration={6000}
+        autoHideDuration={2000}
         onClose={handleClose}
       >
         <Alert

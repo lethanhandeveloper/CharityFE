@@ -7,8 +7,12 @@ const create = async (data: any) => {
 const update = async (data: any) => {
   return await apiService.patch(apiEndPoint.map.update, { ...data });
 };
+const list = async () => {
+  return await apiService.get(apiEndPoint.map.list);
+};
 
 export default {
   create,
   update,
+  list,
 };

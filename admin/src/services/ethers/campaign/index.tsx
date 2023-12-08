@@ -1,6 +1,7 @@
 import { Contract, ethers } from 'ethers';
 import ExtendedWindow from 'models/ether';
 import campaign from '@abi/campaign.json';
+import transaction from '@abi/transactionHistory.json';
 import { CampainUI } from '@models/campain';
 import campaignAddress from './campaignAddress';
 
@@ -25,7 +26,24 @@ const donateCampaign = async (id: string, value: number) => {
     return false;
   }
 };
+const setHistoryAddress = async () => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
+    const tx = await contract.setTransactionHistoryAddress(campaignAddress.historyAddress);
 
+    const contractHis = new Contract(campaignAddress.historyAddress, transaction.abi, signer);
+    const txHis = await contractHis.setCampaignAddress(campaignAddress.contractAddress);
+
+    await tx.wait();
+    await txHis.wait();
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
 const addNew = async (data: CampainUI) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
@@ -47,25 +65,13 @@ const addNew = async (data: CampainUI) => {
       endDate,
     );
     await tx.wait();
+    setHistoryAddress();
     return true;
   } catch (err) {
     return false;
   }
 };
-const setHistoryAddress = async () => {
-  try {
-    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-    const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
 
-    const tx = await contract.setTransactionHistoryAddress(campaignAddress.historyAddress);
-    await tx.wait();
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
 export default {
   donateCampaign,
   addNew,

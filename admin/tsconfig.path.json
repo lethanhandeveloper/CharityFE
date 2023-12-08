@@ -10,7 +10,8 @@
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"],
       "@store/*": ["store/*"],
-      "@models/*": ["models/*"]
+      "@models/*": ["models/*"],
+      "@abi/*": ["abi/*"]
     }
   }
 }

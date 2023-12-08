@@ -3,9 +3,10 @@ import { Avatar, Grid, Switch, TextField } from '@mui/material';
 
 interface DetailUserProps {
   data: UserUI;
+  setData: (data: UserUI) => void;
 }
 const DetailUser = (props: DetailUserProps) => {
-  const { data } = props;
+  const { data, setData } = props;
 
   return (
     <>
@@ -98,9 +99,9 @@ const DetailUser = (props: DetailUserProps) => {
         </Grid>
 
         <Switch
-          checked={true}
+          checked={data.isActive}
           onChange={() => {
-            console.log('xzcxz');
+            setData({ ...data, isActive: !data.isActive });
           }}
           inputProps={{ 'aria-label': 'controlled' }}
         />

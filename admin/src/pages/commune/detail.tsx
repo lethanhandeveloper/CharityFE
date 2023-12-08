@@ -58,10 +58,15 @@ const DetailCommune = (props: DetailCommuneProps) => {
     };
     if (provinceSelected) initDistrict();
   }, [provinceSelected]);
+
+  useEffect(() => {
+    setProvinceSelected(data.districtId.provinceId);
+    setDetail({ ...data, districtId: data.districtId._id });
+  }, [data]);
   return (
     <>
       <PanelDetail
-        title={'Chi tiết banner'}
+        title={'Chi tiết commune'}
         buttonChildren={
           <Grid container>
             <Grid item>

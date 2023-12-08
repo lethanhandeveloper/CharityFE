@@ -16,6 +16,7 @@ export interface UserUI {
   specificAddress: string;
   province: string;
   district: string;
+  isActive: boolean;
 }
 export type RegisterValue = {
   email: string;

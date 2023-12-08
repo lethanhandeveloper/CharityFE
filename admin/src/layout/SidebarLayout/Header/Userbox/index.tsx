@@ -1,27 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  Hidden,
-  lighten,
-  List,
-  ListItem,
-  ListItemText,
-  Popover,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, Button, Divider, Hidden, lighten, Popover, Typography } from '@mui/material';
 
-import InboxTwoToneIcon from '@mui/icons-material/InboxTwoTone';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
-import AccountBoxTwoToneIcon from '@mui/icons-material/AccountBoxTwoTone';
 import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
-import AccountTreeTwoToneIcon from '@mui/icons-material/AccountTreeTwoTone';
 import serviceAPI from '@services/api';
 import { mapUserUI } from '@services/mapdata/user';
 import { UserUI } from '@models/user';
@@ -62,11 +47,11 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('tokenAdmin');
   const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-
+  const navigation = useNavigate();
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -85,7 +70,8 @@ function HeaderUserbox() {
 
   const handleLogOut = () => {
     localStorage.removeItem('role');
-    localStorage.removeItem('token');
+    localStorage.removeItem('tokenAdmin');
+    navigation('/login');
   };
   return (
     <>
@@ -137,35 +123,7 @@ function HeaderUserbox() {
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />
-        <List
-          sx={{ p: 1 }}
-          component='nav'
-        >
-          <ListItem
-            button
-            to='/profile'
-            component={NavLink}
-          >
-            <AccountBoxTwoToneIcon fontSize='small' />
-            <ListItemText primary='My Profile' />
-          </ListItem>
-          <ListItem
-            button
-            to='/register/account/fund'
-            component={NavLink}
-          >
-            <InboxTwoToneIcon fontSize='small' />
-            <ListItemText primary='Messenger' />
-          </ListItem>
-          <ListItem
-            button
-            to='/management/profile/settings'
-            component={NavLink}
-          >
-            <AccountTreeTwoToneIcon fontSize='small' />
-            <ListItemText primary='Account Settings' />
-          </ListItem>
-        </List>
+
         <Divider />
         <Box sx={{ m: 1 }}>
           <Button
@@ -174,7 +132,7 @@ function HeaderUserbox() {
             onClick={handleLogOut}
           >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            Đăng xuất
           </Button>
         </Box>
       </Popover>

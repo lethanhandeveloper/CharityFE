@@ -6,6 +6,7 @@ import {
   useMapEvents,
   GeoJSON,
   ImageOverlay,
+  Popup,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -14,6 +15,9 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
+import { Button, Grid } from '@mui/material';
+import DialogChooseCampaign from './dialogChooseCampaign';
+import serviceAPI from '@services/api';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -85,8 +89,10 @@ const MapPage = () => {
   const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
   const [search, setSearch] = useState<string>('');
+  const [listMap, setListMap] = useState([]);
   const mapRef = useRef(null);
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
+  const [openChooseCampaign, setChooseCampaign] = useState<boolean>(false);
   const isLandSeaGeoJSON = {
     type: 'Feature',
     properties: {
@@ -150,9 +156,9 @@ const MapPage = () => {
     const api = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${text}`;
     const response = await fetch(api);
     const data = await response.json();
-
-    setPostionSearch({ lat: data[0].boundingbox[0], long: data[0].boundingbox[2] });
+    if (data[0]) setPostionSearch({ lat: data[0].boundingbox[0], long: data[0].boundingbox[2] });
   };
+
   useEffect(() => {
     try {
       (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
@@ -160,8 +166,26 @@ const MapPage = () => {
       console.log(e);
     }
   }, [postionSearch]);
+  useEffect(() => {
+    const initData = async () => {
+      const response = await serviceAPI.map.list();
+      setListMap(response.data.result);
+    };
+    initData();
+  }, []);
   return (
     <React.Fragment>
+      {openChooseCampaign && (
+        <DialogChooseCampaign
+          open={openChooseCampaign}
+          handleClose={() => {
+            setChooseCampaign(false);
+          }}
+          lat={postionSearch.lat}
+          long={postionSearch.long}
+          campaignId={''}
+        />
+      )}
       {currentPosition.lat > 0 && (
         <MapContainer
           className='leaflet-map'
@@ -208,30 +232,48 @@ const MapPage = () => {
               borderRadius: '50px',
             }}
           >
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder='Search…'
-                inputProps={{ 'aria-label': 'search' }}
-                onChange={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSearch(e.target.value);
-                }}
-                onKeyUp={(e) => {
-                  if (e.code === 'Enter') {
-                    getAddress(search);
-                  }
-                }}
-              />
-            </Search>
+            <Grid container>
+              <Grid item>
+                <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder='Search…'
+                    inputProps={{ 'aria-label': 'search' }}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setSearch(e.target.value);
+                    }}
+                    onKeyUp={(e) => {
+                      if (e.code === 'Enter') {
+                        getAddress(search);
+                      }
+                    }}
+                  />
+                </Search>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={() => {
+                    setChooseCampaign(!openChooseCampaign);
+                  }}
+                >
+                  Tạo điểm
+                </Button>
+              </Grid>
+            </Grid>
           </div>
-          <Marker
-            position={[postionSearch.lat, postionSearch.long]}
-            icon={icon}
-          />
+          {listMap?.map((item: any) => (
+            <Marker
+              position={[item.lat, item.long]}
+              icon={icon}
+            >
+              <Popup>xzczxczx</Popup>
+            </Marker>
+          ))}
+
           <MarkerClusterGroup chunkedLoading>
             <Marker
               position={[dataMap.lat, dataMap.long]}

@@ -2,7 +2,7 @@ import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import ProgressCustom from '@common/Progess';
-import TableRender from '@components/Table';
+// import TableRender from '@components/Table';
 
 import { useParams } from 'react-router';
 import serviceAPI from '@services/api';
@@ -153,7 +153,7 @@ const DonatePage = () => {
             boxShadow: '0px 1px 16px 0px #00000026',
           }}
         >
-          <TableRender />
+          {/* <TableRender /> */}
         </Grid>
       </Grid>
     </React.Fragment>

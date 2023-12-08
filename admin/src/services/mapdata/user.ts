@@ -13,6 +13,7 @@ export const mapUserUI = (userAPI: any): UserUI => {
     district: userAPI.district,
     province: userAPI.province,
     specificAddress: userAPI.specificAddress,
+    isActive: userAPI.isActive,
   };
 };
 export const mapUsersUI = (userAPI: any): UserUI[] => {

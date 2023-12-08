@@ -23,6 +23,7 @@ const apiEndPoint = {
     create: '/campaign',
     getDetail: (id: string) => `/campaign/${id}`,
     list: '/campaign/list',
+    updateStatus: '/campaign/updateStatus',
   },
   banner: {
     create: '/banner/create',
@@ -51,6 +52,7 @@ const apiEndPoint = {
   map: {
     create: '/map/create',
     update: '/map/update',
+    list: '/map/list',
   },
   request: {
     update: (id: string) => `/user/verification/${id}`,

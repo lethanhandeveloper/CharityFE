@@ -20,7 +20,7 @@ const LoginPage = () => {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigation = useNavigate();
   const [messageError, setMessageError] = useState<string>('');
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('tokenAdmin');
   const onSubmit = async () => {
     try {
       const loginInfo = await serviceAPI.auth.login(user);
@@ -28,9 +28,9 @@ const LoginPage = () => {
         if (loginInfo.data.result.role === 4) {
           setMessageError('test');
         } else {
-          localStorage.setItem('token', loginInfo.data.result.token);
+          localStorage.setItem('tokenAdmin', loginInfo.data.result.token);
           localStorage.setItem('role', loginInfo.data.result.role);
-          navigation('/home');
+          navigation('/');
         }
       } else {
         setMessageError('test');
@@ -47,7 +47,7 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      {token && <Navigate to={'/home'} />}
+      {token && <Navigate to={'/'} />}
       <Grid container>
         <Grid
           item

@@ -1,5 +1,5 @@
 import { Contract, ethers } from 'ethers';
-import ExtendedWindow from 'models/ether';
+import ExtendedWindow from '@models/ether';
 import { useEffect } from 'react';
 import transactionHistory from '@abi/transactionHistory.json';
 

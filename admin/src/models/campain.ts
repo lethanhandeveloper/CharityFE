@@ -1,3 +1,4 @@
+export type CampaignStatus = 'DRAFT' | 'START' | 'END';
 export interface Campain {
   _id: string;
   creatorId: string;

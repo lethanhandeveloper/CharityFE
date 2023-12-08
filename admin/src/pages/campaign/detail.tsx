@@ -4,6 +4,7 @@ import { CampainUI } from '@models/campain';
 
 import { Avatar, Box, Button, Grid, Tab, Tabs, TextField, Typography } from '@mui/material';
 import serviceAPI from '@services/api';
+import campaign from '@services/ethers/campaign';
 
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
@@ -62,9 +63,12 @@ const DetailCampaign = (props: DetailCampaignProps) => {
   };
   const onApprove = async () => {
     try {
-      const response = await serviceAPI.banner.createBanner(detail);
+      const response = await serviceAPI.campain.updateStatus(detail.id, 'START');
       if (response.status === 200) {
-        dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        const check = await campaign.addNew(detail);
+        if (check) {
+          dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        }
         onClose();
         loadTable();
       } else {
@@ -98,10 +102,10 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               <Button onClick={onClose}>Đóng</Button>
             </Grid>
             <Grid item>
-              <Button onClick={onApprove}>Reject</Button>
+              <Button onClick={onReject}>Reject</Button>
             </Grid>
             <Grid item>
-              <Button onClick={onReject}>Approve</Button>
+              <Button onClick={onApprove}>Approve</Button>
             </Grid>
           </Grid>
         }

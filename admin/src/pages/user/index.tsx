@@ -64,12 +64,15 @@ const UserTable = (props: UserTableProps) => {
           title={'Chi tiết người dùng'}
           buttonChildren={
             <>
-              <Button onClick={handleClose}>Save</Button>
+              <Button onClick={handleClose}>Đóng</Button>
             </>
           }
           open={openDetail}
         >
-          <DetailUser data={data} />
+          <DetailUser
+            data={data}
+            setData={setData}
+          />
         </PanelDetail>
       )}
     </>

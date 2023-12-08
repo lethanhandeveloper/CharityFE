@@ -2,6 +2,7 @@ import { Contract, ethers } from 'ethers';
 import ExtendedWindow from 'models/ether';
 import { useEffect, useState } from 'react';
 import transactionHistory from '@abi/transactionHistory.json';
+import TableRender from '@components/Table';
 type TypeHistory = 'user' | 'campaign';
 interface TableHistoryComponentProps {
   id: string;
@@ -33,7 +34,11 @@ const TableHistoryComponent = (props: TableHistoryComponentProps) => {
     };
     initData();
   }, [props.id]);
-  console.log(list);
-  return <></>;
+
+  return (
+    <>
+      <TableRender list={list} />
+    </>
+  );
 };
 export default TableHistoryComponent;

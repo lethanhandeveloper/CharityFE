@@ -1,6 +1,6 @@
 import apiEndPoint from '@constants/apiEndPoint';
 import apiService from '../config';
-import { Campain } from '@models/campain';
+import { CampaignStatus, Campain } from '@models/campain';
 
 const getCategory = async () => {
   return await apiService.get(apiEndPoint.campain.category);
@@ -20,6 +20,9 @@ const getCampainDetail = async (id: string) => {
 const getCampaignList = async () => {
   return await apiService.get(apiEndPoint.campain.getCampainList);
 };
+const updateStatus = async (id: string, status: CampaignStatus) => {
+  return await apiService.patch(apiEndPoint.campain.updateStatus, { id, status });
+};
 export default {
   getCategory,
   getCampainDetail,
@@ -27,4 +30,5 @@ export default {
   createCampain,
   getCampainPendingByPage,
   getCampaignList,
+  updateStatus,
 };

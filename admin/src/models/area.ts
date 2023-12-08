@@ -15,7 +15,7 @@ export interface CommuneAPI {
 export interface CommuneUI {
   id: string;
   name: string;
-  districtId: string;
+  districtId: any;
 }
 
 export interface DistrictAPI {
