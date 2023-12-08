@@ -20,6 +20,8 @@ const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
 const CampainFormPage = Loader(lazy(() => import('@pages/campaign/create')));
 const CampainPage = Loader(lazy(() => import('@pages/campaign/')));
 const RoleUpdate = Loader(lazy(() => import('@pages/auth/updateRole')));
+const ConsultantPage = Loader(lazy(() => import('@pages/consultant')));
+const CampaignCurrentPage = Loader(lazy(() => import('@pages/consultant/campaignTable')));
 const routers: RouteObject[] = [
   {
     path: '/',
@@ -28,13 +30,21 @@ const routers: RouteObject[] = [
       { path: 'home', element: <HomePage /> },
       { path: 'map', element: <MapPage /> },
       { path: 'introduction', element: <IntroductionPage /> },
-
       { path: 'profile', element: <ManagementUserProfile /> },
-
       { path: 'campaign/create', element: <CampainFormPage /> },
       { path: 'campaign', element: <CampainPage /> },
+      {
+        path: 'campaign/current',
+        element: (
+          <CampaignCurrentPage
+            id=''
+            isCurrent={true}
+          />
+        ),
+      },
       { path: 'campaign/donate/:id', element: <DonatePage /> },
       { path: 'register/account/fund', element: <RoleUpdate /> },
+      { path: 'account/:id', element: <ConsultantPage /> },
     ],
   },
   {

@@ -156,6 +156,22 @@ function HeaderUserbox() {
             <InboxTwoToneIcon fontSize='small' />
             <ListItemText primary='Tài khoản cộng tác' />
           </ListItem>
+          <ListItem
+            button
+            to='campaign/create'
+            component={NavLink}
+          >
+            <InboxTwoToneIcon fontSize='small' />
+            <ListItemText primary='Tạo chiến dịch' />
+          </ListItem>
+          <ListItem
+            button
+            to='/campaign/current'
+            component={NavLink}
+          >
+            <InboxTwoToneIcon fontSize='small' />
+            <ListItemText primary='Chiến dịch của tôi' />
+          </ListItem>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>

@@ -14,6 +14,12 @@ const createCampain = async (data: Campain) => {
 const getCampainPendingByPage = async (data: any) => {
   return await apiService.post(apiEndPoint.campain.getCampainPendingList, { ...data });
 };
+const getCampainListByUser = async (data: any) => {
+  return await apiService.post(apiEndPoint.campain.getCampaignByUser, { ...data });
+};
+const getCampainListByCurentUser = async (data: any) => {
+  return await apiService.post(apiEndPoint.campain.getCampaignByCurentUser, { ...data });
+};
 const getListForHome = async () => {
   return await apiService.get(apiEndPoint.campain.home);
 };
@@ -27,4 +33,6 @@ export default {
   createCampain,
   getCampainPendingByPage,
   getListForHome,
+  getCampainListByUser,
+  getCampainListByCurentUser,
 };

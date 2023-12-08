@@ -15,9 +15,14 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
-import { Button, Grid } from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import DialogChooseCampaign from './dialogChooseCampaign';
 import serviceAPI from '@services/api';
+import { mapUIs } from '@services/mapdata/map';
+import { MapUI } from '@models/map';
+import { CampainUI } from '@models/campain';
+import ProgressCustom from '@common/Progess';
+import { Link } from 'react-router-dom';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -89,7 +94,7 @@ const MapPage = () => {
   const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
   const [search, setSearch] = useState<string>('');
-  const [listMap, setListMap] = useState([]);
+  const [listMap, setListMap] = useState<MapUI[]>([]);
   const mapRef = useRef(null);
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
   const [openChooseCampaign, setChooseCampaign] = useState<boolean>(false);
@@ -169,10 +174,133 @@ const MapPage = () => {
   useEffect(() => {
     const initData = async () => {
       const response = await serviceAPI.map.list();
-      setListMap(response.data.result);
+      setListMap(mapUIs(response.data.result));
     };
     initData();
   }, []);
+
+  const calculatePercent = (current: number, target: number): number => {
+    return Number(((current / target) * 100).toFixed(2));
+  };
+  const calculateDayCountDown = (endDate: Date): number => {
+    return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
+  };
+  const renderCard = (data: CampainUI) => (
+    <Card
+      variant='outlined'
+      sx={{
+        margin: '10px 10px 20px',
+        boxShadow: '0 8px 24px hsla(210,8%,62%,.2)',
+        borderRadius: '10px',
+      }}
+    >
+      <CardMedia
+        sx={{ height: 200 }}
+        image={data.thumbnail}
+      />
+      <CardContent>
+        <Typography
+          sx={{
+            background: '#f4f4f4',
+            padding: '3px 15px',
+            position: 'absolute',
+            borderRadius: '12px',
+            top: '10px',
+            margin: '5px 0 0 5px',
+          }}
+          fontSize={'13px'}
+        >
+          Còn {calculateDayCountDown(data.endDate)} ngày
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: '20px',
+            lineHeight: '22px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            WebkitLineClamp: 2,
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            textAlign: 'start',
+            fontWeight: 'bold',
+          }}
+        >
+          <Link to={`donate/${data.id}`}>{data.title}</Link>
+        </Typography>
+
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>
+          <Typography
+            fontSize={16}
+            variant='body2'
+            color='text.secondary'
+          >
+            Tạo bởi
+          </Typography>
+          <Typography
+            fontSize={14}
+            color='#f54a00'
+            fontWeight='bold'
+          >
+            {data.creatorId}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            marginTop: '30px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Typography
+              fontSize={16}
+              color='#f54a00'
+              fontWeight='bold'
+            >
+              {data.targetValue?.toLocaleString()} VNĐ
+            </Typography>
+            <Typography
+              variant='body2'
+              fontSize={16}
+              color='text.secondary'
+            >
+              đã đạt được
+            </Typography>
+          </Box>
+
+          <Typography fontSize={16}>{calculatePercent(data.targetValue, 10000000000)}%</Typography>
+        </Box>
+        <ProgressCustom
+          variant='determinate'
+          value={calculatePercent(data.targetValue, 10000000000)}
+          sx={{ height: '10px', borderRadius: '10px', marginTop: '10px' }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            marginTop: '10px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            fontSize={16}
+          >
+            của mục tiêu {data.targetValue.toLocaleString()} VNĐ
+          </Typography>
+
+          <Typography fontSize={16}>953 người ủng hộ</Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <React.Fragment>
       {openChooseCampaign && (
@@ -265,12 +393,13 @@ const MapPage = () => {
               </Grid>
             </Grid>
           </div>
-          {listMap?.map((item: any) => (
+
+          {listMap?.map((item) => (
             <Marker
               position={[item.lat, item.long]}
               icon={icon}
             >
-              <Popup>xzczxczx</Popup>
+              <Popup>{renderCard(item.campaign)}</Popup>
             </Marker>
           ))}
 
@@ -278,11 +407,15 @@ const MapPage = () => {
             <Marker
               position={[dataMap.lat, dataMap.long]}
               icon={icon}
-            />
+            >
+              <Popup>zxcxzcxzcxzczx</Popup>
+            </Marker>
             <Marker
               position={[dataMap.lat + 1, dataMap.long]}
               icon={icon}
-            />
+            >
+              <Popup>zxcxzcxzcxzczx</Popup>
+            </Marker>
           </MarkerClusterGroup>
         </MapContainer>
       )}

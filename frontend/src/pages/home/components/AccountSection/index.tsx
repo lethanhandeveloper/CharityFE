@@ -3,7 +3,6 @@ import { UserUI } from '@models/user';
 import {
   Card,
   Typography,
-  Button,
   CardContent,
   CardActions,
   Divider,
@@ -12,6 +11,7 @@ import {
   Avatar,
 } from '@mui/material';
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 interface AccountSectionProps {
   list: UserUI[];
 }
@@ -54,7 +54,7 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
         </Box>
       </CardContent>
       <CardActions>
-        <Button size='small'>Xem chi tiết</Button>
+        <Link to={`/account/${account.id}`}>Xem chi tiết</Link>
       </CardActions>
     </Card>
   );

@@ -22,6 +22,8 @@ const apiEndPoint = {
     itemType: '/campaign/itemtype',
     getCampainList: '/campaign',
     getCampainPendingList: '/campaign/filter',
+    getCampaignByUser: '/campaign/byuser',
+    getCampaignByCurentUser: '/campaign/user',
     create: '/campaign',
     getDetail: (id: string) => `/campaign/${id}`,
     home: '/campaign/home',
