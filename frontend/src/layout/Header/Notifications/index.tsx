@@ -10,11 +10,14 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import { styled } from '@mui/material/styles';
 
 import { formatDistance, subDays } from 'date-fns';
+import campaign from '@services/ethers/campaign';
+import { mapHistoryContracts } from '@mapdata/contract';
+import { HistoryContractUI } from '@models/contract';
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -43,7 +46,7 @@ const NotificationsBadge = styled(Badge)(
 function HeaderNotifications() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-
+  const [list, setList] = useState<HistoryContractUI[]>([]);
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -51,12 +54,20 @@ function HeaderNotifications() {
   const handleClose = (): void => {
     setOpen(false);
   };
+  useEffect(() => {
+    const initData = async () => {
+      const id = localStorage.getItem('userId');
 
+      const history = await campaign.getHistoryByUser(id || '');
+      setList(mapHistoryContracts(history));
+    };
+    initData();
+  }, []);
   return (
     <>
       <Tooltip
         arrow
-        title='Notifications'
+        title='Lịch sử'
       >
         <IconButton
           color='primary'
@@ -93,36 +104,37 @@ function HeaderNotifications() {
           alignItems='center'
           justifyContent='space-between'
         >
-          <Typography variant='h5'>Notifications</Typography>
+          <Typography variant='h5'>Lịch sử</Typography>
         </Box>
         <Divider />
         <List sx={{ p: 0 }}>
-          <ListItem sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}>
-            <Box flex='1'>
-              <Box
-                display='flex'
-                justifyContent='space-between'
-              >
-                <Typography sx={{ fontWeight: 'bold' }}>Messaging Platform</Typography>
-                <Typography
-                  variant='caption'
-                  sx={{ textTransform: 'none' }}
+          {list?.map((item) => (
+            <ListItem sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}>
+              <Box flex='1'>
+                <Box
+                  display='flex'
+                  justifyContent='space-between'
                 >
-                  {formatDistance(subDays(new Date(), 3), new Date(), {
-                    addSuffix: true,
-                  })}
+                  <Typography sx={{ fontWeight: 'bold' }}>{item.value}</Typography>
+                  <Typography
+                    variant='caption'
+                    sx={{ textTransform: 'none' }}
+                  >
+                    {formatDistance(subDays(new Date(), 3), new Date(), {
+                      addSuffix: true,
+                    })}
+                  </Typography>
+                </Box>
+                <Typography
+                  component='span'
+                  variant='body2'
+                  color='text.secondary'
+                >
+                  {item.time.toString()}
                 </Typography>
               </Box>
-              <Typography
-                component='span'
-                variant='body2'
-                color='text.secondary'
-              >
-                {' '}
-                new messages in your inbox
-              </Typography>
-            </Box>
-          </ListItem>
+            </ListItem>
+          ))}
         </List>
       </Popover>
     </>

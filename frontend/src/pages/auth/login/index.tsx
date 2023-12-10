@@ -30,6 +30,7 @@ const LoginPage = () => {
         } else {
           localStorage.setItem('token', loginInfo.data.result.token);
           localStorage.setItem('role', loginInfo.data.result.role);
+          localStorage.setItem('userId', loginInfo.data.result._id);
           navigation('/home');
         }
       } else {

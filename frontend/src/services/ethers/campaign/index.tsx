@@ -66,7 +66,6 @@ const getHistoryByUser = async (id: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
     const tx = await contract.getDonateByUser(id);

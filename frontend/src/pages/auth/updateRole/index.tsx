@@ -70,26 +70,57 @@ const UpdateRolePage = () => {
   const handleSubmit = async () => {
     try {
       let response;
+
       if (data.type == 2) {
-        response = await serviceAPI.auth.submitRequest({
-          type: data.type,
-          commitInfoVerification: {
-            ...question,
-          },
-          organizationGeneralInfo: {
-            ...data,
-          },
-        });
+        if (id) {
+          response = await serviceAPI.auth.updateRequest(
+            {
+              type: data.type,
+              commitInfoVerification: {
+                ...question,
+              },
+              organizationGeneralInfo: {
+                ...data,
+              },
+            },
+            id,
+          );
+        } else {
+          response = await serviceAPI.auth.submitRequest({
+            type: data.type,
+            commitInfoVerification: {
+              ...question,
+            },
+            organizationGeneralInfo: {
+              ...data,
+            },
+          });
+        }
       } else {
-        response = await serviceAPI.auth.submitRequest({
-          type: data.type,
-          commitInfoVerification: {
-            ...question,
-          },
-          personalGeneralInfo: {
-            ...data,
-          },
-        });
+        if (id) {
+          response = await serviceAPI.auth.updateRequest(
+            {
+              type: data.type,
+              commitInfoVerification: {
+                ...question,
+              },
+              personalGeneralInfo: {
+                ...data,
+              },
+            },
+            id,
+          );
+        } else {
+          response = await serviceAPI.auth.submitRequest({
+            type: data.type,
+            commitInfoVerification: {
+              ...question,
+            },
+            personalGeneralInfo: {
+              ...data,
+            },
+          });
+        }
       }
       dispatch(setInfoAlert({ open: true, title: response.data.result.message, type: 'success' }));
     } catch (error) {

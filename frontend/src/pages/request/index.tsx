@@ -11,6 +11,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
+  ListItemButton,
 } from '@mui/material';
 import ImageIcon from '@mui/icons-material/Image';
 
@@ -18,6 +19,7 @@ import React, { useEffect } from 'react';
 import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import { NavLink } from 'react-router-dom';
 
 const RequestPage = () => {
   const [list, setList] = React.useState<any>([]);
@@ -62,24 +64,44 @@ const RequestPage = () => {
                   variant='h4'
                   gutterBottom
                 >
-                  Thông tin chi tiết
+                  Danh sách yêu cầu đăng ký
                 </Typography>
               </Box>
             </Box>
             <Divider />
             <CardContent sx={{ p: 4 }}>
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+              <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 {list?.map((item: any) => (
-                  <ListItem>
+                  <ListItem
+                    button
+                    to={`/register/account/fund/${item.id}`}
+                    component={NavLink}
+                  >
                     <ListItemAvatar>
                       <Avatar>
                         <ImageIcon />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={item?.name}
-                      secondary='Jan 9, 2014'
+                      primary={`${item?.commitInfoVerification?.goalName} - ${item?.commitInfoVerification?.targetAmount}`}
+                      secondary={`${item?.commitInfoVerification?.startDate} - ${item?.commitInfoVerification?.endDate}`}
                     />
+                    <ListItemButton>
+                      <Grid container>
+                        <Grid
+                          item
+                          xs={6}
+                        >
+                          {item?.status === 1 ? 'Chưa duyệt' : 'Đã duyệt'}
+                        </Grid>
+                        <Grid
+                          item
+                          xs={6}
+                        >
+                          {item?.type === 1 ? 'Cá nhân' : 'Tổ chức'}
+                        </Grid>
+                      </Grid>
+                    </ListItemButton>
                   </ListItem>
                 ))}
               </List>

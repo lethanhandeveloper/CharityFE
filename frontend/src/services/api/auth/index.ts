@@ -29,6 +29,9 @@ const getListForHome = async () => {
 const submitRequest = async (data: any) => {
   return await apiService.post(apiEndPoint.user.request(data.type), { ...data });
 };
+const updateRequest = async (data: any, id: string) => {
+  return await apiService.patch(apiEndPoint.user.updateByID(id), { ...data });
+};
 
 const getUserById = async (id: string) => {
   return await apiService.get(apiEndPoint.user.getByID(id));
@@ -55,4 +58,5 @@ export default {
   getUserById,
   getRequest,
   sendEmail,
+  updateRequest,
 };

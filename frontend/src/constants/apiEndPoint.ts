@@ -12,6 +12,7 @@ const apiEndPoint = {
     getRequestId: (id: string) => `/user/verification/${id}`,
     getRequestByUser: '/user/verification/myrequest',
     email: '/user/register/getcode',
+    updateByID: (id: string) => `/user/verification/update/${id}`,
   },
 
   location: {
@@ -36,8 +37,10 @@ const apiEndPoint = {
   banner: {
     getList: '/banner/list',
   },
-  getInforHome: '',
-  getDetails: '',
-  updateUserInfor: '',
+  map: {
+    create: '/map/create',
+    update: '/map/update',
+    list: '/map/list',
+  },
 };
 export default apiEndPoint;

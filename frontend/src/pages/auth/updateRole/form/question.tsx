@@ -45,16 +45,6 @@ const QuestionForm = (props: QuestionFormProps) => {
             name='goalName'
             variant='standard'
           />
-          <Typography>Dự định thực hiện:</Typography>
-          <TextField
-            autoFocus
-            margin='dense'
-            onChange={handleChange}
-            fullWidth
-            name='planDesc'
-            value={data?.planDesc}
-            variant='standard'
-          />
 
           <Typography>Ngày bắt đầu:</Typography>
 
