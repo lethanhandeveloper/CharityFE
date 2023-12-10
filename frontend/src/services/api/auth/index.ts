@@ -6,15 +6,19 @@ import { RegisterValue } from '@pages/auth/register';
 const login = async (user: UserAPI) => {
   return await apiService.post(apiEndPoint.user.login, { ...user });
 };
-const register = async (data: RegisterValue) => {
+
+const register = async (data: any) => {
   return await apiService.post(apiEndPoint.user.register, { ...data });
 };
+
 const getProfile = async () => {
   return await apiService.get(apiEndPoint.user.getProfile, {});
 };
+
 const updateProfile = async (data: RegisterValue) => {
   return await apiService.patch(apiEndPoint.user.getProfile, { ...data });
 };
+
 const updateAvatar = async (image_url: string) => {
   return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
@@ -23,9 +27,24 @@ const getListForHome = async () => {
 };
 
 const submitRequest = async (data: any) => {
-  return await apiService.post(apiEndPoint.user.request(data.type), { ...DataTransferItem });
+  return await apiService.post(apiEndPoint.user.request(data.type), { ...data });
+};
+
+const getUserById = async (id: string) => {
+  return await apiService.get(apiEndPoint.user.getByID(id));
+};
+
+const getRequest = async (id: string) => {
+  return await apiService.get(apiEndPoint.user.getRequestId(id));
+};
+const getRequestByUser = async () => {
+  return await apiService.get(apiEndPoint.user.getRequestByUser);
+};
+const sendEmail = async (email: string) => {
+  return await apiService.post(apiEndPoint.user.email, { toEmail: email });
 };
 export default {
+  getRequestByUser,
   login,
   register,
   getProfile,
@@ -33,4 +52,7 @@ export default {
   updateProfile,
   getListForHome,
   submitRequest,
+  getUserById,
+  getRequest,
+  sendEmail,
 };

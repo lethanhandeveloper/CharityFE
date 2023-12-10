@@ -129,7 +129,7 @@ const CampainPage = () => {
             fontWeight: 'bold',
           }}
         >
-          <Link to={`donate/${data.id}`}>{data.title}</Link>
+          <Link to={`/campaign/donate/${data.id}`}>{data.title}</Link>
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>

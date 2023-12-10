@@ -22,7 +22,7 @@ import { ButtonStyle1 } from '@common/Button';
 import { setInfoAlert } from '@store/redux/alert';
 import { useAppDispatch } from '@store/hook';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const validationSchema = Yup.object({
   categoryId: Yup.string().required('Chọn danh mục'),
@@ -35,14 +35,14 @@ const validationSchema = Yup.object({
   title: Yup.string().required('Nhập tiêu đề'),
   fileUrl: Yup.string().required('Chọn file xác thực'),
 });
-const CampaignCreatePage = () => {
+const CampaignEditPage = () => {
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const [itemTypeList, setItemTypeList] = useState<SimpleValueKey[]>([]);
   const [error, setErrors] = useState<any>({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { id } = useParams();
   const [data, setData] = useState<Campain>({
     _id: '',
     categoryId: '',
@@ -76,7 +76,15 @@ const CampaignCreatePage = () => {
     };
     initProvince();
   }, []);
-
+  useEffect(() => {
+    const initData = async () => {
+      if (id) {
+        const response = await serviceAPI.campain.getCampainDetail(id);
+        setData({ ...response.data.result });
+      }
+    };
+    initData();
+  }, [id]);
   const handleSubmit = async () => {
     try {
       await validationSchema.validate(data, { abortEarly: false });
@@ -150,6 +158,7 @@ const CampaignCreatePage = () => {
                       margin='dense'
                       onChange={handleChange}
                       fullWidth
+                      value={data.title}
                       name='title'
                       variant='standard'
                       error={Boolean(error?.title)}
@@ -159,6 +168,7 @@ const CampaignCreatePage = () => {
                     <TextField
                       autoFocus
                       margin='dense'
+                      value={data.targetValue}
                       onChange={handleChange}
                       type='number'
                       fullWidth
@@ -170,6 +180,7 @@ const CampaignCreatePage = () => {
                     <Typography>Ngày kết thúc</Typography>
                     <DateCalendar
                       disablePast
+                      value={new Date(data.endDate)}
                       onChange={(e) => {
                         setData({ ...data, endDate: e || new Date() });
                       }}
@@ -188,6 +199,7 @@ const CampaignCreatePage = () => {
                           id='standard-select-currency'
                           label='Tỉnh/TP'
                           select
+                          value={data.provinceId}
                           name='provinceId'
                           onChange={handleChange}
                           fullWidth
@@ -211,6 +223,7 @@ const CampaignCreatePage = () => {
                           id='standard-select-currency'
                           label='Danh mục'
                           select
+                          value={data.categoryId}
                           name='categoryId'
                           onChange={handleChange}
                           fullWidth
@@ -236,6 +249,7 @@ const CampaignCreatePage = () => {
                           id='standard-select-currency'
                           label='Loại'
                           select
+                          value={data.itemTypeId}
                           name='itemTypeId'
                           onChange={handleChange}
                           fullWidth
@@ -301,6 +315,7 @@ const CampaignCreatePage = () => {
                     <Typography>Mô tả chi tiết</Typography>
                     <Editor
                       apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
+                      value={data.description}
                       onEditorChange={(e) => {
                         setData({ ...data, description: e });
                       }}
@@ -324,7 +339,7 @@ const CampaignCreatePage = () => {
                   justifyContent: 'center',
                 }}
               >
-                <ButtonStyle1 onClick={handleSubmit}>Gửi yêu cầu</ButtonStyle1>
+                <ButtonStyle1 onClick={handleSubmit}>Cập nhật</ButtonStyle1>
               </Grid>
             </CardActions>
           </Card>
@@ -334,4 +349,4 @@ const CampaignCreatePage = () => {
   );
 };
 
-export default CampaignCreatePage;
+export default CampaignEditPage;

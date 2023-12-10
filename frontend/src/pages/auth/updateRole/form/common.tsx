@@ -44,6 +44,7 @@ const CommonForm = (props: CommonFormProps) => {
             autoFocus
             margin='dense'
             onChange={handleChange}
+            value={data?.name}
             fullWidth
             name='name'
             variant='standard'
@@ -54,6 +55,7 @@ const CommonForm = (props: CommonFormProps) => {
             autoFocus
             margin='dense'
             onChange={handleChange}
+            value={data?.address}
             fullWidth
             name='address'
             variant='standard'
@@ -65,6 +67,7 @@ const CommonForm = (props: CommonFormProps) => {
             margin='dense'
             onChange={handleChange}
             fullWidth
+            value={data?.actionDescSocialLink}
             name='actionDescSocialLink'
             variant='standard'
             helperText={helperText}
@@ -76,14 +79,15 @@ const CommonForm = (props: CommonFormProps) => {
             margin='dense'
             onChange={handleChange}
             fullWidth
+            value={data?.representativeEmail}
             name='representativeEmail'
             variant='standard'
           />
           <RadioGroup
             row
             aria-labelledby='demo-row-radio-buttons-group-label'
-            name='personal'
-            value={data?.personal}
+            name='type'
+            value={data?.type || '2'}
             onChange={handleChange}
           >
             <FormControlLabel

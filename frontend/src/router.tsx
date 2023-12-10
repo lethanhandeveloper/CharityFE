@@ -17,9 +17,11 @@ const LoginPage = Loader(lazy(() => import('@pages/auth/login')));
 const RegisterPage = Loader(lazy(() => import('@pages/auth/register')));
 const ErrorRouter = Loader(lazy(() => import('@pages/error/ErrorRouter')));
 const ManagementUserProfile = Loader(lazy(() => import('@pages/profile')));
-const CampainFormPage = Loader(lazy(() => import('@pages/campaign/create')));
+const CampainCreatePage = Loader(lazy(() => import('@pages/campaign/create')));
+const CampainEditPage = Loader(lazy(() => import('@pages/campaign/edit')));
 const CampainPage = Loader(lazy(() => import('@pages/campaign/')));
 const RoleUpdate = Loader(lazy(() => import('@pages/auth/updateRole')));
+const RequestPage = Loader(lazy(() => import('@pages/request')));
 const ConsultantPage = Loader(lazy(() => import('@pages/consultant')));
 const CampaignCurrentPage = Loader(lazy(() => import('@pages/consultant/campaignTable')));
 const routers: RouteObject[] = [
@@ -31,7 +33,8 @@ const routers: RouteObject[] = [
       { path: 'map', element: <MapPage /> },
       { path: 'introduction', element: <IntroductionPage /> },
       { path: 'profile', element: <ManagementUserProfile /> },
-      { path: 'campaign/create', element: <CampainFormPage /> },
+      { path: 'campaign/edit/:id', element: <CampainEditPage /> },
+      { path: 'campaign/create', element: <CampainCreatePage /> },
       { path: 'campaign', element: <CampainPage /> },
       {
         path: 'campaign/current',
@@ -43,7 +46,9 @@ const routers: RouteObject[] = [
         ),
       },
       { path: 'campaign/donate/:id', element: <DonatePage /> },
+      { path: 'register/account/fund/list', element: <RequestPage /> },
       { path: 'register/account/fund', element: <RoleUpdate /> },
+      { path: 'register/account/fund/:id', element: <RoleUpdate /> },
       { path: 'account/:id', element: <ConsultantPage /> },
     ],
   },

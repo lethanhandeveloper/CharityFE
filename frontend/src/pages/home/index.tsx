@@ -19,11 +19,13 @@ import { CampainUI } from '@models/campain';
 import { mapUsersUI } from '@mapdata/user';
 import { mapCampainUIs } from '@mapdata/campain';
 import CarouselSection from './components/CarouselSection';
+import { SimpleValueKey } from '@models/meta';
 
 const HomePage = () => {
   const [banners, setBanners] = useState<BannerUI[]>([]);
   const [users, setUsers] = useState<UserUI[]>([]);
   const [campagins, setCampaigns] = useState<CampainUI[]>([]);
+  const [categorys, setCategorys] = useState<SimpleValueKey[]>([]);
   useEffect(() => {
     const initData = async () => {
       const banner = await serviceAPI.banner.getBannerList();
@@ -32,6 +34,13 @@ const HomePage = () => {
       setUsers(mapUsersUI(user.data.result));
       const campaign = await serviceAPI.campain.getListForHome();
       setCampaigns(mapCampainUIs(campaign.data.result));
+      const category = await serviceAPI.campain.getCategory();
+      setCategorys(
+        category.data.result.map((item: any) => ({
+          id: item._id,
+          value: item.name,
+        })),
+      );
     };
     initData();
   }, []);
@@ -40,7 +49,10 @@ const HomePage = () => {
     <React.Fragment>
       <CarouselSection list={banners} />
 
-      <FeatureSection list={campagins} />
+      <FeatureSection
+        list={campagins}
+        categorys={categorys}
+      />
 
       <BannerSection />
 

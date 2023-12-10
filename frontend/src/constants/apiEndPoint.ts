@@ -8,6 +8,10 @@ const apiEndPoint = {
     updateAvatar: '/user/avatar',
     home: '/user/home',
     request: (type: string) => `/user/verification/${type}`,
+    getByID: (id: string) => `/user/getbyid/${id}`,
+    getRequestId: (id: string) => `/user/verification/${id}`,
+    getRequestByUser: '/user/verification/myrequest',
+    email: '/user/register/getcode',
   },
 
   location: {

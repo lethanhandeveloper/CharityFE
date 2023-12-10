@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   Avatar,
@@ -24,6 +24,7 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import serviceAPI from '@services/api';
 import { mapUserUI } from '@mapdata/user';
 import { UserUI } from '@models/user';
+import Can from '@caslConfig/can';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -65,7 +66,7 @@ function HeaderUserbox() {
   const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-
+  const navigation = useNavigate();
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -85,6 +86,7 @@ function HeaderUserbox() {
   const handleLogOut = () => {
     localStorage.removeItem('role');
     localStorage.removeItem('token');
+    navigation('/login');
   };
   return (
     <>
@@ -148,30 +150,58 @@ function HeaderUserbox() {
             <AccountBoxTwoToneIcon fontSize='small' />
             <ListItemText primary='Thông tin' />
           </ListItem>
-          <ListItem
-            button
-            to='/register/account/fund'
-            component={NavLink}
+          <Can
+            I='create'
+            an='RequestRole'
           >
-            <InboxTwoToneIcon fontSize='small' />
-            <ListItemText primary='Tài khoản cộng tác' />
-          </ListItem>
-          <ListItem
-            button
-            to='campaign/create'
-            component={NavLink}
+            <ListItem
+              button
+              to='/register/account/fund'
+              component={NavLink}
+            >
+              <InboxTwoToneIcon fontSize='small' />
+              <ListItemText primary='Tài khoản cộng tác' />
+            </ListItem>
+          </Can>
+          <Can
+            I='create'
+            an='RequestRole'
           >
-            <InboxTwoToneIcon fontSize='small' />
-            <ListItemText primary='Tạo chiến dịch' />
-          </ListItem>
-          <ListItem
-            button
-            to='/campaign/current'
-            component={NavLink}
+            <ListItem
+              button
+              to='/register/account/fund/list'
+              component={NavLink}
+            >
+              <InboxTwoToneIcon fontSize='small' />
+              <ListItemText primary='Lịch sử yêu cầu' />
+            </ListItem>
+          </Can>
+          <Can
+            I='create'
+            an='CampaignRequest'
           >
-            <InboxTwoToneIcon fontSize='small' />
-            <ListItemText primary='Chiến dịch của tôi' />
-          </ListItem>
+            <ListItem
+              button
+              to='campaign/create'
+              component={NavLink}
+            >
+              <InboxTwoToneIcon fontSize='small' />
+              <ListItemText primary='Tạo chiến dịch' />
+            </ListItem>
+          </Can>
+          <Can
+            I='create'
+            an='CampaignRequest'
+          >
+            <ListItem
+              button
+              to='/campaign/current'
+              component={NavLink}
+            >
+              <InboxTwoToneIcon fontSize='small' />
+              <ListItemText primary='Chiến dịch của tôi' />
+            </ListItem>
+          </Can>
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
@@ -181,7 +211,7 @@ function HeaderUserbox() {
             onClick={handleLogOut}
           >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            Đăng xuất
           </Button>
         </Box>
       </Popover>

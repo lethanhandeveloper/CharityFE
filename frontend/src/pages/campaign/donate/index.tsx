@@ -10,12 +10,17 @@ import { mapCampain } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import parse from 'html-react-parser';
 import campaign from '@services/ethers/campaign';
+import { CampaignContractUI } from '@models/contract';
+import { mapCampainContract } from '@mapdata/contract';
+import TableRender from '@components/Table';
 
+export const calculatePercent = (number1: number, number2: number) =>
+  Math.floor((number1 / number2) * 100).toFixed(2);
 const DonatePage = () => {
   const { id } = useParams();
 
   const [detail, setDetail] = useState<CampainUI>();
-
+  const [campaignContract, setCampaign] = useState<CampaignContractUI>();
   useEffect(() => {
     const initData = async () => {
       if (id) {
@@ -23,6 +28,8 @@ const DonatePage = () => {
         if (response.status === 200) {
           setDetail(mapCampain(response.data.result));
         }
+        const contract = await campaign.getCampainDetail(id);
+        setCampaign(mapCampainContract(contract));
       }
     };
     initData();
@@ -84,10 +91,26 @@ const DonatePage = () => {
               flexDirection={'row'}
               justifyContent={'space-between'}
             >
-              Đã đạt được <span style={{ color: '#f54a00' }}>{detail?.targetValue}</span>
-              <b> {50}%</b>
+              Đã đạt được <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
+              <b>
+                {' '}
+                {calculatePercent(
+                  campaignContract?.currentValue || 0,
+                  campaignContract?.targetValue || 1,
+                )}
+                %
+              </b>
             </Typography>
-            <ProgressCustom value={50} />
+            <ProgressCustom
+              variant='determinate'
+              sx={{ height: '10px', borderRadius: '10px' }}
+              value={parseFloat(
+                calculatePercent(
+                  campaignContract?.currentValue || 0,
+                  campaignContract?.targetValue || 1,
+                ),
+              )}
+            />
             <Box
               sx={{
                 display: 'flex',
@@ -101,13 +124,13 @@ const DonatePage = () => {
                 fontSize={'13px'}
                 color={'#999'}
               >
-                Của mục tiêu {detail?.targetValue}
+                Của mục tiêu {campaignContract?.targetValue.toLocaleString()}
               </Typography>
               <Typography
                 fontSize={'13px'}
                 color={'#999'}
               >
-                953 người đã ủng hộ
+                {campaignContract?.donatorCount} người đã ủng hộ
               </Typography>
             </Box>
 
@@ -119,12 +142,7 @@ const DonatePage = () => {
                   border: '1px solid #f54a00',
                   padding: '5px 25px 5px 25px',
                 }}
-                onClick={() => {
-                  if (detail) {
-                    campaign.addNew(detail);
-                    campaign.setHistoryAddress();
-                  }
-                }}
+                onClick={() => {}}
               >
                 Chia sẻ
               </Button>
@@ -137,7 +155,7 @@ const DonatePage = () => {
                   background: '#f54a00',
                 }}
                 onClick={() => {
-                  if (detail) campaign.donateCampaign(detail?.id, 200);
+                  if (detail) campaign.donateCampaign(detail?.id, 50);
                 }}
               >
                 Ủng hộ
@@ -153,7 +171,12 @@ const DonatePage = () => {
             boxShadow: '0px 1px 16px 0px #00000026',
           }}
         >
-          {/* <TableRender /> */}
+          {id && (
+            <TableRender
+              id={id}
+              isCampaign={true}
+            />
+          )}
         </Grid>
       </Grid>
     </React.Fragment>

@@ -52,8 +52,8 @@ const FundSection = (props: FundCardProps) => {
           }}
         >
           <Can
-            I='view'
-            a='ProductsListRoute'
+            I='create'
+            a='RequestRole'
           >
             <LinkCustom to={'/register/account/fund'}>Đăng ký ngay</LinkCustom>
           </Can>

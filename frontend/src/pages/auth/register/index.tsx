@@ -11,12 +11,17 @@ import style from '../auth.module.scss';
 import serviceAPI from '@services/api';
 import { SimpleValueKey } from 'models/meta';
 import { useNavigate } from 'react-router';
+import * as Yup from 'yup';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
+import ConfirmCode from './dialog';
 
 export type RegisterValue = {
   email: string;
   password: string;
   name: string;
   phoneNumber: string;
+  confirmPassword: string;
   gender: string;
   age: number;
   provinceId: string;
@@ -25,10 +30,12 @@ export type RegisterValue = {
   image_url: string;
   specificAddress: string;
 };
+
 const RegisterPage = () => {
   const [data, setData] = useState<RegisterValue>({
     email: '',
     password: '',
+    confirmPassword: '',
     name: '',
     districtId: '',
     provinceId: '',
@@ -43,23 +50,59 @@ const RegisterPage = () => {
   const [communeList, setCommuneList] = useState<SimpleValueKey[]>([]);
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [error, setErrors] = useState<any>();
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigative = useNavigate();
-  const handleSubmit = async () => {
+  const dispatch = useAppDispatch();
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Email không đúng định dạng').required('Nhập email'),
+    password: Yup.string().required('Nhập mật khẩu'),
+    name: Yup.string().required('Nhập họ và tên'),
+    userName: Yup.string().required('Nhập nickname'),
+    phoneNumber: Yup.string().required('Nhập số điện thoại'),
+    age: Yup.number().required('Nhập tuổi'),
+    gender: Yup.string().required('Chọn giới tính'),
+    provinceId: Yup.string().required('Chọn tỉnh'),
+    communeId: Yup.string().required('Chọn xã'),
+    districtId: Yup.string().required('Chọn quận/huyện'),
+    confirmPassword: Yup.string().equals([Yup.ref('password')], 'Mật khẩu không trùng khớp'),
+  });
+  const handleSubmit = async (code: string) => {
     try {
-      const response = await serviceAPI.auth.register(data);
+      await validationSchema.validate(data, { abortEarly: false });
+      const response = await serviceAPI.auth.register({ ...data, rgCode: code });
       if (response.status === 200) {
-        //alert successs
         navigative('/login');
       } else {
-        console.log('');
+        dispatch(setInfoAlert({ open: true, title: 'Không thể tạo tài khoản', type: 'error' }));
       }
     } catch (error) {
-      console.log(error);
+      if ((error as any).name === 'ValidationError') {
+        const errors = (error as any).inner.reduce((acc: any, err: any) => {
+          acc[err.path] = err.message;
+          return acc;
+        }, {});
+
+        setErrors(errors);
+      }
+      dispatch(setInfoAlert({ open: true, title: 'Không thể tạo tài khoản', type: 'error' }));
     }
   };
-
+  const handleSendEmail = async () => {
+    const response = await serviceAPI.auth.sendEmail(data.email);
+    if (response.status === 200) {
+      dispatch(
+        setInfoAlert({
+          open: true,
+          title: 'Gửi mã thành công, vui lòng kiểm tra email',
+          type: 'success',
+        }),
+      );
+      setOpenDialog(true);
+    }
+  };
   const handleOnChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -124,25 +167,35 @@ const RegisterPage = () => {
             <BoxColum>
               <Typography className={style['mt-20']}>Email</Typography>
               <TextFieldStyle1
-                required
                 size='small'
-                type='email'
                 name='email'
                 onChange={handleOnChange}
+                error={Boolean(error?.email)}
+                helperText={error?.email}
               />
               <Typography className={style['mt-20']}>Họ và tên</Typography>
               <TextFieldStyle1
-                required
                 size='small'
                 name='name'
                 onChange={handleOnChange}
+                error={Boolean(error?.name)}
+                helperText={error?.name}
+              />
+              <Typography className={style['mt-20']}>Nick name</Typography>
+              <TextFieldStyle1
+                size='small'
+                name='userName'
+                onChange={handleOnChange}
+                error={Boolean(error?.userName)}
+                helperText={error?.userName}
               />
               <Typography className={style['mt-20']}>Số điện thoại</Typography>
               <TextFieldStyle1
-                required
                 size='small'
                 name='phoneNumber'
                 onChange={handleOnChange}
+                error={Boolean(error?.phoneNumber)}
+                helperText={error?.phoneNumber}
               />
               <Grid
                 container
@@ -157,6 +210,9 @@ const RegisterPage = () => {
                     label='Giới tính'
                     select
                     fullWidth
+                    value={data.gender}
+                    error={Boolean(error?.gender)}
+                    helperText={error?.gender}
                     name='gender'
                     onChange={handleOnChange}
                     variant='standard'
@@ -181,24 +237,15 @@ const RegisterPage = () => {
                   <TextField
                     id='standard-select-currency'
                     label='Tuổi'
-                    select
+                    type='number'
+                    value={data.age}
                     name='age'
                     onChange={handleOnChange}
                     fullWidth
                     variant='standard'
-                  >
-                    {[
-                      { value: 20, label: 20 },
-                      { value: 21, label: 21 },
-                    ].map((option) => (
-                      <MenuItem
-                        key={option.value}
-                        value={option.value}
-                      >
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    error={Boolean(error?.age)}
+                    helperText={error?.age}
+                  />
                 </Grid>
               </Grid>
               <Grid
@@ -213,6 +260,8 @@ const RegisterPage = () => {
                     id='standard-select-currency'
                     label='Tỉnh/TP'
                     select
+                    error={Boolean(error?.provinceId)}
+                    helperText={error?.provinceId}
                     fullWidth
                     onChange={(e) => {
                       setData({ ...data, provinceId: e.target.value });
@@ -236,6 +285,8 @@ const RegisterPage = () => {
                   <TextField
                     id='standard-select-currency'
                     label='Quận/Huyện'
+                    error={Boolean(error?.districtId)}
+                    helperText={error?.districtId}
                     select
                     fullWidth
                     onChange={(e) => {
@@ -261,6 +312,8 @@ const RegisterPage = () => {
                     id='standard-select-currency'
                     label='Phường/Xã'
                     select
+                    error={Boolean(error?.communeId)}
+                    helperText={error?.communeId}
                     fullWidth
                     onChange={(e) => {
                       setData({ ...data, communeId: e.target.value });
@@ -280,7 +333,6 @@ const RegisterPage = () => {
               </Grid>
               <Typography className={style['mt-20']}>Password</Typography>
               <TextFieldStyle1
-                required
                 type={showPassword ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -298,11 +350,16 @@ const RegisterPage = () => {
                 size='small'
                 name='password'
                 onChange={handleOnChange}
+                error={Boolean(error?.password)}
+                helperText={error?.password}
               />
               <Typography className={style['mt-20']}>Xác nhận Password</Typography>
               <TextFieldStyle1
-                required
+                name='confirmPassword'
                 size='small'
+                onChange={handleOnChange}
+                error={Boolean(error?.confirmPassword)}
+                helperText={error?.confirmPassword}
                 type={showPassword ? 'text' : 'password'}
                 InputProps={{
                   endAdornment: (
@@ -317,12 +374,9 @@ const RegisterPage = () => {
                     </InputAdornment>
                   ),
                 }}
-                onChange={(e) => {
-                  console.log(e);
-                }}
               />
               <ButtonStyle2
-                onClick={handleSubmit}
+                onClick={handleSendEmail}
                 className={style['mt-20']}
               >
                 Tiếp tục
@@ -335,6 +389,13 @@ const RegisterPage = () => {
           xs={1}
         ></Grid>
       </Grid>
+      {openDialog && (
+        <ConfirmCode
+          open={openDialog}
+          handleSubmit={handleSubmit}
+          handleClose={() => setOpenDialog(false)}
+        />
+      )}
     </React.Fragment>
   );
 };

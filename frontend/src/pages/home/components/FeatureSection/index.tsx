@@ -5,18 +5,12 @@ import { Box, Grid, Typography } from '@mui/material';
 
 import { LinkCustom } from '@common/Link';
 import { CampainUI } from '@models/campain';
-const categoryList = [
-  'Tất cả',
-  'Trẻ em',
-  'Người già',
-  'Người nghèo',
-  'Người khuyết tật',
-  'Bệnh hiểm nghèo',
-  'Dân tộc thiểu số',
-];
+import { SimpleValueKey } from '@models/meta';
+
 const handleDragStart = (e: { preventDefault: () => any }) => e.preventDefault();
 interface FeatureSectionProps {
   list: CampainUI[];
+  categorys: SimpleValueKey[];
 }
 const FeatureSection = (props: FeatureSectionProps) => {
   return (
@@ -82,7 +76,7 @@ const FeatureSection = (props: FeatureSectionProps) => {
         justifyContent='center'
         marginTop='30px'
       >
-        {categoryList?.map((item) => (
+        {props.categorys?.map((item) => (
           <p
             style={{
               backgroundColor: 'white',
@@ -93,7 +87,7 @@ const FeatureSection = (props: FeatureSectionProps) => {
               boxShadow: '0px 1px 16px 0px rgba(56, 56, 56, 0.15)',
             }}
           >
-            {item}
+            {item.value}
           </p>
         ))}
       </Grid>

@@ -5,6 +5,7 @@ import { SearchTwoTone } from '@mui/icons-material';
 import {
   Box,
   Card,
+  CardActions,
   CardContent,
   CardMedia,
   Grid,
@@ -22,6 +23,7 @@ import { ButtonStyle1 } from '@common/Button';
 import ProgressCustom from '@common/Progess';
 
 import TypographyTitle from '@common/Typography';
+import { LinkCustom } from '@common/Link';
 export interface SearchStructure {
   id: string;
   categoryId: string;
@@ -134,7 +136,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
             fontWeight: 'bold',
           }}
         >
-          <Link to={`donate/${data.id}`}>{data.title}</Link>
+          <Link to={`/campaign/donate/${data.id}`}>{data.title}</Link>
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>
@@ -206,6 +208,11 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
           <Typography fontSize={16}>953 người ủng hộ</Typography>
         </Box>
       </CardContent>
+      <CardActions>
+        {data.status === 'DRAFT' && (
+          <LinkCustom to={`/campaign/edit/${data.id}`}>Chỉnh sửa</LinkCustom>
+        )}
+      </CardActions>
     </Card>
   );
 
@@ -289,6 +296,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
                   { id: 'FINISH', value: 'Kết thúc' },
                   { id: 'PENDING', value: 'Đang thực hiện' },
                   { id: 'TARGET', value: 'Đã đủ chỉ tiêu' },
+                  { id: 'TARGET', value: 'Đợi duyệt' },
                 ].map((option) => (
                   <MenuItem
                     key={option.id}

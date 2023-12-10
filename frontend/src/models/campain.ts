@@ -10,6 +10,7 @@ export interface Campain {
   description: string;
   thumbnail: string;
   fileUrl: string;
+  status: string;
 }
 export interface CampainUI {
   id: string;
@@ -23,4 +24,5 @@ export interface CampainUI {
   description: string;
   thumbnail: string;
   countdown: number;
+  status: string;
 }

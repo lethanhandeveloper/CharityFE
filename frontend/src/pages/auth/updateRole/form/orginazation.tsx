@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from '@mui/material';
+import { FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 
 import { Editor } from '@tinymce/tinymce-react';
@@ -48,22 +48,23 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             onChange={(e) => {
               setData({ ...data, establishedDate: e || new Date() });
             }}
-            defaultValue={new Date()}
+            value={new Date(data?.establishedDate)}
           />
           <Typography>Website</Typography>
           <TextField
             autoFocus
             margin='dense'
+            value={data?.website}
             onChange={handleChange}
             fullWidth
             name='website'
             variant='standard'
             helperText={helperText}
           />
-
           <Typography>Lĩnh vực hoạt động</Typography>
           <TextField
             autoFocus
+            value={data?.operationField}
             margin='dense'
             onChange={handleChange}
             fullWidth
@@ -74,6 +75,7 @@ const OrginazationForm = (props: OrginazationFormProps) => {
           <Typography>Người đại diện:</Typography>
           <TextField
             autoFocus
+            value={data?.representativeName}
             margin='dense'
             onChange={handleChange}
             fullWidth
@@ -84,12 +86,30 @@ const OrginazationForm = (props: OrginazationFormProps) => {
           <TextField
             autoFocus
             margin='dense'
+            value={data?.representativePhoneNumber}
             onChange={handleChange}
             fullWidth
-            name='representativePhoneNumberk'
+            name='representativePhoneNumber'
             variant='standard'
           />
-
+          <RadioGroup
+            row
+            aria-labelledby='demo-row-radio-buttons-group-label'
+            name='actionDescSocialLink'
+            value={data?.actionDescSocialLink}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value='1'
+              control={<Radio />}
+              label='Facebook'
+            />
+            <FormControlLabel
+              value='2'
+              control={<Radio />}
+              label='Instagram'
+            />
+          </RadioGroup>
           <Typography>Mô tả chi tiết</Typography>
           <Editor
             apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'

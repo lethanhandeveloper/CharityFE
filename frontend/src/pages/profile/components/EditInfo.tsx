@@ -34,6 +34,7 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
     gender: data.gender,
     image_url: data.imageUrl,
     password: '',
+    confirmPassword: '',
     phoneNumber: data.phoneNumber,
     provinceId: '',
     specificAddress: data.specificAddress,

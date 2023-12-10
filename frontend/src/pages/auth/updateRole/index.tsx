@@ -13,17 +13,40 @@ import PersonalForm from './form/personal';
 import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import QuestionForm from './form/question';
+import { useParams } from 'react-router';
 
-const steps = ['Thông tin cơ bản', 'Thông tin tổ chức', 'Cập nhật file xác thực'];
+const steps = ['Thông tin cơ bản', 'Thông tin tổ chức', 'Cam kết', 'Cập nhật file xác thực'];
 
-export default function HorizontalLinearStepper() {
+const UpdateRolePage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
+  const { id } = useParams();
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [data, setData] = React.useState<any>();
+  const [question, setQuestion] = React.useState<any>();
   const dispatch = useAppDispatch();
   const isStepOptional = (step: number) => {
     return step === 1;
   };
+  React.useEffect(() => {
+    const initData = async () => {
+      const response = await serviceAPI.auth.getRequest(id || '');
+      if (response.data.result.type === 1) {
+        setData({
+          ...response.data.result.personalGeneralInfo,
+          type: response.data.result.type,
+        });
+      } else {
+        setData({
+          ...response.data.result.organizationGeneralInfo,
+          type: response.data.result.type,
+        });
+      }
+
+      setQuestion(response.data.result.commitInfoVerification);
+    };
+    if (id) initData();
+  }, []);
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
@@ -46,7 +69,28 @@ export default function HorizontalLinearStepper() {
 
   const handleSubmit = async () => {
     try {
-      const response = await serviceAPI.auth.submitRequest(data);
+      let response;
+      if (data.type == 2) {
+        response = await serviceAPI.auth.submitRequest({
+          type: data.type,
+          commitInfoVerification: {
+            ...question,
+          },
+          organizationGeneralInfo: {
+            ...data,
+          },
+        });
+      } else {
+        response = await serviceAPI.auth.submitRequest({
+          type: data.type,
+          commitInfoVerification: {
+            ...question,
+          },
+          personalGeneralInfo: {
+            ...data,
+          },
+        });
+      }
       dispatch(setInfoAlert({ open: true, title: response.data.result.message, type: 'success' }));
     } catch (error) {
       dispatch(setInfoAlert({ open: true, title: 'Không thể gửi yêu câu', type: 'error' }));
@@ -111,9 +155,9 @@ export default function HorizontalLinearStepper() {
               data={data}
               setData={setData}
             />
-          ) : (
+          ) : activeStep === 1 ? (
             <>
-              {data?.type === '1' ? (
+              {data?.type == '1' ? (
                 <PersonalForm
                   data={data}
                   setData={setData}
@@ -124,6 +168,13 @@ export default function HorizontalLinearStepper() {
                   setData={setData}
                 />
               )}
+            </>
+          ) : (
+            <>
+              <QuestionForm
+                data={question}
+                setData={setQuestion}
+              />
             </>
           )}
         </React.Fragment>
@@ -148,4 +199,5 @@ export default function HorizontalLinearStepper() {
       </Box>
     </Box>
   );
-}
+};
+export default UpdateRolePage;
