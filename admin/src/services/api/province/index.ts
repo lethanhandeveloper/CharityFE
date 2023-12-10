@@ -5,7 +5,7 @@ const create = async (data: any) => {
   return await apiService.post(apiEndPoint.province.create, { ...data });
 };
 const update = async (data: any) => {
-  return await apiService.patch(apiEndPoint.province.create, { ...data });
+  return await apiService.patch(apiEndPoint.province.update, { ...data });
 };
 
 const getList = async () => {

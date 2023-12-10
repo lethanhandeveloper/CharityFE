@@ -11,7 +11,7 @@ const JWTProvider = (props: JWTProviderProps) => {
   apiService.interceptors.request.use(
     (config) => {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('tokenAdmin');
       config.headers['Authorization'] = `Bearer ${token}`;
       config.headers['Accept'] = '*/*';
       config.headers['Content-Type'] = 'application/json';
@@ -29,7 +29,7 @@ const JWTProvider = (props: JWTProviderProps) => {
     },
     (error) => {
       if (error.response.status === 401) {
-        localStorage.removeItem('token');
+        localStorage.removeItem('tokenAdmin');
         navigate('/login');
       }
       return Promise.reject(error);

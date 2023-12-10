@@ -5,7 +5,7 @@ const create = async (data: any) => {
   return await apiService.post(apiEndPoint.district.create, { ...data });
 };
 const update = async (data: any) => {
-  return await apiService.patch(apiEndPoint.district.create, { ...data });
+  return await apiService.patch(apiEndPoint.district.update, { ...data });
 };
 
 const getList = async () => {

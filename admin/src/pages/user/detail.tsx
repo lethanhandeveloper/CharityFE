@@ -1,13 +1,12 @@
 import { UserUI } from '@models/user';
-import { Avatar, Grid, Switch, TextField } from '@mui/material';
+import { Avatar, Grid, TextField } from '@mui/material';
 
 interface DetailUserProps {
   data: UserUI;
   setData: (data: UserUI) => void;
 }
 const DetailUser = (props: DetailUserProps) => {
-  const { data, setData } = props;
-
+  const { data } = props;
   return (
     <>
       <Grid
@@ -97,14 +96,6 @@ const DetailUser = (props: DetailUserProps) => {
             disabled
           />
         </Grid>
-
-        <Switch
-          checked={data.isActive}
-          onChange={() => {
-            setData({ ...data, isActive: !data.isActive });
-          }}
-          inputProps={{ 'aria-label': 'controlled' }}
-        />
       </Grid>
     </>
   );

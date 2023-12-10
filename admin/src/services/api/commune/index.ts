@@ -6,7 +6,7 @@ const create = async (data: any) => {
 };
 
 const update = async (data: any) => {
-  return await apiService.patch(apiEndPoint.commune.create, { ...data });
+  return await apiService.patch(apiEndPoint.commune.update, { ...data });
 };
 
 const getList = async () => {

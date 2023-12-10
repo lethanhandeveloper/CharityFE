@@ -35,7 +35,7 @@ const apiEndPoint = {
   commune: {
     create: '/area/commune/create',
     update: '/area/commune/update',
-    list: '/area/commune/list',
+    list: '/area/commune/paginate',
     getByDistrict: (id: string) => `/commune/${id}/district`,
   },
   province: {

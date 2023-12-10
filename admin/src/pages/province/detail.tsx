@@ -23,22 +23,27 @@ const DetailProvince = (props: DetailProvinceProps) => {
   };
   const onSave = async () => {
     try {
-      const response = await serviceAPI.province.create(detail);
+      let response;
+      if (!detail.id) {
+        response = await serviceAPI.province.create(detail);
+      } else {
+        response = await serviceAPI.province.update(detail);
+      }
       if (response.status === 200) {
-        dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        dispatch(setInfoAlert({ title: response.data.message, open: true, type: 'success' }));
         onClose();
         loadTable();
       } else {
-        dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+        dispatch(setInfoAlert({ title: response.data.message, open: true, type: 'error' }));
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Không thể tạo cập thông tin!', open: true, type: 'error' }));
     }
   };
   return (
     <>
       <PanelDetail
-        title={'Chi tiết banner'}
+        title={'Chi tiết tỉnh'}
         buttonChildren={
           <Grid container>
             <Grid item>

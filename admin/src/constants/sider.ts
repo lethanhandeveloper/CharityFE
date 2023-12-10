@@ -6,10 +6,6 @@ const SiderLink = [
         title: 'Active',
         link: '/user/active',
       },
-      {
-        title: 'InActive',
-        link: '/user/inactive',
-      },
     ],
   },
   {

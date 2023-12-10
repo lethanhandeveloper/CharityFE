@@ -25,7 +25,7 @@ const LoginPage = () => {
     try {
       const loginInfo = await serviceAPI.auth.login(user);
       if (loginInfo.status === 200) {
-        if (loginInfo.data.result.role === 4) {
+        if (loginInfo.data.result.role !== 4) {
           setMessageError('test');
         } else {
           localStorage.setItem('tokenAdmin', loginInfo.data.result.token);

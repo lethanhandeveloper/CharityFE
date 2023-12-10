@@ -27,16 +27,24 @@ const DetailCommune = (props: DetailCommuneProps) => {
   };
   const onSave = async () => {
     try {
-      const response = await serviceAPI.commune.create(detail);
+      let response;
+      if (detail.id) {
+        response = await serviceAPI.commune.update(detail);
+      } else {
+        response = await serviceAPI.commune.create(detail);
+      }
+
       if (response.status === 200) {
-        dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
         onClose();
         loadTable();
+      } else if (response.status === 201) {
+        dispatch(setInfoAlert({ title: 'Tạo mới thành công!', open: true, type: 'success' }));
       } else {
-        dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+        dispatch(setInfoAlert({ title: 'Không thể thao tác!', open: true, type: 'error' }));
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Không thể thao tác!', open: true, type: 'error' }));
     }
   };
 
