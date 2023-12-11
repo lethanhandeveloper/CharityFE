@@ -45,7 +45,10 @@ const DetailProvince = (props: DetailProvinceProps) => {
       <PanelDetail
         title={'Chi tiết tỉnh'}
         buttonChildren={
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'space-between'}
+          >
             <Grid item>
               <Button onClick={onClose}>Đóng</Button>
             </Grid>

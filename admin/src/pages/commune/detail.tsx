@@ -74,9 +74,12 @@ const DetailCommune = (props: DetailCommuneProps) => {
   return (
     <>
       <PanelDetail
-        title={'Chi tiết commune'}
+        title={'Chi tiết xã'}
         buttonChildren={
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'space-between'}
+          >
             <Grid item>
               <Button onClick={onClose}>Đóng</Button>
             </Grid>
@@ -91,19 +94,6 @@ const DetailCommune = (props: DetailCommuneProps) => {
           container
           gap={3}
         >
-          <Grid
-            item
-            xs={12}
-          >
-            <TextField
-              value={detail.name}
-              label='Tên'
-              fullWidth
-              name='name'
-              size='small'
-              onChange={handleChange}
-            />
-          </Grid>
           <Grid
             item
             xs={12}
@@ -153,6 +143,19 @@ const DetailCommune = (props: DetailCommuneProps) => {
                 </MenuItem>
               ))}
             </TextField>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+          >
+            <TextField
+              value={detail.name}
+              label='Tên'
+              fullWidth
+              name='name'
+              size='small'
+              onChange={handleChange}
+            />
           </Grid>
         </Grid>
       </PanelDetail>

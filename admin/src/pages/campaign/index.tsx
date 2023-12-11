@@ -6,12 +6,13 @@ import serviceAPI from '@services/api';
 import { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { CampainUI } from '@models/campain';
+import { CampaignStatus, CampainUI } from '@models/campain';
 import { mapCampainUI } from '@services/mapdata/campain';
 import DetailCampaign from './detail';
 
 interface CampaignTableProps {
   isActive: boolean;
+  status: CampaignStatus;
 }
 
 const CampaignTable = (props: CampaignTableProps) => {

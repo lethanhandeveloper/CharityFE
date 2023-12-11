@@ -62,7 +62,30 @@ const routers: RouteObject[] = [
       },
       {
         path: 'campaign/pending',
-        element: <CampaignPage isActive={false} />,
+        element: (
+          <CampaignPage
+            isActive={false}
+            status='DRAFT'
+          />
+        ),
+      },
+      {
+        path: 'campaign/finish',
+        element: (
+          <CampaignPage
+            isActive={false}
+            status='END'
+          />
+        ),
+      },
+      {
+        path: 'campaign/start',
+        element: (
+          <CampaignPage
+            isActive={false}
+            status='START'
+          />
+        ),
       },
       {
         path: 'banner',

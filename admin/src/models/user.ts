@@ -5,6 +5,7 @@ export interface UserAPI {
 export type UserRole = 'Normal' | 'Organization';
 
 export interface UserUI {
+  id: string;
   fullname: string;
   imageUrl: string;
   email: string;

@@ -9,7 +9,7 @@ import campaign from '@services/ethers/campaign';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import React, { useState } from 'react';
-
+import { LineChart } from '@mui/x-charts/LineChart';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -80,32 +80,31 @@ const DetailCampaign = (props: DetailCampaignProps) => {
   };
   const onReject = async () => {
     try {
-      const response = await serviceAPI.banner.createBanner(detail);
+      const response = await serviceAPI.campain.updateStatus(detail.id, 'REJECTED');
       if (response.status === 200) {
-        dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
         onClose();
         loadTable();
-      } else {
-        dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
   };
   return (
     <>
       <PanelDetail
-        title={'Chi tiết banner'}
+        title={'Chi tiết chiến dịch'}
         buttonChildren={
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'space-between'}
+          >
             <Grid item>
               <Button onClick={onClose}>Đóng</Button>
             </Grid>
             <Grid item>
-              <Button onClick={onReject}>Reject</Button>
-            </Grid>
-            <Grid item>
-              <Button onClick={onApprove}>Approve</Button>
+              <Button onClick={onReject}>Từ chối</Button>
+              {detail.status === 'DRAFT' && <Button onClick={onApprove}>Duyệt</Button>}
             </Grid>
           </Grid>
         }
@@ -123,12 +122,16 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 {...a11yProps(0)}
               />
               <Tab
-                label='Lịch sử giao dịch'
+                label='File xác thực'
                 {...a11yProps(1)}
               />
               <Tab
                 label='Biểu đồ'
                 {...a11yProps(2)}
+              />
+              <Tab
+                label='Lịch sử giao dịch'
+                {...a11yProps(4)}
               />
             </Tabs>
           </Box>
@@ -222,6 +225,18 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                   onChange={handleChangeData}
                 />
               </Grid>
+              <Grid
+                item
+                xs={12}
+              >
+                <TextField
+                  value={detail.targetValue}
+                  label='Mục tiêu'
+                  fullWidth
+                  size='small'
+                  onChange={handleChangeData}
+                />
+              </Grid>
             </Grid>
           </CustomTabPanel>
           <CustomTabPanel
@@ -232,7 +247,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               data={data.fileUrl}
               style={{
                 width: '100%',
-                height: '30vh',
+                height: '60vh',
               }}
               type='application/pdf'
             />
@@ -241,7 +256,16 @@ const DetailCampaign = (props: DetailCampaignProps) => {
             value={value}
             index={2}
           >
-            Item Three
+            <LineChart
+              xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+              series={[
+                {
+                  data: [2, 5.5, 2, 8.5, 1.5, 5],
+                },
+              ]}
+              width={500}
+              height={300}
+            />
           </CustomTabPanel>
         </Box>
       </PanelDetail>

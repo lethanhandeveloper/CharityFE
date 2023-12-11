@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   MapContainer,
   TileLayer,
   Marker,
-  useMapEvents,
+  // useMapEvents,
   GeoJSON,
   ImageOverlay,
   Popup,
@@ -11,11 +11,19 @@ import {
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
+  Typography,
+} from '@mui/material';
 import DialogChooseCampaign from './dialogChooseCampaign';
 import serviceAPI from '@services/api';
 import { mapUIs } from '@services/mapdata/map';
@@ -23,6 +31,7 @@ import { MapUI } from '@models/map';
 import { CampainUI } from '@models/campain';
 import ProgressCustom from '@common/Progess';
 import { Link } from 'react-router-dom';
+import { ButtonStyle1 } from '@common/Button';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -69,29 +78,29 @@ interface IMap {
   lat: number;
   long: number;
 }
-interface IMapComponent {
-  setLagLog: (data: IMap) => void;
-  isOn: boolean;
-}
+// interface IMapComponent {
+//   setLagLog: (data: IMap) => void;
+//   isOn: boolean;
+// }
 const icon = L.icon({
   iconSize: [13, 20],
   iconAnchor: [5, 20],
   popupAnchor: [2, -20],
   iconUrl: 'https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png',
 });
-const MapComponent: FC<IMapComponent> = (props) => {
-  useMapEvents({
-    click(e) {
-      if (props.isOn) {
-        props.setLagLog({ lat: e.latlng.lat, long: e.latlng.lng });
-        alert(e.latlng.lng + ',' + e.latlng.lat);
-      }
-    },
-  });
-  return <></>;
-};
+// const MapComponent: FC<IMapComponent> = (props) => {
+//   useMapEvents({
+//     click(e) {
+//       if (props.isOn) {
+//         props.setLagLog({ lat: e.latlng.lat, long: e.latlng.lng });
+//         alert(e.latlng.lng + ',' + e.latlng.lat);
+//       }
+//     },
+//   });
+//   return <></>;
+// };
 const MapPage = () => {
-  const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
+  // const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
   const [search, setSearch] = useState<string>('');
   const [listMap, setListMap] = useState<MapUI[]>([]);
@@ -187,15 +196,14 @@ const MapPage = () => {
   };
   const renderCard = (data: CampainUI) => (
     <Card
-      variant='outlined'
       sx={{
-        margin: '10px 10px 20px',
-        boxShadow: '0 8px 24px hsla(210,8%,62%,.2)',
-        borderRadius: '10px',
+        border: 'none',
+        boxShadow: 'none',
+        width: '100%',
       }}
     >
       <CardMedia
-        sx={{ height: 200 }}
+        sx={{ height: 200, border: 'none', boxShadow: 'none' }}
         image={data.thumbnail}
       />
       <CardContent>
@@ -298,6 +306,9 @@ const MapPage = () => {
           <Typography fontSize={16}>953 người ủng hộ</Typography>
         </Box>
       </CardContent>
+      <CardActions>
+        <ButtonStyle1>Nhập vật phẩm</ButtonStyle1>
+      </CardActions>
     </Card>
   );
 
@@ -326,10 +337,10 @@ const MapPage = () => {
           zoom={12}
           zoomControl={false}
         >
-          <MapComponent
+          {/* <MapComponent
             setLagLog={setLocation}
             isOn={false}
-          />
+          /> */}
           <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
 
           <GeoJSON
@@ -402,21 +413,6 @@ const MapPage = () => {
               <Popup>{renderCard(item.campaign)}</Popup>
             </Marker>
           ))}
-
-          <MarkerClusterGroup chunkedLoading>
-            <Marker
-              position={[dataMap.lat, dataMap.long]}
-              icon={icon}
-            >
-              <Popup>zxcxzcxzcxzczx</Popup>
-            </Marker>
-            <Marker
-              position={[dataMap.lat + 1, dataMap.long]}
-              icon={icon}
-            >
-              <Popup>zxcxzcxzcxzczx</Popup>
-            </Marker>
-          </MarkerClusterGroup>
         </MapContainer>
       )}
     </React.Fragment>

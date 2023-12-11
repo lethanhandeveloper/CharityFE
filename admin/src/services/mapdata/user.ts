@@ -14,16 +14,9 @@ export const mapUserUI = (userAPI: any): UserUI => {
     province: userAPI.province,
     specificAddress: userAPI.specificAddress,
     isActive: userAPI.isActive,
+    id: userAPI._id,
   };
 };
 export const mapUsersUI = (userAPI: any): UserUI[] => {
-  return userAPI?.map((item: any) => ({
-    age: item?.age,
-    email: userAPI?.email,
-    fullname: userAPI,
-    gender: '',
-    imageUrl: '',
-    phoneNumber: '',
-    role: 'Normal',
-  }));
+  return userAPI?.map((item: any) => mapUserUI(item));
 };

@@ -8,6 +8,7 @@ const apiEndPoint = {
     updateAvatar: '/user/avatar',
     getActiveList: '/user/list',
     getInActiveList: '/user/listinactive',
+    setactive: '/user/setactive',
   },
 
   location: {

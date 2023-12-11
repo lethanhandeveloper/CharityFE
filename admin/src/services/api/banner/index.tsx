@@ -5,7 +5,7 @@ const createBanner = async (data: any) => {
   return await apiService.post(apiEndPoint.banner.create, { ...data });
 };
 const updateBanner = async (data: any) => {
-  return await apiService.patch(apiEndPoint.banner.create, { ...data });
+  return await apiService.patch(apiEndPoint.banner.update, { ...data });
 };
 
 const getBannerList = async () => {

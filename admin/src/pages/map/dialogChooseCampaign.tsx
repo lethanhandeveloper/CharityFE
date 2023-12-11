@@ -17,6 +17,7 @@ interface DialogChooseCampaignProps {
   long: number;
   campaignId?: string;
   open: boolean;
+  id?: string;
   handleClose: () => void;
 }
 export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
@@ -41,17 +42,27 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
         type: '1',
       });
       if (response.status === 200) {
-        dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        dispatch(
+          setInfoAlert({ title: 'Ghi điểm thiện nguyện thành công!', open: true, type: 'success' }),
+        );
       } else {
-        dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+        dispatch(
+          setInfoAlert({ title: 'Không thể tạo thực hiện thao tác!', open: true, type: 'error' }),
+        );
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
   };
   const update = async () => {
     try {
-      const response = await serviceAPI.map.update({});
+      const response = await serviceAPI.map.update({
+        lat: props.lat,
+        long: props.long,
+        campaignId: campaign,
+        type: '1',
+        id: props.id,
+      });
       if (response.status === 200) {
         dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
       } else {
@@ -70,7 +81,7 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >
-        <DialogTitle id='alert-dialog-title'>{'Select campaign'}</DialogTitle>
+        <DialogTitle id='alert-dialog-title'>{'Chọn chiến dịch'}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             <Autocomplete
@@ -79,7 +90,7 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
               options={campaignList}
               autoHighlight
               onChange={(e, value) => setCampaign(value?.id || '')}
-              getOptionLabel={(option) => option.id}
+              getOptionLabel={(option) => option.title}
               renderOption={(props, option) => (
                 <Box
                   component='li'
@@ -95,10 +106,6 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
                 <TextField
                   {...params}
                   label='Choose a campaign'
-                  inputProps={{
-                    ...params.inputProps,
-                    autoComplete: 'new-password', // disable autocomplete and autofill
-                  }}
                 />
               )}
             />
@@ -106,18 +113,21 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
         </DialogContent>
         <DialogActions>
           <Button onClick={props.handleClose}>Đóng</Button>
-          <Button
-            onClick={create}
-            autoFocus
-          >
-            Tạo mới
-          </Button>
-          <Button
-            onClick={update}
-            autoFocus
-          >
-            Cập nhật
-          </Button>
+          {props.id ? (
+            <Button
+              onClick={update}
+              autoFocus
+            >
+              Cập nhật
+            </Button>
+          ) : (
+            <Button
+              onClick={create}
+              autoFocus
+            >
+              Tạo mới
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </React.Fragment>

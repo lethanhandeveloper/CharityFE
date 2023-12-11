@@ -23,16 +23,26 @@ const DetailBanner = (props: DetailBannerProps) => {
   };
   const onSave = async () => {
     try {
-      const response = await serviceAPI.banner.createBanner(detail);
-      if (response.status === 200) {
+      let response;
+      if (detail.id) {
+        response = await serviceAPI.banner.updateBanner(detail);
+      } else {
+        response = await serviceAPI.banner.createBanner(detail);
+      }
+
+      if (response.status === 201) {
         dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+        onClose();
+        loadTable();
+      } else if (response.status === 200) {
+        dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
         onClose();
         loadTable();
       } else {
         dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Hệ thống lỗi', open: true, type: 'error' }));
     }
   };
   return (
@@ -40,7 +50,10 @@ const DetailBanner = (props: DetailBannerProps) => {
       <PanelDetail
         title={'Chi tiết banner'}
         buttonChildren={
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'space-between'}
+          >
             <Grid item>
               <Button onClick={onClose}>Đóng</Button>
             </Grid>
