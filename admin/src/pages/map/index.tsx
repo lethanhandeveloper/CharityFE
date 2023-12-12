@@ -12,8 +12,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
 import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
-import { styled, alpha } from '@mui/material/styles';
+import { Search, SearchIconWrapper, StyledInputBase } from './style';
 import {
   Box,
   Button,
@@ -32,48 +31,8 @@ import { CampainUI } from '@models/campain';
 import ProgressCustom from '@common/Progess';
 import { Link } from 'react-router-dom';
 import { ButtonStyle1 } from '@common/Button';
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
-
+import { isLandSeaGeoJSON, isLand2SeaGeoJSON } from './json';
+import DialogAddItem from './dialogAddItem';
 interface IMap {
   lat: number;
   long: number;
@@ -107,50 +66,7 @@ const MapPage = () => {
   const mapRef = useRef(null);
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
   const [openChooseCampaign, setChooseCampaign] = useState<boolean>(false);
-  const isLandSeaGeoJSON = {
-    type: 'Feature',
-    properties: {
-      name: 'Hoàng Sa Islands',
-      description: 'A group of islands in the South China Sea.',
-      // You can include additional properties as needed
-    },
-    geometry: {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [111.07177734375001, 16.785231612264507],
-          [111.22558593750001, 17.2696039039649],
-          [111.92871093750001, 17.415458569037863],
-          [113.02734375000001, 16.891465552988944],
-          [112.89550781250001, 15.73360116895393],
-          [110.96191406250001, 15.332048675583701],
-          [110.93994140625001, 16.492252789302228],
-        ],
-      ],
-    },
-  };
-  const isLand2SeaGeoJSON = {
-    type: 'Feature',
-    properties: {
-      name: 'Hoàng Sa Islands',
-      description: 'A group of islands in the South China Sea.',
-      // You can include additional properties as needed
-    },
-    geometry: {
-      type: 'Polygon',
-      coordinates: [
-        [
-          [112.23632812500001, 9.35511948163477],
-          [112.69775390625, 9.105827824137561],
-          [112.76367187500001, 9.141525855603676],
-          [113.88427734375, 9.342036682200241],
-          [113.44482421875001, 10.220626721348296],
-          [112.25830078125001, 10.50147613716864],
-          [112.26928710937501, 9.37661413297591],
-        ],
-      ],
-    },
-  };
+  const [openDialog, setOpenDialog] = useState({ open: false, campaignId: '' });
   useEffect(() => {
     const initCurrentAddress = () => {
       if ('geolocation' in navigator) {
@@ -180,6 +96,7 @@ const MapPage = () => {
       console.log(e);
     }
   }, [postionSearch]);
+
   useEffect(() => {
     const initData = async () => {
       const response = await serviceAPI.map.list();
@@ -191,9 +108,11 @@ const MapPage = () => {
   const calculatePercent = (current: number, target: number): number => {
     return Number(((current / target) * 100).toFixed(2));
   };
+
   const calculateDayCountDown = (endDate: Date): number => {
     return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
   };
+
   const renderCard = (data: CampainUI) => (
     <Card
       sx={{
@@ -294,26 +213,31 @@ const MapPage = () => {
             marginTop: '10px',
             justifyContent: 'space-between',
           }}
-        >
-          <Typography
-            variant='body2'
-            color='text.secondary'
-            fontSize={16}
-          >
-            của mục tiêu {data.targetValue.toLocaleString()} VNĐ
-          </Typography>
-
-          <Typography fontSize={16}>953 người ủng hộ</Typography>
-        </Box>
+        ></Box>
       </CardContent>
       <CardActions>
-        <ButtonStyle1>Nhập vật phẩm</ButtonStyle1>
+        <ButtonStyle1
+          onClick={() => {
+            setOpenDialog({ open: true, campaignId: data.id });
+          }}
+        >
+          Nhập vật phẩm
+        </ButtonStyle1>
       </CardActions>
     </Card>
   );
 
   return (
     <React.Fragment>
+      {openDialog && (
+        <DialogAddItem
+          open={openDialog.open}
+          campaignId={openDialog.campaignId}
+          handleClose={() => {
+            setOpenDialog({ open: false, campaignId: '' });
+          }}
+        />
+      )}
       {openChooseCampaign && (
         <DialogChooseCampaign
           open={openChooseCampaign}

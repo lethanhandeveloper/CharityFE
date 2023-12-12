@@ -8,41 +8,52 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import { setInfoAlert } from '@store/redux/alert';
 import { useAppDispatch } from '@store/hook';
-import { Autocomplete, Avatar, Box, TextField, Typography } from '@mui/material';
+import { Autocomplete, Avatar, Box, Grid, TextField, Typography } from '@mui/material';
 import serviceAPI from '@services/api';
 import { UserUI } from '@models/user';
 import { mapUsersUI } from '@services/mapdata/user';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import campaign from '@services/ethers/campaign';
 
-interface DialogChooseCampaignProps {
+interface DialogAddItemProps {
   campaignId?: string;
   open: boolean;
   handleClose: () => void;
 }
 interface ItemContractStructure {
-  creatorId?: string;
-  message?: string;
-  time?: Date;
-  campaignId?: string;
+  creatorId: string;
+  message: string;
+  time: Date;
+  campaignId: string;
 }
-export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
-  const [itemContract, setItemContract] = React.useState<ItemContractStructure>();
+export default function DialogAddItem(props: DialogAddItemProps) {
+  const [itemContract, setItemContract] = React.useState<ItemContractStructure>({
+    campaignId: '',
+    creatorId: '',
+    message: '',
+    time: new Date(),
+  });
   const [userList, setUserList] = React.useState<UserUI[]>([]);
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     const initData = async () => {
       try {
         const response = await serviceAPI.auth.getUserList();
-        setUserList(mapUsersUI(response.data.reuslt));
+        setUserList(mapUsersUI(response.data.result));
       } catch (err) {
         console.log(err);
       }
     };
-    initData();
-  });
+    if (props.open) initData();
+  }, [props.open]);
   const addItem = async () => {
     try {
-      console.log('addItem');
+      await campaign.addItem(
+        props.campaignId || '',
+        itemContract?.creatorId || '',
+        itemContract?.message || '',
+        itemContract?.time || new Date(),
+      );
     } catch (error) {
       dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
@@ -59,42 +70,66 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
         <DialogTitle id='alert-dialog-title'>{'Chọn chiến dịch'}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            <Autocomplete
-              id='country-select-demo'
-              sx={{ width: 300 }}
-              options={userList}
-              autoHighlight
-              onChange={(e, value) => setItemContract({ ...itemContract, creatorId: value?.id })}
-              getOptionLabel={(option) => option.email}
-              renderOption={(props, option) => (
-                <Box
-                  component='li'
-                  sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                  {...props}
-                >
-                  <Avatar src={option.imageUrl} />
-                  <Typography>{option.fullname}</Typography>
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Người quyên góp'
+            <Grid
+              container
+              gap={2}
+            >
+              <Grid
+                item
+                xs={6}
+              >
+                <Autocomplete
+                  id='country-select-demo'
+                  options={userList}
+                  autoHighlight
+                  onChange={(e, value) =>
+                    setItemContract({ ...itemContract, creatorId: value?.id || '' })
+                  }
+                  getOptionLabel={(option) => option.email}
+                  renderOption={(props, option) => (
+                    <Box
+                      component='li'
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                    >
+                      <Avatar src={option.imageUrl} />
+                      <Typography>{option.fullname}</Typography>
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label='Người quyên góp'
+                    />
+                  )}
                 />
-              )}
-            />
-            <TextField
-              rows={4}
-              onChange={(e) => {
-                setItemContract({ ...itemContract, message: e.target.value });
-              }}
-            />
-            <DatePicker
-              sx={{ width: 260 }}
-              label={'Ngày quyên góp'}
-              disableFuture
-              onChange={(e) => setItemContract({ ...itemContract, time: e })}
-            />
+              </Grid>
+              <Grid
+                item
+                xs={3}
+              >
+                <TextField
+                  rows={4}
+                  minRows={4}
+                  onChange={(e) => {
+                    setItemContract({ ...itemContract, message: e.target.value || '' });
+                  }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={3}
+              >
+                <DatePicker
+                  sx={{ width: 260 }}
+                  label={'Ngày quyên góp'}
+                  disableFuture
+                  onChange={(e) => {
+                    console.log(e);
+                  }}
+                />
+              </Grid>
+            </Grid>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

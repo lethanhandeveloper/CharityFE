@@ -32,7 +32,7 @@ const setActive = async (id: string, isActive: boolean) => {
 const getUserList = async () => {
   return await apiService.post(apiEndPoint.user.getActiveList, {
     page: 1,
-    no_item_per_page: 1000,
+    no_item_per_page: 100,
   });
 };
 export default {
