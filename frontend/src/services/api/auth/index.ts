@@ -46,6 +46,9 @@ const getRequestByUser = async () => {
 const sendEmail = async (email: string) => {
   return await apiService.post(apiEndPoint.user.email, { toEmail: email });
 };
+const getRequestByUserId = async (id: string) => {
+  return await apiService.get(apiEndPoint.user.getRequestByUserId(id));
+};
 export default {
   getRequestByUser,
   login,
@@ -59,4 +62,5 @@ export default {
   getRequest,
   sendEmail,
   updateRequest,
+  getRequestByUserId,
 };

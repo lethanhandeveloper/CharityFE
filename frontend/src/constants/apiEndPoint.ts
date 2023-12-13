@@ -13,6 +13,7 @@ const apiEndPoint = {
     getRequestByUser: '/user/verification/myrequest',
     email: '/user/register/getcode',
     updateByID: (id: string) => `/user/verification/update/${id}`,
+    getRequestByUserId: (id: string) => `/user/verification/user/${id}`,
   },
 
   location: {
@@ -41,6 +42,9 @@ const apiEndPoint = {
     create: '/map/create',
     update: '/map/update',
     list: '/map/list',
+  },
+  home: {
+    home: '/home/user',
   },
 };
 export default apiEndPoint;

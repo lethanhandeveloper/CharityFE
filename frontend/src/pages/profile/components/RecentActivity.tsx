@@ -11,6 +11,8 @@ import {
 
 import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
 
+import TableRender from '@components/Table';
+
 const AvatarPrimary = styled(Avatar)(
   ({ theme }) => `
       background: ${theme.colors.primary.lighter};
@@ -20,7 +22,7 @@ const AvatarPrimary = styled(Avatar)(
 `,
 );
 
-function RecentActivity() {
+function RecentActivity({ id }: { id: string }) {
   const theme = useTheme();
 
   return (
@@ -40,8 +42,6 @@ function RecentActivity() {
           pl={2}
           flex={1}
         >
-          <Typography variant='h3'>Orders</Typography>
-
           <Box
             pt={2}
             display='flex'
@@ -70,6 +70,10 @@ function RecentActivity() {
         </Box>
       </Box>
       <Divider />
+      <TableRender
+        id={id}
+        isCampaign={false}
+      />
     </Card>
   );
 }

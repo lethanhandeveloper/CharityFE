@@ -26,6 +26,7 @@ const HomePage = () => {
   const [users, setUsers] = useState<UserUI[]>([]);
   const [campagins, setCampaigns] = useState<CampainUI[]>([]);
   const [categorys, setCategorys] = useState<SimpleValueKey[]>([]);
+  const [home, setHome] = useState();
   useEffect(() => {
     const initData = async () => {
       const banner = await serviceAPI.banner.getBannerList();
@@ -41,6 +42,8 @@ const HomePage = () => {
           value: item.name,
         })),
       );
+      const home = await serviceAPI.home.getCountForHome();
+      setHome(home.data.result);
     };
     initData();
   }, []);
@@ -54,7 +57,7 @@ const HomePage = () => {
         categorys={categorys}
       />
 
-      <BannerSection />
+      <BannerSection data={home} />
 
       <NewsSection newsList={data.CardNews} />
 

@@ -35,6 +35,11 @@ const getUserList = async () => {
     no_item_per_page: 100,
   });
 };
+
+const getUserById = async (id: string) => {
+  return await apiService.get(apiEndPoint.user.getByID(id));
+};
+
 export default {
   login,
   register,
@@ -44,4 +49,5 @@ export default {
   updateRequest,
   setActive,
   getUserList,
+  getUserById,
 };

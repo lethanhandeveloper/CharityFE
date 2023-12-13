@@ -148,7 +148,7 @@ const getItemByCampaign = async (id: string) => {
     return {};
   }
 };
-const getItemByCampaign = async (id: string) => {
+const getItemByUser = async (id: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
@@ -169,4 +169,6 @@ export default {
   getCampainDetail,
   getHistoryByCampaign,
   getHistoryByUser,
+  getItemByCampaign,
+  getItemByUser,
 };

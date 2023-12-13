@@ -9,6 +9,7 @@ const apiEndPoint = {
     getActiveList: '/user/list',
     getInActiveList: '/user/listinactive',
     setactive: '/user/setactive',
+    getByID: (id: string) => `/user/getbyid/${id}`,
   },
 
   location: {

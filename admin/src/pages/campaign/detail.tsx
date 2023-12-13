@@ -10,6 +10,7 @@ import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import React, { useState } from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
+import TableRender from '@components/Table/tableCapaign';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -131,7 +132,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               />
               <Tab
                 label='Lịch sử giao dịch'
-                {...a11yProps(4)}
+                {...a11yProps(3)}
               />
             </Tabs>
           </Box>
@@ -265,6 +266,15 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               ]}
               width={500}
               height={300}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel
+            value={value}
+            index={3}
+          >
+            <TableRender
+              id={detail.id}
+              isCampaign={true}
             />
           </CustomTabPanel>
         </Box>

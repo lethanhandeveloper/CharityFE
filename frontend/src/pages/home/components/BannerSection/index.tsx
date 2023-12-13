@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 
-const BannerSection = () => {
+const BannerSection = ({ data }: { data: any }) => {
   return (
     <Grid
       item
@@ -33,9 +33,7 @@ const BannerSection = () => {
             color='#fff'
             fontSize='28px'
             marginBottom='30px'
-          >
-            App Thiện Nguyện
-          </Typography>
+          ></Typography>
 
           <img
             src='https://thiennguyen.app/_next/static/media/download_ios.be3c8ac5.png'
@@ -60,7 +58,7 @@ const BannerSection = () => {
                 fontSize={'40px'}
                 color={'#fff'}
               >
-                125
+                {data?.organizationCount}
               </Typography>
               <Typography color={'#fff'}>Tổ chức thiện nguyện</Typography>
             </Grid>
@@ -73,7 +71,7 @@ const BannerSection = () => {
                 fontSize={'40px'}
                 color={'#fff'}
               >
-                911
+                {data?.userCount}
               </Typography>
               <Typography color={'#fff'}>Cá nhân thiện nguyện</Typography>
             </Grid>
@@ -86,47 +84,7 @@ const BannerSection = () => {
                 fontSize={'40px'}
                 color={'#fff'}
               >
-                1.009.489
-              </Typography>
-              <Typography color={'#fff'}>Thành viên tham gia</Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={4}
-            >
-              <Typography
-                fontWeight='bold'
-                fontSize={'40px'}
-                color={'#fff'}
-              >
-                125
-              </Typography>
-              <Typography color={'#fff'}>Tổ chức thiện nguyện</Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-            >
-              <Typography
-                fontWeight='bold'
-                fontSize={'40px'}
-                color={'#fff'}
-              >
-                911
-              </Typography>
-              <Typography color={'#fff'}>Cá nhân thiện nguyện</Typography>
-            </Grid>
-            <Grid
-              item
-              xs={4}
-            >
-              <Typography
-                fontWeight='bold'
-                fontSize={'40px'}
-                color={'#fff'}
-              >
-                1.009.489{' '}
+                {data?.campaignCount}
               </Typography>
               <Typography color={'#fff'}>Thành viên tham gia</Typography>
             </Grid>
