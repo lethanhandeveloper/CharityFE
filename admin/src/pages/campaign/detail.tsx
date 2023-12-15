@@ -68,15 +68,27 @@ const DetailCampaign = (props: DetailCampaignProps) => {
       if (response.status === 200) {
         const check = await campaign.addNew(detail);
         if (check) {
-          dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
+          dispatch(
+            setInfoAlert({ title: 'Duyệt chiến dịch thành công!', open: true, type: 'success' }),
+          );
         }
         onClose();
         loadTable();
       } else {
-        dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+        dispatch(setInfoAlert({ title: 'Duyệt chuyến dịch thất bại!', open: true, type: 'error' }));
       }
     } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể tạo banner!', open: true, type: 'error' }));
+      dispatch(setInfoAlert({ title: 'Không thể duyệt chiến dịch!', open: true, type: 'error' }));
+    }
+  };
+  const onTransfer = async () => {
+    try {
+      const reuslt = await campaign.getRequestByCampaign(detail.id);
+      console.log(reuslt);
+      await campaign.approveRequest(reuslt.id._hex);
+      await campaign.withDraw(reuslt.id._hex);
+    } catch (error) {
+      console.log(error);
     }
   };
   const onReject = async () => {
@@ -91,6 +103,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
       dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
   };
+
   return (
     <>
       <PanelDetail
@@ -105,6 +118,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
             </Grid>
             <Grid item>
               <Button onClick={onReject}>Từ chối</Button>
+              <Button onClick={onTransfer}>Chuyển tiền</Button>
               {detail.status === 'DRAFT' && <Button onClick={onApprove}>Duyệt</Button>}
             </Grid>
           </Grid>

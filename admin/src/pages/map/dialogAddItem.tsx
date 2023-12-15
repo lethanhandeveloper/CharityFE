@@ -52,7 +52,6 @@ export default function DialogAddItem(props: DialogAddItemProps) {
         props.campaignId || '',
         itemContract?.creatorId || '',
         itemContract?.message || '',
-        itemContract?.time || new Date(),
       );
     } catch (error) {
       dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));

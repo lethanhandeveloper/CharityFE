@@ -1,4 +1,15 @@
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  TextField,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import ProgressCustom from '@common/Progess';
@@ -13,12 +24,14 @@ import campaign from '@services/ethers/campaign';
 import { CampaignContractUI } from '@models/contract';
 import { mapCampainContract } from '@mapdata/contract';
 import TableRender from '@components/Table';
+import DialogContentText from '@mui/material/DialogContentText';
 
 export const calculatePercent = (number1: number, number2: number) =>
   Math.floor((number1 / number2) * 100).toFixed(2);
 const DonatePage = () => {
   const { id } = useParams();
-
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [number, setNumber] = useState<number>(0);
   const [detail, setDetail] = useState<CampainUI>();
   const [campaignContract, setCampaign] = useState<CampaignContractUI>();
   useEffect(() => {
@@ -29,6 +42,7 @@ const DonatePage = () => {
           setDetail(mapCampain(response.data.result));
         }
         const contract = await campaign.getCampainDetail(id);
+
         setCampaign(mapCampainContract(contract));
       }
     };
@@ -37,6 +51,52 @@ const DonatePage = () => {
 
   return (
     <React.Fragment>
+      {openDialog && (
+        <Dialog
+          open={openDialog}
+          onClose={() => {
+            setOpenDialog(false);
+          }}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <TextField
+                type='number'
+                onChange={(e) => {
+                  setNumber(parseFloat(e.target.value));
+                }}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                if (detail) {
+                  campaign.donateCampaign(
+                    detail?.id,
+                    number,
+                    localStorage.getItem('userId') || 'anonymous',
+                  );
+                }
+                setOpenDialog(false);
+              }}
+            >
+              Chuyển
+            </Button>
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+              }}
+              autoFocus
+            >
+              Đóng
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
       <Grid
         container
         spacing={5}
@@ -142,7 +202,6 @@ const DonatePage = () => {
                   border: '1px solid #f54a00',
                   padding: '5px 25px 5px 25px',
                 }}
-                onClick={() => {}}
               >
                 Chia sẻ
               </Button>
@@ -155,7 +214,7 @@ const DonatePage = () => {
                   background: '#f54a00',
                 }}
                 onClick={() => {
-                  if (detail) campaign.donateCampaign(detail?.id, 50);
+                  setOpenDialog(true);
                 }}
               >
                 Ủng hộ

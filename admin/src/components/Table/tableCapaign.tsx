@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 
-import { InputAdornment, TextField } from '@mui/material';
+import { Avatar, Box, InputAdornment, TextField } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import serviceAPI from '@services/api';
 
@@ -20,13 +20,6 @@ import { UserUI } from '@models/user';
 import { HistoryContractUI } from '@models/contract';
 import { mapHistoryContracts } from '@services/mapdata/contract';
 
-interface Column {
-  id: 'user' | 'amount' | 'time' | 'size' | 'density';
-  label: string;
-  minWidth?: number;
-  align?: 'right';
-  format?: (value: number) => string;
-}
 const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
     background: ${theme.colors.alpha.white[100]};
@@ -36,6 +29,14 @@ const SearchInputWrapper = styled(TextField)(
     }
 `,
 );
+interface Column {
+  id: 'user' | 'amount' | 'time' | 'size' | 'density';
+  label: string;
+  minWidth?: number;
+  align?: 'right';
+  format?: (value: number) => string;
+}
+
 const columns: readonly Column[] = [
   { id: 'user', label: 'Tài khoản', minWidth: 170 },
   {
@@ -48,7 +49,6 @@ const columns: readonly Column[] = [
     id: 'time',
     label: 'Thời gian',
     minWidth: 170,
-    align: 'right',
   },
 ];
 
@@ -73,15 +73,13 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
       } else {
         history = await campaign.getHistoryByUser(id);
       }
-      if (history?.length > 0) {
-        setList(mapHistoryContracts(history || []));
-        const users: UserUI[] = [];
-        history.forEach((element: any) => {
-          const data = serviceAPI.auth.getUserById(element.donatorId);
-          users.push(mapUserUI(data));
-        });
-        setUserList(users);
+      setList(mapHistoryContracts(history));
+      const users: UserUI[] = [];
+      for (let index = 0; index < history.length; index++) {
+        const data = await serviceAPI.auth.getUserById(history[index].donatorId);
+        users.push(mapUserUI(data.data.result));
       }
+      setUserList(users);
     };
     initData();
   }, []);
@@ -120,14 +118,27 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
             </TableRow>
           </TableHead>
           <TableBody>
-            {list?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row) => {
+            {list?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
               return (
                 <TableRow
                   hover
                   role='checkbox'
                   tabIndex={-1}
                 >
-                  <TableCell>{userList[0]?.fullname}</TableCell>
+                  <TableCell>
+                    <Box
+                      display={'flex'}
+                      flexDirection={'row'}
+                      alignItems={'center'}
+                      gap={3}
+                    >
+                      <Avatar
+                        alt={userList.find((item) => item.id === row.userId)?.fullname}
+                        src={userList.find((item) => item.id === row.userId)?.imageUrl}
+                      />
+                      {userList.find((item) => item.id === row.userId)?.fullname}
+                    </Box>
+                  </TableCell>
                   <TableCell>{row.value}</TableCell>
                   <TableCell>{row.time.toString()}</TableCell>
                 </TableRow>

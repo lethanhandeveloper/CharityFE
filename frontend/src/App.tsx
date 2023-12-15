@@ -14,6 +14,7 @@ import StatusMaintenance from '@pages/error/Maintenance';
 import React from 'react';
 import { buildAbilityFor } from '@caslConfig/ability';
 import { AbilityContext } from '@caslConfig/can';
+import AlertSnackbar from '@components/SnackBar';
 
 function App() {
   const content = useRoutes(routers);
@@ -36,6 +37,7 @@ function App() {
             <LocalizationProvider dateAdapter={AdapterDateFns as any}>
               <CssBaseline />
               <AbilityContext.Provider value={ability}>{content}</AbilityContext.Provider>
+              <AlertSnackbar />
             </LocalizationProvider>
           </JWTProvider>
         </ErrorBoundary>

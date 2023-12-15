@@ -1,6 +1,6 @@
 import { Facebook, LinkedIn, YouTube } from '@mui/icons-material';
 import { Avatar, Box, Container, Grid, Typography } from '@mui/material';
-import MonthlyBarChart from './bar';
+import MonthlyBarChart from '../../components/Chart';
 import { useParams } from 'react-router';
 import CampaignTable from './campaignTable';
 import serviceAPI from '@services/api';
@@ -66,7 +66,11 @@ const DetailAccount = () => {
         item
         xs={12}
       >
-        <MonthlyBarChart />
+        <MonthlyBarChart
+          isLine={false}
+          type='User'
+          id={data?.userId}
+        />
       </Grid>
       <Grid
         item

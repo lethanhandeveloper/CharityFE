@@ -5,27 +5,16 @@ import transactionContract from '@abi/transactionHistory.json';
 import itemContract from '@abi/item.json';
 import { CampainUI } from '@models/campain';
 import campaignAddress from './campaignAddress';
-
-const donateCampaign = async (id: string, value: number) => {
-  try {
-    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-    const valueInWei = ethers.utils.parseEther(value.toString());
-    const signer = provider.getSigner();
-    const contract = new Contract(
-      process.env.REACT_APP_CONTRACT_ADDRESS || '',
-      campaignContract.abi,
-      signer,
-    );
-
-    const tx = await contract.donate(id, {
-      value: valueInWei,
-    });
-    await tx.wait();
-    return true;
-  } catch (error) {
-    return false;
-  }
+import campaignWidth from '@abi/withdraw.json';
+const getCurrentDate = (): string => {
+  return new Date().toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
 };
 
 const setHistoryAddress = async () => {
@@ -36,6 +25,7 @@ const setHistoryAddress = async () => {
 
     const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
     const tx = await contract.setTransactionHistoryAddress(campaignAddress.historyAddress);
+    const txWith = await contract.setWithdrawRequestAddress(campaignAddress.withdrawAddress);
 
     const contractHis = new Contract(
       campaignAddress.historyAddress,
@@ -44,8 +34,14 @@ const setHistoryAddress = async () => {
     );
     const txHis = await contractHis.setCampaignAddress(campaignAddress.contractAddress);
 
+    const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const txWithContract = await contractWith.setCampaignAddress(campaignAddress.contractAddress);
+
     await tx.wait();
+    await txWith.wait();
+    await txWithContract.await();
     await txHis.wait();
+
     return true;
   } catch (err) {
     return false;
@@ -63,14 +59,13 @@ const addNew = async (data: CampainUI) => {
     const title = data.title;
     const currentValue = 0;
     const targetValue = data.targetValue;
-    const endDate = Math.floor(Date.now() / 1000) + 3600;
     const tx = await contract.addNewCampaign(
       id,
       creatorUserName,
       title,
       currentValue,
       targetValue,
-      endDate,
+      getCurrentDate(),
     );
     await tx.wait();
     setHistoryAddress();
@@ -80,14 +75,14 @@ const addNew = async (data: CampainUI) => {
   }
 };
 
-const addItem = async (campaignId: string, creatorId: string, message: string, time: Date) => {
+const addItem = async (campaignId: string, creatorId: string, message: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
-    const endDate = Math.floor(new Date(time).getTime() / 1000) + 3600;
-    const tx = await contract.addNew(campaignId, creatorId, message, endDate);
+
+    const tx = await contract.addNew(campaignId, creatorId, message, getCurrentDate());
     await tx.wait();
     return true;
   } catch (err) {
@@ -153,6 +148,7 @@ const getItemByUser = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
+
     const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
@@ -161,14 +157,72 @@ const getItemByUser = async (id: string) => {
   }
 };
 
+const addRequest = async (id: string, value: number, address: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const valueInWei = ethers.utils.parseEther(value.toString());
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const tx = await contract.addNewWithdrawRequest(id, valueInWei, address);
+    await tx.wait();
+  } catch (error) {
+    return {};
+  }
+};
+
+const approveRequest = async (id: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const tx = await contract.approveWithdrawRequest(id);
+    await tx.wait();
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getRequestByCampaign = async (id: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const tx = await contract.getWithdrawRequestByCampaignId(id);
+    return tx;
+  } catch (error) {
+    return {};
+  }
+};
+const withDraw = async (id: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const tx = await contract.withdraw(id);
+    return tx;
+  } catch (error) {
+    return {};
+  }
+};
+
 export default {
-  donateCampaign,
   addNew,
   setHistoryAddress,
-  addItem,
   getCampainDetail,
   getHistoryByCampaign,
   getHistoryByUser,
+  addItem,
   getItemByCampaign,
   getItemByUser,
+
+  addRequest,
+  approveRequest,
+  getRequestByCampaign,
+  withDraw,
 };

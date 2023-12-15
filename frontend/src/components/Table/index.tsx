@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
-import { InputAdornment } from '@mui/material';
+import { Avatar, Box, InputAdornment } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
 import serviceAPI from '@services/api';
@@ -37,7 +37,6 @@ const columns: readonly Column[] = [
     id: 'time',
     label: 'Thời gian',
     minWidth: 170,
-    align: 'right',
   },
 ];
 
@@ -64,10 +63,10 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
       }
       setList(mapHistoryContracts(history));
       const users: UserUI[] = [];
-      history.forEach((element: any) => {
-        const data = serviceAPI.auth.getUserById(element.donatorId);
-        users.push(mapUserUI(data));
-      });
+      for (let index = 0; index < history.length; index++) {
+        const data = await serviceAPI.auth.getUserById(history[index].donatorId);
+        users.push(mapUserUI(data.data.result));
+      }
       setUserList(users);
     };
     initData();
@@ -114,7 +113,20 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                   role='checkbox'
                   tabIndex={-1}
                 >
-                  <TableCell>{userList[0]?.fullname}</TableCell>
+                  <TableCell>
+                    <Box
+                      display={'flex'}
+                      flexDirection={'row'}
+                      alignItems={'center'}
+                      gap={3}
+                    >
+                      <Avatar
+                        alt={userList.find((item) => item.id === row.userId)?.fullname}
+                        src={userList.find((item) => item.id === row.userId)?.imageUrl}
+                      />
+                      {userList.find((item) => item.id === row.userId)?.fullname}
+                    </Box>
+                  </TableCell>
                   <TableCell>{row.value}</TableCell>
                   <TableCell>{row.time.toString()}</TableCell>
                 </TableRow>

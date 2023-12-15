@@ -4,7 +4,7 @@ import { BigNumber, ethers } from 'ethers';
 export const mapCampainContract = (data: any): CampaignContractUI => ({
   id: data.id,
   currentValue: parseFloat(ethers.utils.formatEther(BigNumber.from(data.currentValue).toString())),
-  donatorCount: BigNumber.from(data.donatorCount).toNumber(),
+  donatorCount: parseInt(ethers.utils.formatEther(BigNumber.from(data.donatorCount).toString())),
   targetValue: parseFloat(data.targetValue),
 });
 export const mapHistoryContract = (data: any): HistoryContractUI => ({

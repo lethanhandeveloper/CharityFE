@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom';
 import { SearchTwoTone } from '@mui/icons-material';
 import {
   Box,
+  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   InputAdornment,
   MenuItem,
@@ -24,6 +30,9 @@ import ProgressCustom from '@common/Progess';
 
 import TypographyTitle from '@common/Typography';
 import { LinkCustom } from '@common/Link';
+import campaign from '@services/ethers/campaign';
+import ExtendedWindow from '@models/ether';
+import { ethers } from 'ethers';
 export interface SearchStructure {
   id: string;
   categoryId: string;
@@ -37,6 +46,12 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [transfer, setTransfer] = useState({
+    number: 0,
+    message: '',
+    id: '',
+  });
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
     id: id,
     categoryId: '',
@@ -94,6 +109,34 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
     };
     initProvince();
   }, []);
+
+  const withDraw = async (id: string) => {
+    try {
+      // Request account access if needed
+      await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+
+      // Use MetaMask provider
+      const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+
+      // Get signer (account) from provider
+      const signer = provider.getSigner();
+
+      // Get the user's Ethereum address
+      const address = await signer.getAddress();
+
+      // Display the Ethereum address
+      alert(`Connected with address: ${address}`);
+    } catch (error) {
+      console.error('Error connecting to MetaMask:', error);
+    }
+    campaign.addRequest(
+      id,
+      50,
+      '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
+      localStorage.getItem('userId') || 'anonymous',
+      'xzcxzc',
+    );
+  };
 
   const renderCard = (data: CampainUI) => (
     <Card
@@ -209,8 +252,23 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
         </Box>
       </CardContent>
       <CardActions>
-        {data.status === 'DRAFT' && (
+        {data.status === 'DRAFT' ? (
           <LinkCustom to={`/campaign/edit/${data.id}`}>Chỉnh sửa</LinkCustom>
+        ) : (
+          <>
+            <Button onClick={() => withDraw(data.id)}>Rút tiền</Button>
+            <Button
+              onClick={() => {
+                setTransfer({
+                  id: data.id,
+                  message: '',
+                  number: 0,
+                });
+              }}
+            >
+              Tất toán
+            </Button>
+          </>
         )}
       </CardActions>
     </Card>
@@ -218,6 +276,52 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
 
   return (
     <React.Fragment>
+      {openDialog && (
+        <Dialog
+          open={openDialog}
+          onClose={() => {
+            setOpenDialog(false);
+          }}
+          aria-labelledby='alert-dialog-title'
+          aria-describedby='alert-dialog-description'
+        >
+          <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id='alert-dialog-description'>
+              <TextField
+                type='number'
+                onChange={(e) => {
+                  setTransfer({ ...transfer, number: parseInt(e.target.value) });
+                }}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                campaign.addRequest(
+                  transfer.id,
+                  transfer.number,
+                  '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
+                  localStorage.getItem('userId') || 'anonymous',
+                  transfer.message,
+                );
+                setOpenDialog(false);
+              }}
+            >
+              Chuyển
+            </Button>
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+              }}
+              autoFocus
+            >
+              Đóng
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
       <Grid container>
         <Grid
           item
