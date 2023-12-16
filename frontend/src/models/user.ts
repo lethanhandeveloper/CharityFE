@@ -18,6 +18,7 @@ export interface UserUI {
   province: string;
   district: string;
   commune: string;
+  createdDate: Date;
 }
 export interface PersonalUI {
   name: string;

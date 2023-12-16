@@ -5,12 +5,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Autocomplete, Avatar, Box, TextField, Typography } from '@mui/material';
+import { Autocomplete, Avatar, Box, MenuItem, TextField, Typography } from '@mui/material';
 import serviceAPI from '@services/api';
 import { setInfoAlert } from '@store/redux/alert';
 import { useAppDispatch } from '@store/hook';
 import { CampainUI } from '@models/campain';
 import { mapCampainUIs } from '@services/mapdata/campain';
+import { SimpleValueKey } from '@models/meta';
 
 interface DialogChooseCampaignProps {
   lat: number;
@@ -22,7 +23,10 @@ interface DialogChooseCampaignProps {
 }
 export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
   const [campaignList, setCampaignList] = React.useState<CampainUI[]>([]);
-  const [campaign, setCampaign] = React.useState<string>('');
+  const [campaign, setCampaign] = React.useState<SimpleValueKey>({
+    id: '',
+    value: 'NORMAL',
+  });
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
@@ -38,8 +42,8 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
       const response = await serviceAPI.map.create({
         lat: props.lat,
         long: props.long,
-        campaignId: campaign,
-        type: '1',
+        campaignId: campaign.id,
+        type: campaign.value,
       });
       if (response.status === 200) {
         dispatch(
@@ -84,31 +88,54 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
         <DialogTitle id='alert-dialog-title'>{'Chọn chiến dịch'}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            <Autocomplete
-              id='country-select-demo'
-              sx={{ width: 300 }}
-              options={campaignList}
-              autoHighlight
-              onChange={(e, value) => setCampaign(value?.id || '')}
-              getOptionLabel={(option) => option.title}
-              renderOption={(props, option) => (
-                <Box
-                  component='li'
-                  sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                  {...props}
-                >
-                  <Avatar src={option.thumbnail} />
-                  <Typography>{option.title}</Typography>
-                  <Typography>{option.endDate.toString()}</Typography>
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label='Choose a campaign'
-                />
-              )}
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 3 }}>
+              <Autocomplete
+                id='country-select-demo'
+                sx={{ width: 300 }}
+                options={campaignList}
+                autoHighlight
+                onChange={(e, value) => setCampaign({ ...campaign, id: value?.id || '' })}
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => (
+                  <Box
+                    component='li'
+                    sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                    {...props}
+                  >
+                    <Avatar src={option.thumbnail} />
+                    <Typography>{option.title}</Typography>
+                    <Typography>{option.endDate.toString()}</Typography>
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label='Choose a campaign'
+                  />
+                )}
+              />
+              <TextField
+                id='outlined-select-currency'
+                select
+                sx={{ width: '100px' }}
+                label='Loại chiến dịch'
+                defaultValue='EUR'
+                onChange={(e) => setCampaign({ ...campaign, value: e.target.value })}
+              >
+                {[
+                  { value: 'NORMAL', label: 'Quyên góp' },
+                  { value: 'EMERGENCY', label: 'Khẩn cấp' },
+                  { value: 'ITEM', label: 'Vật phẩm' },
+                ].map((option) => (
+                  <MenuItem
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Box>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -15,6 +15,16 @@ import { Link } from 'react-router-dom';
 interface AccountSectionProps {
   list: UserUI[];
 }
+export const getCurrentDate = (date: Date): string => {
+  return new Date(date).toLocaleString('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+};
 const AccountSection: FC<AccountSectionProps> = (props) => {
   const renderCardAccount = (account: UserUI) => (
     <Card style={{ textAlign: 'left' }}>
@@ -50,7 +60,7 @@ const AccountSection: FC<AccountSectionProps> = (props) => {
         >
           <Typography>Tài khoản thiện nguyện số: {account.email}</Typography>
           <Typography>Số tiền gây quỹ:{0}</Typography>
-          <Typography>Tham gia từ: {new Date().toString()}</Typography>
+          <Typography>Tham gia từ: {getCurrentDate(account.createdDate)}</Typography>
         </Box>
       </CardContent>
       <CardActions>

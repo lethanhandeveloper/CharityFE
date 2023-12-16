@@ -84,7 +84,6 @@ const DetailCampaign = (props: DetailCampaignProps) => {
   const onTransfer = async () => {
     try {
       const reuslt = await campaign.getRequestByCampaign(detail.id);
-      console.log(reuslt);
       await campaign.approveRequest(reuslt.id._hex);
       await campaign.withDraw(reuslt.id._hex);
     } catch (error) {

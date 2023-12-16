@@ -67,6 +67,18 @@ const icon = L.icon({
   popupAnchor: [2, -20],
   iconUrl: 'https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png',
 });
+const iconEmergency = L.icon({
+  iconSize: [13, 20],
+  iconAnchor: [5, 20],
+  popupAnchor: [2, -20],
+  iconUrl: 'https://img.icons8.com/doodle/48/heart-with-pulse.png',
+});
+const iconItem = L.icon({
+  iconSize: [13, 20],
+  iconAnchor: [5, 20],
+  popupAnchor: [2, -20],
+  iconUrl: 'https://img.icons8.com/plasticine/100/exterior.png',
+});
 
 const MapPage = () => {
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
@@ -349,7 +361,9 @@ const MapPage = () => {
           {listMap?.map((item) => (
             <Marker
               position={[item.lat, item.long]}
-              icon={icon}
+              icon={
+                item.type === 'EMERGENCY' ? iconEmergency : item.type === 'NORMAL' ? icon : iconItem
+              }
             >
               <Popup>{renderCard(item.campaign)}</Popup>
             </Marker>

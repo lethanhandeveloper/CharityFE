@@ -20,6 +20,7 @@ import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import { NavLink } from 'react-router-dom';
+import { getCurrentDate } from '@pages/home/components/AccountSection';
 
 const RequestPage = () => {
   const [list, setList] = React.useState<any>([]);
@@ -84,7 +85,9 @@ const RequestPage = () => {
                     </ListItemAvatar>
                     <ListItemText
                       primary={`${item?.commitInfoVerification?.goalName} - ${item?.commitInfoVerification?.targetAmount}`}
-                      secondary={`${item?.commitInfoVerification?.startDate} - ${item?.commitInfoVerification?.endDate}`}
+                      secondary={`${getCurrentDate(
+                        new Date(item?.commitInfoVerification?.startDate),
+                      )} - ${getCurrentDate(new Date(item?.commitInfoVerification?.endDate))}`}
                     />
                     <ListItemButton>
                       <Grid container>

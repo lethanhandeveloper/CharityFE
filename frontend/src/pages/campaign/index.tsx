@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { SearchTwoTone } from '@mui/icons-material';
 import {
@@ -31,6 +31,7 @@ export interface SearchStructure {
 }
 const CampainPage = () => {
   const [campainList, setCampainList] = useState<CampainUI[]>([]);
+  const location = useLocation();
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
@@ -39,7 +40,7 @@ const CampainPage = () => {
     no_item_per_page: 9,
     categoryId: '',
     provinceId: '',
-    search_text: '',
+    search_text: location?.state?.searchText || '',
   });
 
   const calculatePercent = (current: number, target: number): number => {

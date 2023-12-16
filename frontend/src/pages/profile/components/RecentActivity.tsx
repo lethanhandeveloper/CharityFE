@@ -52,7 +52,7 @@ function RecentActivity({ id }: { id: string }) {
                 variant='caption'
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Total
+                Tổng tiền quyên góp
               </Typography>
               <Typography variant='h2'>485</Typography>
             </Box>
@@ -62,7 +62,7 @@ function RecentActivity({ id }: { id: string }) {
                 variant='caption'
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
-                Failed
+                Số lần quyên góp
               </Typography>
               <Typography variant='h2'>8</Typography>
             </Box>

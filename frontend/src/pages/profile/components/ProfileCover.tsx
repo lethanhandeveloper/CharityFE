@@ -58,7 +58,7 @@ const ProfileCover = (props: ProfileCoverProps) => {
       <CardCover>
         <Card>
           <Box
-            p={3}
+            padding={'6px'}
             display='flex'
             alignItems='center'
             justifyContent='space-between'

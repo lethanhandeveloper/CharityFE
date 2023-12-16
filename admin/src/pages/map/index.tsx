@@ -47,6 +47,24 @@ const icon = L.icon({
   popupAnchor: [2, -20],
   iconUrl: 'https://unpkg.com/leaflet@1.6/dist/images/marker-icon.png',
 });
+const iconNormal = L.icon({
+  iconSize: [13, 20],
+  iconAnchor: [5, 20],
+  popupAnchor: [2, -20],
+  iconUrl: 'https://img.icons8.com/doodle/48/heart-with-pulse.png',
+});
+const iconEmergency = L.icon({
+  iconSize: [13, 20],
+  iconAnchor: [5, 20],
+  popupAnchor: [2, -20],
+  iconUrl: 'https://img.icons8.com/doodle/48/heart-with-pulse.png',
+});
+const iconItem = L.icon({
+  iconSize: [13, 20],
+  iconAnchor: [5, 20],
+  popupAnchor: [2, -20],
+  iconUrl: 'https://img.icons8.com/plasticine/100/exterior.png',
+});
 // const MapComponent: FC<IMapComponent> = (props) => {
 //   useMapEvents({
 //     click(e) {
@@ -328,11 +346,23 @@ const MapPage = () => {
               </Grid>
             </Grid>
           </div>
+          {postionSearch.lat !== 0 && (
+            <Marker
+              position={[postionSearch.lat, postionSearch.long]}
+              icon={icon}
+            />
+          )}
 
           {listMap?.map((item) => (
             <Marker
               position={[item.lat, item.long]}
-              icon={icon}
+              icon={
+                item.type === 'EMERGENCY'
+                  ? iconEmergency
+                  : item.type === 'NORMAL'
+                  ? iconNormal
+                  : iconItem
+              }
             >
               <Popup>{renderCard(item.campaign)}</Popup>
             </Marker>

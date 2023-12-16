@@ -1,4 +1,4 @@
-import { CampaignContractUI, HistoryContractUI } from '@models/contract';
+import { CampaignContractUI, HistoryContractUI, HistoryItemContractUI } from '@models/contract';
 import { BigNumber, ethers } from 'ethers';
 
 export const mapCampainContract = (data: any): CampaignContractUI => ({
@@ -7,12 +7,23 @@ export const mapCampainContract = (data: any): CampaignContractUI => ({
   donatorCount: parseInt(ethers.utils.formatEther(BigNumber.from(data.donatorCount).toString())),
   targetValue: parseFloat(data.targetValue),
 });
+
 export const mapHistoryContract = (data: any): HistoryContractUI => ({
   campaignId: data.campaignId,
   userId: data.donatorId,
   time: new Date(BigNumber.from(data.time).toNumber()),
   value: parseFloat(ethers.utils.formatEther(BigNumber.from(data.value).toString())),
 });
+export const mapHistoryItemContract = (data: any): HistoryItemContractUI => ({
+  campaignId: data.campaignId,
+  userId: data.creatorId,
+  time: data.time,
+  message: data.message,
+});
+
+export const mapHistoryItemContracts = (list: any): HistoryItemContractUI[] => {
+  return list.map((item: any) => mapHistoryItemContract(item));
+};
 export const mapHistoryContracts = (list: any): HistoryContractUI[] => {
   return list.map((item: any) => mapHistoryContract(item));
 };

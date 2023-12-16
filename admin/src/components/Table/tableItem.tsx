@@ -9,14 +9,26 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { SearchInputWrapper } from '@layout/Header/SearchBox';
-import { Avatar, Box, InputAdornment } from '@mui/material';
+
+import { Avatar, Box, InputAdornment, TextField } from '@mui/material';
 import campaign from '@services/ethers/campaign';
-import { mapHistoryContracts } from '@mapdata/contract';
 import serviceAPI from '@services/api';
-import { HistoryContractUI } from '@models/contract';
-import { UserUI } from '@models/user';
-import { mapUserUI } from '@mapdata/user';
+
+import { mapUserUI } from '@services/mapdata/user';
+import { styled } from '@mui/material/styles';
+import { HistoryItemContractUI } from '@models/contract';
+import { mapHistoryItemContracts } from '@services/mapdata/contract';
+import { mapCampainUI } from '@services/mapdata/campain';
+
+const SearchInputWrapper = styled(TextField)(
+  ({ theme }) => `
+    background: ${theme.colors.alpha.white[100]};
+
+    .MuiInputBase-input {
+        font-size: ${theme.typography.pxToRem(17)};
+    }
+`,
+);
 interface Column {
   id: 'user' | 'amount' | 'time' | 'size' | 'density';
   label: string;
@@ -40,11 +52,17 @@ const columns: readonly Column[] = [
   },
 ];
 
-export default function TableRender({ id, isCampaign }: { id: string; isCampaign: boolean }) {
+export default function TableRenderHistoryItem({
+  id,
+  isCampaign,
+}: {
+  id: string;
+  isCampaign: boolean;
+}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [list, setList] = React.useState<HistoryContractUI[]>();
-  const [userList, setUserList] = React.useState<UserUI[]>([]);
+  const [list, setList] = React.useState<HistoryItemContractUI[]>();
+  const [userList, setUserList] = React.useState<any>([]);
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -57,17 +75,24 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
     const initData = async () => {
       let history;
       if (isCampaign) {
-        history = await campaign.getHistoryByCampaign(id);
+        history = await campaign.getItemByCampaign(id);
       } else {
-        history = await campaign.getHistoryByUser(id);
+        history = await campaign.getItemByUser(id);
       }
-      setList(mapHistoryContracts(history));
-      const users: UserUI[] = [];
-      for (let index = 0; index < history.length; index++) {
-        const data = await serviceAPI.auth.getUserById(history[index].donatorId);
-        users.push(mapUserUI(data.data.result));
+      setList(mapHistoryItemContracts(history));
+      const checkList = [];
+      if (isCampaign) {
+        for (let index = 0; index < history.length; index++) {
+          const data = await serviceAPI.auth.getUserById(history[index].donatorId);
+          checkList.push(mapUserUI(data.data.result));
+        }
+      } else {
+        for (let index = 0; index < history.length; index++) {
+          const data = await serviceAPI.campain.getCampainDetail(history[index].campaignId);
+          checkList.push(mapCampainUI(data.data.result));
+        }
       }
-      setUserList(users);
+      setUserList(checkList);
     };
     initData();
   }, []);
@@ -120,32 +145,42 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                       alignItems={'center'}
                       gap={3}
                     >
-                      <Avatar
-                        alt={userList.find((item) => item.id === row.userId)?.fullname}
-                        src={userList.find((item) => item.id === row.userId)?.imageUrl}
-                      />
-                      {userList.find((item) => item.id === row.userId)?.fullname}
+                      {isCampaign ? (
+                        <>
+                          <Avatar
+                            alt={userList.find((item: any) => item.id === row.userId)?.fullname}
+                            src={userList.find((item: any) => item.id === row.userId)?.imageUrl}
+                          />
+                          {userList.find((item: any) => item.id === row.userId)?.fullname}
+                        </>
+                      ) : (
+                        <>
+                          <Avatar
+                            alt={userList.find((item: any) => item.id === row.campaignId)?.title}
+                            src={userList.find((item: any) => item.id === row.campaignId)?.imageUrl}
+                          />
+                          {userList.find((item: any) => item.id === row.campaignId)?.title}
+                        </>
+                      )}
                     </Box>
                   </TableCell>
-                  <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.time.toString()}</TableCell>
+                  <TableCell>{row.message}</TableCell>
+                  <TableCell>{row.time}</TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
-      {(list?.length || 0) > 0 && (
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component='div'
-          count={list?.length || 0}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      )}
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component='div'
+        count={list?.length || 0}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Paper>
   );
 }

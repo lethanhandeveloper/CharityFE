@@ -1,4 +1,4 @@
-import { forwardRef, Ref, useState, ReactElement, ChangeEvent } from 'react';
+import { forwardRef, Ref, useState, ReactElement, ChangeEvent, useEffect } from 'react';
 import {
   Avatar,
   Link,
@@ -25,8 +25,13 @@ import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import FindInPageTwoToneIcon from '@mui/icons-material/FindInPageTwoTone';
-
+import parse from 'html-react-parser';
 import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
+import { useDebounce } from 'use-debounce';
+import serviceAPI from '@services/api';
+import { CampainUI } from '@models/campain';
+import { mapCampainUIs } from '@mapdata/campain';
+import { useNavigate } from 'react-router';
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
@@ -71,9 +76,11 @@ const DialogTitleWrapper = styled(DialogTitle)(
 );
 
 function HeaderSearch() {
-  const [openSearchResults, setOpenSearchResults] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
-
+  const [openSearchResults, setOpenSearchResults] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchText] = useDebounce<string>(searchValue, 4000);
+  const [campaigns, setCampainList] = useState<CampainUI[]>([]);
+  const navigate = useNavigate();
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
 
@@ -95,7 +102,17 @@ function HeaderSearch() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  useEffect(() => {
+    const initData = async () => {
+      const data = await serviceAPI.campain.getCampainPendingByPage({
+        page: 1,
+        no_item_per_page: 3,
+        search_text: searchText,
+      });
+      setCampainList(mapCampainUIs(data.data.result));
+    };
+    if (searchText) initData();
+  }, [searchText]);
   return (
     <>
       <Tooltip
@@ -149,7 +166,7 @@ function HeaderSearch() {
                 variant='body2'
                 component='span'
               >
-                Search results for{' '}
+                Kết quả tiềm kiếm{' '}
                 <Typography
                   sx={{ fontWeight: 'bold' }}
                   variant='body1'
@@ -158,143 +175,67 @@ function HeaderSearch() {
                   {searchValue}
                 </Typography>
               </Typography>
-              <Link
-                href='#'
-                variant='body2'
-                underline='hover'
-              >
-                Advanced search
-              </Link>
             </Box>
             <Divider sx={{ my: 1 }} />
             <List disablePadding>
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
+              {campaigns.map((item) => (
+                <ListItem
+                  button
+                  onClick={() => {
+                    navigate(`/campaign/donate/${item.id}`);
+                    setOpen(false);
+                  }}
+                >
+                  <Hidden smDown>
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          background: (theme: Theme) => theme.palette.secondary.main,
+                        }}
+                      >
+                        <FindInPageTwoToneIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                  </Hidden>
+                  <Box flex='1'>
+                    <Box
+                      display='flex'
+                      justifyContent='space-between'
+                    >
+                      <Link
+                        href='#'
+                        underline='hover'
+                        sx={{ fontWeight: 'bold' }}
+                        variant='body2'
+                      >
+                        {item.title}
+                      </Link>
+                    </Box>
+                    <Typography
+                      component='span'
+                      variant='body2'
                       sx={{
-                        background: (theme: Theme) => theme.palette.secondary.main,
+                        color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
                       }}
                     >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex='1'>
-                  <Box
-                    display='flex'
-                    justifyContent='space-between'
-                  >
-                    <Link
-                      href='#'
-                      underline='hover'
-                      sx={{ fontWeight: 'bold' }}
-                      variant='body2'
-                    >
-                      Dashboard for Healthcare Platform
-                    </Link>
+                      {parse(item.description)}
+                    </Typography>
                   </Box>
-                  <Typography
-                    component='span'
-                    variant='body2'
-                    sx={{
-                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
-                    }}
-                  >
-                    This page contains all the necessary information for managing all hospital
-                    staff.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
-              </ListItem>
-              <Divider
-                sx={{ my: 1 }}
-                component='li'
-              />
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        background: (theme: Theme) => theme.palette.secondary.main,
-                      }}
-                    >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex='1'>
-                  <Box
-                    display='flex'
-                    justifyContent='space-between'
-                  >
-                    <Link
-                      href='#'
-                      underline='hover'
-                      sx={{ fontWeight: 'bold' }}
-                      variant='body2'
-                    >
-                      Example Projects Application
-                    </Link>
-                  </Box>
-                  <Typography
-                    component='span'
-                    variant='body2'
-                    sx={{
-                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
-                    }}
-                  >
-                    This is yet another search result pointing to a app page.
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
-              </ListItem>
-              <Divider
-                sx={{ my: 1 }}
-                component='li'
-              />
-              <ListItem button>
-                <Hidden smDown>
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        background: (theme: Theme) => theme.palette.secondary.main,
-                      }}
-                    >
-                      <FindInPageTwoToneIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                </Hidden>
-                <Box flex='1'>
-                  <Box
-                    display='flex'
-                    justifyContent='space-between'
-                  >
-                    <Link
-                      href='#'
-                      underline='hover'
-                      sx={{ fontWeight: 'bold' }}
-                      variant='body2'
-                    >
-                      Search Results Page
-                    </Link>
-                  </Box>
-                  <Typography
-                    component='span'
-                    variant='body2'
-                    sx={{
-                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
-                    }}
-                  >
-                    Choose if you would like to show or not this typography section here...
-                  </Typography>
-                </Box>
-                <ChevronRightTwoToneIcon />
-              </ListItem>
+                  <ChevronRightTwoToneIcon />
+                </ListItem>
+              ))}
             </List>
             <Divider sx={{ mt: 1, mb: 2 }} />
             <Box sx={{ textAlign: 'center' }}>
-              <Button color='primary'>View all search results</Button>
+              <Button
+                color='primary'
+                onClick={() => {
+                  navigate('/campaign', { state: { searchText: searchText } });
+                  setOpen(false);
+                }}
+              >
+                Xem tất cả kết quả
+              </Button>
             </Box>
           </DialogContent>
         )}

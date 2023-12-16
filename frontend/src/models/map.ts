@@ -1,6 +1,6 @@
 import { CampainUI } from './campain';
 
-export type MapType = 'NORMAL' | 'EMERGENCY';
+export type MapType = 'NORMAL' | 'EMERGENCY' | 'ITEM';
 export interface MapRecord {
   id: string;
   lat: string;

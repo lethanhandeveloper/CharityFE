@@ -108,7 +108,7 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
         variant='text'
         startIcon={<EditTwoTone />}
       >
-        Edit
+        Cập nhật
       </Button>
       <Dialog
         open={open}

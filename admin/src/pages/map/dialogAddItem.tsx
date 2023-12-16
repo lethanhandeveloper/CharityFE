@@ -75,56 +75,61 @@ export default function DialogAddItem(props: DialogAddItemProps) {
             >
               <Grid
                 item
-                xs={6}
+                xs={12}
               >
-                <Autocomplete
-                  id='country-select-demo'
-                  options={userList}
-                  autoHighlight
-                  onChange={(e, value) =>
-                    setItemContract({ ...itemContract, creatorId: value?.id || '' })
-                  }
-                  getOptionLabel={(option) => option.email}
-                  renderOption={(props, option) => (
-                    <Box
-                      component='li'
-                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
-                      {...props}
-                    >
-                      <Avatar src={option.imageUrl} />
-                      <Typography>{option.fullname}</Typography>
-                    </Box>
-                  )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label='Người quyên góp'
-                    />
-                  )}
-                />
+                <Box
+                  display={'flex'}
+                  flexDirection={'row'}
+                  gap={2}
+                  justifyContent={'space-between'}
+                >
+                  <Autocomplete
+                    id='country-select-demo'
+                    sx={{ width: 260 }}
+                    options={userList}
+                    autoHighlight
+                    onChange={(e, value) =>
+                      setItemContract({ ...itemContract, creatorId: value?.id || '' })
+                    }
+                    getOptionLabel={(option) => option.email}
+                    renderOption={(props, option) => (
+                      <Box
+                        component='li'
+                        sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                        {...props}
+                      >
+                        <Avatar src={option.imageUrl} />
+                        <Typography>{option.fullname}</Typography>
+                      </Box>
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label='Người quyên góp'
+                      />
+                    )}
+                  />
+                  <DatePicker
+                    sx={{ width: 260 }}
+                    label={'Ngày quyên góp'}
+                    disableFuture
+                    onChange={(e) => {
+                      console.log(e);
+                    }}
+                  />
+                </Box>
               </Grid>
+
               <Grid
                 item
-                xs={3}
+                xs={12}
               >
                 <TextField
                   rows={4}
+                  fullWidth
                   minRows={4}
                   onChange={(e) => {
                     setItemContract({ ...itemContract, message: e.target.value || '' });
-                  }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={3}
-              >
-                <DatePicker
-                  sx={{ width: 260 }}
-                  label={'Ngày quyên góp'}
-                  disableFuture
-                  onChange={(e) => {
-                    console.log(e);
                   }}
                 />
               </Grid>

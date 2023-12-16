@@ -15,6 +15,7 @@ export const mapUserUI = (userAPI: any): UserUI => {
     province: userAPI.province,
     specificAddress: userAPI.specificAddress,
     commune: userAPI.commune,
+    createdDate: new Date(userAPI.createdDate),
   };
 };
 export const mapUsersUI = (userAPI: any): UserUI[] => {

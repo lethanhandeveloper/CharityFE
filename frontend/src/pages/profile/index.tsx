@@ -43,14 +43,14 @@ const ManagementUserProfile = () => {
           <Grid
             item
             xs={12}
-            md={8}
+            md={6}
           >
             {user && <ProfileCover user={user} />}
           </Grid>
           <Grid
             item
             xs={12}
-            md={4}
+            md={6}
           >
             <RecentActivity id={user?.id || ''} />
           </Grid>
