@@ -26,7 +26,7 @@ const LoginPage = () => {
       const loginInfo = await serviceAPI.auth.login(user);
       if (loginInfo.status === 200) {
         if (loginInfo.data.result.role === 4) {
-          setMessageError('Không đúng quyền đăng nhập');
+          setMessageError('Sai mật khẩu hoặc tên đăng nhập');
         } else {
           localStorage.setItem('token', loginInfo.data.result.token);
           localStorage.setItem('role', loginInfo.data.result.role);
