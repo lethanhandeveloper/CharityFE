@@ -284,7 +284,7 @@ const CampainPage = () => {
                 {[
                   { id: 'FINISH', value: 'Kết thúc' },
                   { id: 'PENDING', value: 'Đang thực hiện' },
-                  { id: 'TARGET', value: 'Đã đủ chỉ tiêu' },
+                  { id: 'TARGET', value: 'Đạt mục tiêu' },
                 ].map((option) => (
                   <MenuItem
                     key={option.id}

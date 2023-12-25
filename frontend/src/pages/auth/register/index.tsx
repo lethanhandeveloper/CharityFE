@@ -161,7 +161,7 @@ const RegisterPage = () => {
               lineHeight={'34px'}
               className={style['mt-20']}
             >
-              Đăng nhập
+              Đăng ký tài khoản
             </Typography>
 
             <BoxColum>
@@ -218,7 +218,7 @@ const RegisterPage = () => {
                     variant='standard'
                   >
                     {[
-                      { value: 'male', label: 'Name' },
+                      { value: 'male', label: 'Nam' },
                       { value: 'female', label: 'Nữ' },
                     ].map((option) => (
                       <MenuItem

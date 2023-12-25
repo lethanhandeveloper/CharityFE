@@ -166,7 +166,7 @@ function HeaderSearch() {
                 variant='body2'
                 component='span'
               >
-                Kết quả tiềm kiếm{' '}
+                Kết quả tìm kiếm{' '}
                 <Typography
                   sx={{ fontWeight: 'bold' }}
                   variant='body1'

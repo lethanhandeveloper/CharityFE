@@ -72,28 +72,40 @@ const DonatePage = () => {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={() => {
-                if (detail) {
-                  campaign.donateCampaign(
-                    detail?.id,
-                    number,
-                    localStorage.getItem('userId') || 'anonymous',
-                  );
-                }
-                setOpenDialog(false);
-              }}
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'space-between'}
+              width={'100%'}
             >
-              Chuyển
-            </Button>
-            <Button
-              onClick={() => {
-                setOpenDialog(false);
-              }}
-              autoFocus
-            >
-              Đóng
-            </Button>
+              <Button
+                variant='contained'
+                onClick={() => {
+                  setOpenDialog(false);
+                }}
+                autoFocus
+                style={{
+                  backgroundColor: '',
+                }}
+              >
+                Đóng
+              </Button>
+              <Button
+                variant='contained'
+                onClick={() => {
+                  if (detail) {
+                    campaign.donateCampaign(
+                      detail?.id,
+                      number,
+                      localStorage.getItem('userId') || 'anonymous',
+                    );
+                  }
+                  setOpenDialog(false);
+                }}
+              >
+                Chuyển
+              </Button>
+            </Box>
           </DialogActions>
         </Dialog>
       )}
