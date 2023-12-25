@@ -123,9 +123,9 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
                 onChange={(e) => setCampaign({ ...campaign, value: e.target.value })}
               >
                 {[
-                  { value: 'NORMAL', label: 'Quyên góp' },
+                  { value: 'NORMAL', label: 'Trung bình' },
                   { value: 'EMERGENCY', label: 'Khẩn cấp' },
-                  { value: 'ITEM', label: 'Vật phẩm' },
+                  { value: 'ITEM', label: 'Cao' },
                 ].map((option) => (
                   <MenuItem
                     key={option.value}
