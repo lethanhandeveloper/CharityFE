@@ -10,6 +10,8 @@ import { useState } from 'react';
 import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Can from '@caslConfig/can';
 
 const AvatarWrapper = styled(Card)(
   ({ theme }) => `
@@ -71,7 +73,12 @@ const ProfileCover = (props: ProfileCoverProps) => {
                 Thông tin cá nhân
               </Typography>
             </Box>
-            {user && <EditInfoDialog data={user} />}
+            <Can
+              I='update'
+              an='UserProfile'
+            >
+              {user && <EditInfoDialog data={user} />}
+            </Can>
           </Box>
           <Divider />
           <CardContent sx={{ p: 4 }}>
@@ -97,6 +104,12 @@ const ProfileCover = (props: ProfileCoverProps) => {
                   item
                   xs={5}
                 >
+                  <Can
+                    I='view'
+                    an='UserProfile'
+                  >
+                    <CheckCircleIcon style={{ color: 'blue' }} />
+                  </Can>
                   <Text color='black'>
                     <b>{data.fullname}</b>
                   </Text>

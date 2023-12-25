@@ -1,7 +1,7 @@
 import { AbilityBuilder, AbilityClass, Ability } from '@casl/ability';
 
 export type Actions = 'view' | 'manage' | 'create' | 'read' | 'update' | 'delete';
-type Subjects = 'RequestRole' | 'CampaignRequest';
+type Subjects = 'RequestRole' | 'CampaignRequest' | 'UserProfile';
 
 export type AppAbility = Ability<[Actions, Subjects]>;
 export const appAbility = Ability as AbilityClass<AppAbility>;
@@ -11,9 +11,11 @@ export default function defineRulesFor(role: string) {
 
   if (role === '1') {
     can('create', 'RequestRole');
+    can('update', 'UserProfile');
   }
   if (role === '2' || role === '3') {
     can('create', 'CampaignRequest');
+    can('view', 'UserProfile');
   }
 
   // } else {
