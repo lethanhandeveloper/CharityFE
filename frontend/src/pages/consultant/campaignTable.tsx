@@ -25,7 +25,7 @@ import serviceAPI from '@services/api';
 import { mapCampainUIs } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import { SimpleValueKey } from '@models/meta';
-import { ButtonStyle1 } from '@common/Button';
+import { ButtonCancel, ButtonConfirm, ButtonStyle1 } from '@common/Button';
 import ProgressCustom from '@common/Progess';
 
 import TypographyTitle from '@common/Typography';
@@ -297,7 +297,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button
+            <ButtonConfirm
               onClick={() => {
                 campaign.addRequest(
                   transfer.id,
@@ -310,15 +310,15 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
               }}
             >
               Chuyển
-            </Button>
-            <Button
+            </ButtonConfirm>
+            <ButtonCancel
               onClick={() => {
                 setOpenDialog(false);
               }}
               autoFocus
             >
               Đóng
-            </Button>
+            </ButtonCancel>
           </DialogActions>
         </Dialog>
       )}

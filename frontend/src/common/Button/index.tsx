@@ -20,3 +20,18 @@ export const ButtonStyle2 = styled(Button)({
   height: 48,
   padding: '0 30px',
 });
+
+export const ButtonCancel = styled(Button)({
+  color: '#f54a00 !important',
+  borderRadius: '20px !important',
+  border: '1px solid #f54a00 !important',
+  padding: '5px 25px 5px 25px !important',
+});
+
+export const ButtonConfirm = styled(Button)({
+  color: 'white !important',
+  padding: '5px 25px 5px 25px !important',
+  borderRadius: '20px !important',
+  border: '1px solid #f54a00 !important',
+  background: '#f54a00 !important',
+});

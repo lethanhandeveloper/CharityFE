@@ -104,15 +104,17 @@ const ProfileCover = (props: ProfileCoverProps) => {
                   item
                   xs={5}
                 >
-                  <Can
-                    I='view'
-                    an='UserProfile'
-                  >
-                    <CheckCircleIcon style={{ color: 'blue' }} />
-                  </Can>
-                  <Text color='black'>
-                    <b>{data.fullname}</b>
-                  </Text>
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Can
+                      I='view'
+                      an='UserProfile'
+                    >
+                      <CheckCircleIcon style={{ color: 'blue' }} />
+                    </Can>
+                    <Text color='black'>
+                      <b>{data.fullname}</b>
+                    </Text>
+                  </Box>
                 </Grid>
                 <Grid xs={2}></Grid>
                 <Grid

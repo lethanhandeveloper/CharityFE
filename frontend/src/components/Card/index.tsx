@@ -3,6 +3,7 @@ import Card from '@mui/material/Card/Card';
 import ProgressCustom from '@common/Progess';
 import React, { FC } from 'react';
 import { CampainUI } from '@models/campain';
+import { Link } from 'react-router-dom';
 interface ICardSlide {
   handleDragStart: (e: { preventDefault: () => any }) => void;
   data: CampainUI;
@@ -55,7 +56,7 @@ const CardSlice: FC<ICardSlide> = (props) => {
               fontWeight: 'bold',
             }}
           >
-            {data.title}
+            <Link to={`/campaign/donate/${data.id}`}>{data.title}</Link>
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>

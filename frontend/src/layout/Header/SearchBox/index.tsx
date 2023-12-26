@@ -148,9 +148,8 @@ function HeaderSearch() {
                 </InputAdornment>
               ),
             }}
-            placeholder='Search terms here...'
+            placeholder='Nhập thông tin tìm kiếm...'
             fullWidth
-            label='Search'
           />
         </DialogTitleWrapper>
         <Divider />

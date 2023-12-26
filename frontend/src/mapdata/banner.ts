@@ -4,7 +4,7 @@ export const mapBannerUI = (dataAPI: any): BannerUI => {
   return {
     description: dataAPI.description,
     title: dataAPI.title,
-    imgUrl: dataAPI.imgUrl,
+    imgUrl: dataAPI.imageUrl,
   };
 };
 export const mapBannerUIs = (listAPI: any): BannerUI[] => {

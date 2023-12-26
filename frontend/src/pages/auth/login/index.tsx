@@ -12,6 +12,8 @@ import { TextFieldStyle1 } from '@common/TextField';
 import style from '../auth.module.scss';
 import serviceAPI from '@services/api/index';
 import { UserAPI } from 'models/user';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -20,13 +22,16 @@ const LoginPage = () => {
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigation = useNavigate();
   const [messageError, setMessageError] = useState<string>('');
+  const dispatch = useAppDispatch();
   const token = localStorage.getItem('token');
   const onSubmit = async () => {
     try {
       const loginInfo = await serviceAPI.auth.login(user);
       if (loginInfo.status === 200) {
         if (loginInfo.data.result.role === 4) {
-          setMessageError('Sai mật khẩu hoặc tên đăng nhập');
+          dispatch(
+            setInfoAlert({ open: true, title: 'Sai mật khẩu hoặc tên đăng nhập', type: 'error' }),
+          );
         } else {
           localStorage.setItem('token', loginInfo.data.result.token);
           localStorage.setItem('role', loginInfo.data.result.role);
@@ -34,10 +39,14 @@ const LoginPage = () => {
           navigation('/home');
         }
       } else {
-        setMessageError('Sai mật khẩu hoặc tên đăng nhập');
+        dispatch(
+          setInfoAlert({ open: true, title: 'Sai mật khẩu hoặc tên đăng nhập', type: 'error' }),
+        );
       }
     } catch (error) {
-      setMessageError('Thông tin không chính xác!');
+      dispatch(
+        setInfoAlert({ open: true, title: 'Sai mật khẩu hoặc tên đăng nhập', type: 'error' }),
+      );
     }
   };
 

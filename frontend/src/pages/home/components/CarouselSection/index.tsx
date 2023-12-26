@@ -19,6 +19,7 @@ const CarouselSection = (props: CarouselSectionProps) => {
         items={props.list.slice(0, 5).map((item, key) => (
           <CardMedia
             key={key}
+            sx={{ height: '60vh' }}
             image={item.imgUrl}
             onDragStart={handleDragStart}
           />

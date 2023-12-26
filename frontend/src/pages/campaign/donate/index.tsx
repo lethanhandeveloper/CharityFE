@@ -25,6 +25,7 @@ import { CampaignContractUI } from '@models/contract';
 import { mapCampainContract } from '@mapdata/contract';
 import TableRender from '@components/Table';
 import DialogContentText from '@mui/material/DialogContentText';
+import { ButtonCancel, ButtonConfirm } from '@common/Button';
 
 export const calculatePercent = (number1: number, number2: number) =>
   Math.floor((number1 / number2) * 100).toFixed(2);
@@ -78,20 +79,15 @@ const DonatePage = () => {
               justifyContent={'space-between'}
               width={'100%'}
             >
-              <Button
-                variant='contained'
+              <ButtonCancel
                 onClick={() => {
                   setOpenDialog(false);
                 }}
                 autoFocus
-                style={{
-                  backgroundColor: '',
-                }}
               >
                 Đóng
-              </Button>
-              <Button
-                variant='contained'
+              </ButtonCancel>
+              <ButtonConfirm
                 onClick={() => {
                   if (detail) {
                     campaign.donateCampaign(
@@ -104,7 +100,7 @@ const DonatePage = () => {
                 }}
               >
                 Chuyển
-              </Button>
+              </ButtonConfirm>
             </Box>
           </DialogActions>
         </Dialog>

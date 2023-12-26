@@ -14,6 +14,7 @@ import { SimpleValueKey } from 'models/meta';
 import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import { ButtonCancel, ButtonConfirm } from '@common/Button';
 interface EditInfoDialogProps {
   data: UserUI;
 }
@@ -287,8 +288,8 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
-          <Button onClick={handleUpdateProfile}>Cập nhật</Button>
+          <ButtonCancel onClick={handleClose}>Hủy</ButtonCancel>
+          <ButtonConfirm onClick={handleUpdateProfile}>Cập nhật</ButtonConfirm>
         </DialogActions>
       </Dialog>
     </React.Fragment>
