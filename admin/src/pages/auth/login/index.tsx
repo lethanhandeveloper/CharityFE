@@ -78,7 +78,7 @@ const LoginPage = () => {
               textAlign='left'
               className={style['mt-40']}
             >
-              Đăng nhập
+              Đăng nhập quản trị viên
             </Typography>
 
             <BoxColum>
