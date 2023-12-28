@@ -13,11 +13,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { Avatar } from '@mui/material';
+import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import { Avatar, InputAdornment } from '@mui/material';
+import SearchField from '@common/SearchField';
+import serviceAPI from '@services/api';
 
 interface Data {
   id: number;
@@ -88,7 +87,7 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
   const { onSelectAllClick, numSelected, rowCount } = props;
 
   return (
-    <TableHead>
+    <TableHead sx={{ background: 'rgb(243, 246, 249)' }}>
       <TableRow>
         <TableCell padding='checkbox'>
           <Checkbox
@@ -124,6 +123,8 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
 interface EnhancedTableToolbarProps {
   numSelected: number;
   buttons: React.ReactNode;
+  setSearchText: (value: string) => void;
+  onLoad: () => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -132,6 +133,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   return (
     <Toolbar
       sx={{
+        margin: '10px',
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
@@ -142,19 +144,33 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     >
       {props.buttons}
 
-      <Tooltip title='Filter list'>
-        <IconButton>
-          <FilterListIcon />
-        </IconButton>
-      </Tooltip>
+      <SearchField
+        sx={{ width: '350px', paddingRight: '30px' }}
+        placeholder='Nhập thông tin tìm kiếm ...'
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position='end'>
+              <SearchTwoToneIcon />
+            </InputAdornment>
+          ),
+        }}
+        size='small'
+        onChange={(e) => {
+          props.setSearchText(e.target.value);
+        }}
+        onKeyUp={(e) => {
+          if (e.code === 'Enter') {
+            props.onLoad();
+          }
+        }}
+      />
     </Toolbar>
   );
 }
 
 interface EnhancedTableProps {
   columns: Column[];
-  data: any;
-  loadTable: (page: number, noItemPerPage: number, searchText: string) => void;
+  api: string;
   onRowEvent?: (data: any) => void;
   onToggle?: () => void;
   buttons?: React.ReactNode;
@@ -166,11 +182,14 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
+  const [searchText, setSearchText] = React.useState<string>('');
+  const [totalItems, setTotalItems] = React.useState<number>(0);
 
-  React.useEffect(() => {
-    setDataTable(props.data);
-  }, [props.data]);
-
+  const loadTable = async (page: number, noItemPerPage: number, searchText: string) => {
+    const api = await serviceAPI.common.getAPIList(props.api, page, noItemPerPage, searchText);
+    setDataTable(api.data.result);
+    setTotalItems(api.data.totalItems);
+  };
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
@@ -190,6 +209,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+    loadTable(newPage, rowsPerPage, searchText);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -230,17 +250,32 @@ export default function EnhancedTable(props: EnhancedTableProps) {
       return row.image_url;
     }
   };
-
+  React.useEffect(() => {
+    if (props.api) {
+      loadTable(page, rowsPerPage, searchText);
+    }
+  }, [props.api]);
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2, minHeight: 600 }}>
+    <Box
+      sx={{
+        width: '100%',
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow:
+          '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
+      }}
+    >
+      <Paper sx={{ width: '100%', mb: 2, minHeight: 570, maxHeight: 570, padding: '10px' }}>
         <EnhancedTableToolbar
+          setSearchText={setSearchText}
+          onLoad={() => {
+            loadTable(page, rowsPerPage, searchText);
+          }}
           numSelected={selected.length}
           buttons={props.buttons}
         />
-        <TableContainer>
+        <TableContainer sx={{ maxHeight: 500, overflow: 'auto' }}>
           <Table
-            sx={{ minWidth: 750 }}
             aria-labelledby='tableTitle'
             size={'medium'}
           >
@@ -330,7 +365,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
           }}
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={dataTable?.length}
+          count={totalItems}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

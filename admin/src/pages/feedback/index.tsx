@@ -3,38 +3,35 @@ import apiEndPoint from '@constants/apiEndPoint';
 import Button from '@mui/material/Button';
 
 import { useState } from 'react';
-
+import DetailFeedback from './detail';
 import { Grid } from '@mui/material';
-import { CampaignStatus, CampainUI } from '@models/campain';
-import { mapCampainUI } from '@services/mapdata/campain';
-import DetailCampaign from './detail';
+import { FeedbackUI } from '@models/feedback';
+import { mapFeedbackUI } from '@services/mapdata/feedback';
 
-interface CampaignTableProps {
-  isActive: boolean;
-  status: CampaignStatus;
-}
-
-const CampaignTable = (props: CampaignTableProps) => {
+const FeedbackTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  console.log(props);
-  const [data, setData] = useState<CampainUI>();
+
+  const [data, setData] = useState<FeedbackUI>();
 
   const columns: Column[] = [
     {
       title: 'Tiêu đề',
-      nameField: 'title',
+      nameField: 'userTitle',
       isShowImage: true,
     },
+
+    { title: 'Hiển thị', nameField: 'isShowInHomePage' },
   ];
 
   const handleRowEvent = (row: any) => {
-    setData(mapCampainUI(row));
+    setData(mapFeedbackUI(row));
     setOpenDetail(true);
   };
 
   const handleClose = () => {
     setOpenDetail(false);
   };
+
   const renderButton = () => {
     return (
       <Grid container>
@@ -43,7 +40,7 @@ const CampaignTable = (props: CampaignTableProps) => {
             variant='contained'
             onClick={() => {
               setOpenDetail(true);
-              setData(mapCampainUI({}));
+              setData(mapFeedbackUI({}));
             }}
           >
             Tạo mới
@@ -56,16 +53,16 @@ const CampaignTable = (props: CampaignTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        api={apiEndPoint.campain.list}
+        api={apiEndPoint.feedback.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />
       {openDetail && data && (
-        <DetailCampaign
+        <DetailFeedback
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('');
+            console.log('zcxzc');
           }}
           onClose={handleClose}
         />
@@ -73,4 +70,4 @@ const CampaignTable = (props: CampaignTableProps) => {
     </>
   );
 };
-export default CampaignTable;
+export default FeedbackTable;

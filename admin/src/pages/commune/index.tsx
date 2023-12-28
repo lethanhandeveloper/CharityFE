@@ -1,23 +1,19 @@
 import EnhancedTable, { Column } from '@components/Table';
 import apiEndPoint from '@constants/apiEndPoint';
 import Button from '@mui/material/Button';
-import serviceAPI from '@services/api';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import DetailCommune from './detail';
 import { Grid } from '@mui/material';
 import { CommuneUI } from '@models/area';
 import { mapCommuneUI } from '@services/mapdata/area';
 
-interface CampaignTableProps {
-  isActive: boolean;
-}
-
-const CampaignTable = (props: CampaignTableProps) => {
+const CampaignTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  const [dataTable, setDataTable] = useState();
+
   const [data, setData] = useState<CommuneUI>();
+
   const columns: Column[] = [
     {
       title: 'Tên',
@@ -25,11 +21,6 @@ const CampaignTable = (props: CampaignTableProps) => {
       isShowImage: true,
     },
   ];
-  const loadData = async (page: number, noItemPerPage: number, searchText: string) => {
-    const link = apiEndPoint.commune.list;
-    const api = await serviceAPI.common.getAPIList(link, page, noItemPerPage, searchText);
-    setDataTable(api.data.result);
-  };
 
   const handleRowEvent = (row: any) => {
     setData(mapCommuneUI(row));
@@ -39,14 +30,13 @@ const CampaignTable = (props: CampaignTableProps) => {
   const handleClose = () => {
     setOpenDetail(false);
   };
-  useEffect(() => {
-    loadData(1, 10, '');
-  }, [props.isActive]);
+
   const renderButton = () => {
     return (
       <Grid container>
         <Grid item>
           <Button
+            variant='contained'
             onClick={() => {
               setOpenDetail(true);
               setData(mapCommuneUI({}));
@@ -62,8 +52,7 @@ const CampaignTable = (props: CampaignTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        data={dataTable}
-        loadTable={loadData}
+        api={apiEndPoint.commune.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />
@@ -72,7 +61,7 @@ const CampaignTable = (props: CampaignTableProps) => {
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            loadData(1, 10, '');
+            console.log('zcxzc');
           }}
           onClose={handleClose}
         />

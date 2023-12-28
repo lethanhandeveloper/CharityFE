@@ -110,14 +110,33 @@ const DetailCampaign = (props: DetailCampaignProps) => {
         buttonChildren={
           <Grid
             container
+            gap={3}
             justifyContent={'space-between'}
           >
             <Grid item>
-              <Button onClick={onClose}>Đóng</Button>
+              <Button
+                onClick={onClose}
+                variant='outlined'
+              >
+                Đóng
+              </Button>
             </Grid>
-            <Grid item>
-              <Button onClick={onReject}>Từ chối</Button>
-              <Button onClick={onTransfer}>Chuyển tiền</Button>
+            <Grid
+              item
+              gap={3}
+            >
+              <Button
+                onClick={onReject}
+                variant='outlined'
+              >
+                Từ chối
+              </Button>
+              <Button
+                onClick={onTransfer}
+                variant='contained'
+              >
+                Chuyển tiền
+              </Button>
               {detail.status === 'DRAFT' && <Button onClick={onApprove}>Duyệt</Button>}
             </Grid>
           </Grid>

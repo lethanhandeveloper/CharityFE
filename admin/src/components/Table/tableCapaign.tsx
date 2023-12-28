@@ -95,9 +95,9 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
             </InputAdornment>
           ),
         }}
-        placeholder='Search terms here...'
+        placeholder='Tìm kiếm người ủng hộ...'
         fullWidth
-        label='Search'
+        size='small'
       />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table

@@ -1,52 +1,37 @@
-import * as ExcelJS from 'exceljs';
-import { dialog } from 'electron';
-interface Data {
-  [key: string]: string | number;
-}
+import * as React from 'react';
+import * as XLSX from 'xlsx';
 
-function exportToExcel(data: Data[]): void {
-  const workbook = new ExcelJS.Workbook();
-  const worksheet = workbook.addWorksheet('Sheet 1');
-  const getFilePath = (): string | undefined => {
-    const result = dialog.showSaveDialogSync({
-      title: 'Save Excel File',
-      defaultPath: 'example.xlsx',
-      filters: [{ name: 'Excel Files', extensions: ['xlsx'] }],
+const ExportToExcelButton: React.FC<{ data: Array<Array<any>> }> = ({ data }) => {
+  const exportToExcel = () => {
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Add a worksheet to the workbook
+    const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Assign the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Create an array from the workbook using XLSX.write with type 'array'
+    const arrayBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+    // Create a Blob from the array
+    const blob = new Blob([arrayBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
 
-    return result;
+    // Create a download link and trigger a click event to download the file
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.download = 'exported_data.xlsx';
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(url);
   };
 
-  // Get the file path from the user
-  const filePath = getFilePath();
-  // Add headers
-  const headers = Object.keys(data[0]);
-  worksheet.addRow(headers);
+  return <button onClick={exportToExcel}>Export to Excel</button>;
+};
 
-  // Add data
-  data.forEach((item) => {
-    const row: any[] = [];
-    headers.forEach((header) => {
-      row.push(item[header]);
-    });
-    worksheet.addRow(row);
-  });
-
-  // Save the workbook to a file
-  workbook.xlsx
-    .writeFile(filePath || '')
-    .then(() => {
-      console.log(`Excel file saved at: ${filePath}`);
-    })
-    .catch((error) => {
-      console.error('Error saving Excel file:', error);
-    });
-}
-
-// Example usage
-const sampleData: Data[] = [
-  { name: 'John Doe', age: 30, email: 'john@example.com' },
-  { name: 'Jane Doe', age: 25, email: 'jane@example.com' },
-];
-
-exportToExcel(sampleData);
+export default ExportToExcelButton;

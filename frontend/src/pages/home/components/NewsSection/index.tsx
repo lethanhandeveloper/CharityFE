@@ -1,49 +1,8 @@
 import TypographyTitle from '@common/Typography';
-import { Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import React from 'react';
 
-interface NewsCardProps {
-  newsList: any;
-}
-const NewsSection = (props: NewsCardProps) => {
-  const renderCard = (card: any) => {
-    return (
-      <Card
-        sx={{
-          borderRadius: '10px',
-          width: '100%',
-          textAlign: 'left',
-          height: '100%',
-          position: 'relative',
-        }}
-      >
-        <CardMedia
-          sx={{ height: 140 }}
-          image={card.imageUrl}
-          title='green iguana'
-        />
-        <CardContent style={{ marginBottom: '30px' }}>
-          <Typography
-            gutterBottom
-            variant='h5'
-            component='div'
-            fontSize='18px'
-          >
-            {card.title}
-          </Typography>
-          <Typography
-            variant='body2'
-            color='text.secondary'
-          >
-            {card.description}
-          </Typography>
-        </CardContent>
-        <CardActions style={{ position: 'absolute', left: '0', bottom: '15px' }}>
-          <a style={{ color: '#f54a00' }}>Xem chi tiết &gt;</a>
-        </CardActions>
-      </Card>
-    );
-  };
+const NewsSection = () => {
   return (
     <React.Fragment>
       <Grid
@@ -51,8 +10,12 @@ const NewsSection = (props: NewsCardProps) => {
         spacing={3}
         sx={{
           padding: '0 20px 40px 20px',
+          backgroundSize: 'cover',
+          height: '300px',
+          backgroundRepeat: 'no-repeat',
           backgroundImage:
-            'linear-gradient(0deg,#fff 5%,#f3f6fe 17%,#ecf0fd 51%,#f2f5fd 83%,#fdfdfe 95%)',
+            'url(https://media.vneconomy.vn/w800/images/upload/2023/02/22/blockchain.jpg)',
+          backgroundColor: 'rgba(0,0,0,0.8)',
         }}
       >
         <Grid
@@ -60,17 +23,22 @@ const NewsSection = (props: NewsCardProps) => {
           textAlign={'center'}
           xs={12}
         >
-          <TypographyTitle>Tin tức, sự kiện</TypographyTitle>
+          <TypographyTitle color={'white'}>Giới thiệu</TypographyTitle>
         </Grid>
 
-        {props.newsList.map((item: any) => (
-          <Grid
-            item
-            xs={4}
-          >
-            {renderCard(item)}
-          </Grid>
-        ))}
+        <Typography
+          sx={{
+            marginLeft: 30,
+            marginRight: 30,
+            textAlign: 'center',
+            color: 'white',
+          }}
+        >
+          Chào mừng bạn đến với trang web của chúng tôi - nơi kết hợp công nghệ tiên tiến và đổi mới
+          để mang đến trải nghiệm độc đáo và an toàn. Chúng tôi tự hào thông báo rằng trang web của
+          chúng tôi sử dụng công nghệ blockchain để tối ưu hóa quy trình và đảm bảo tính minh bạch
+          và an toàn cho tất cả người dùng.
+        </Typography>
       </Grid>
     </React.Fragment>
   );

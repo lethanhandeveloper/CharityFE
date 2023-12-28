@@ -1,22 +1,17 @@
 import EnhancedTable, { Column } from '@components/Table';
 import apiEndPoint from '@constants/apiEndPoint';
 import Button from '@mui/material/Button';
-import serviceAPI from '@services/api';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DetailDistrict from './detail';
 import { Grid } from '@mui/material';
 import { DistrictUI } from '@models/area';
 import { mapDistrictUI } from '@services/mapdata/area';
 
-interface DistrictTableProps {
-  isActive: boolean;
-}
-
-const DistrictTable = (props: DistrictTableProps) => {
+const DistrictTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  const [dataTable, setDataTable] = useState();
   const [data, setData] = useState<DistrictUI>();
+
   const columns: Column[] = [
     {
       title: 'Tên đường',
@@ -24,11 +19,6 @@ const DistrictTable = (props: DistrictTableProps) => {
       isShowImage: true,
     },
   ];
-  const loadData = async (page: number, noItemPerPage: number, searchText: string) => {
-    const link = apiEndPoint.district.list;
-    const api = await serviceAPI.common.getAPIList(link, page, noItemPerPage, searchText);
-    setDataTable(api.data.result);
-  };
 
   const handleRowEvent = (row: any) => {
     setData(mapDistrictUI(row));
@@ -38,14 +28,13 @@ const DistrictTable = (props: DistrictTableProps) => {
   const handleClose = () => {
     setOpenDetail(false);
   };
-  useEffect(() => {
-    loadData(1, 10, '');
-  }, [props.isActive]);
+
   const renderButton = () => {
     return (
       <Grid container>
         <Grid item>
           <Button
+            variant='contained'
             onClick={() => {
               setOpenDetail(true);
               setData(mapDistrictUI({}));
@@ -61,8 +50,7 @@ const DistrictTable = (props: DistrictTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        data={dataTable}
-        loadTable={loadData}
+        api={apiEndPoint.district.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />
@@ -71,7 +59,7 @@ const DistrictTable = (props: DistrictTableProps) => {
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            loadData(1, 10, '');
+            console.log('xzcxz');
           }}
           onClose={handleClose}
         />

@@ -19,7 +19,7 @@ import {
   DialogContent,
   DialogTitle,
   Slide,
-  Hidden
+  Hidden,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from '@mui/material/transitions';
@@ -30,9 +30,15 @@ import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
 
 const Transition = forwardRef(function Transition(
   props: TransitionProps & { children: ReactElement<any, any> },
-  ref: Ref<unknown>
+  ref: Ref<unknown>,
 ) {
-  return <Slide direction="down" ref={ref} {...props} />;
+  return (
+    <Slide
+      direction='down'
+      ref={ref}
+      {...props}
+    />
+  );
 });
 
 const DialogWrapper = styled(Dialog)(
@@ -44,7 +50,7 @@ const DialogWrapper = styled(Dialog)(
     .MuiDialog-paperScrollPaper {
         max-height: calc(100vh - 64px)
     }
-`
+`,
 );
 
 const SearchInputWrapper = styled(TextField)(
@@ -54,14 +60,14 @@ const SearchInputWrapper = styled(TextField)(
     .MuiInputBase-input {
         font-size: ${theme.typography.pxToRem(17)};
     }
-`
+`,
 );
 
 const DialogTitleWrapper = styled(DialogTitle)(
   ({ theme }) => `
     background: ${theme.colors.alpha.black[5]};
     padding: ${theme.spacing(3)}
-`
+`,
 );
 
 function HeaderSearch() {
@@ -92,8 +98,14 @@ function HeaderSearch() {
 
   return (
     <>
-      <Tooltip arrow title="Search">
-        <IconButton color="primary" onClick={handleClickOpen}>
+      <Tooltip
+        arrow
+        title='Search'
+      >
+        <IconButton
+          color='primary'
+          onClick={handleClickOpen}
+        >
           <SearchTwoToneIcon />
         </IconButton>
       </Tooltip>
@@ -102,9 +114,9 @@ function HeaderSearch() {
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        maxWidth="md"
+        maxWidth='md'
         fullWidth
-        scroll="paper"
+        scroll='paper'
         onClose={handleClose}
       >
         <DialogTitleWrapper>
@@ -114,14 +126,14 @@ function HeaderSearch() {
             onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <InputAdornment position='start'>
                   <SearchTwoToneIcon />
                 </InputAdornment>
-              )
+              ),
             }}
-            placeholder="Search terms here..."
+            placeholder='Search terms here...'
             fullWidth
-            label="Search"
+            label='Search'
           />
         </DialogTitleWrapper>
         <Divider />
@@ -130,20 +142,27 @@ function HeaderSearch() {
           <DialogContent>
             <Box
               sx={{ pt: 0, pb: 1 }}
-              display="flex"
-              justifyContent="space-between"
+              display='flex'
+              justifyContent='space-between'
             >
-              <Typography variant="body2" component="span">
+              <Typography
+                variant='body2'
+                component='span'
+              >
                 Search results for{' '}
                 <Typography
                   sx={{ fontWeight: 'bold' }}
-                  variant="body1"
-                  component="span"
+                  variant='body1'
+                  component='span'
                 >
                   {searchValue}
                 </Typography>
               </Typography>
-              <Link href="#" variant="body2" underline="hover">
+              <Link
+                href='#'
+                variant='body2'
+                underline='hover'
+              >
                 Advanced search
               </Link>
             </Box>
@@ -154,70 +173,75 @@ function HeaderSearch() {
                   <ListItemAvatar>
                     <Avatar
                       sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
+                        background: (theme: Theme) => theme.palette.secondary.main,
                       }}
                     >
                       <FindInPageTwoToneIcon />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
+                <Box flex='1'>
+                  <Box
+                    display='flex'
+                    justifyContent='space-between'
+                  >
                     <Link
-                      href="#"
-                      underline="hover"
+                      href='#'
+                      underline='hover'
                       sx={{ fontWeight: 'bold' }}
-                      variant="body2"
+                      variant='body2'
                     >
                       Dashboard for Healthcare Platform
                     </Link>
                   </Box>
                   <Typography
-                    component="span"
-                    variant="body2"
+                    component='span'
+                    variant='body2'
                     sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
+                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
                     }}
                   >
-                    This page contains all the necessary information for
-                    managing all hospital staff.
+                    This page contains all the necessary information for managing all hospital
+                    staff.
                   </Typography>
                 </Box>
                 <ChevronRightTwoToneIcon />
               </ListItem>
-              <Divider sx={{ my: 1 }} component="li" />
+              <Divider
+                sx={{ my: 1 }}
+                component='li'
+              />
               <ListItem button>
                 <Hidden smDown>
                   <ListItemAvatar>
                     <Avatar
                       sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
+                        background: (theme: Theme) => theme.palette.secondary.main,
                       }}
                     >
                       <FindInPageTwoToneIcon />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
+                <Box flex='1'>
+                  <Box
+                    display='flex'
+                    justifyContent='space-between'
+                  >
                     <Link
-                      href="#"
-                      underline="hover"
+                      href='#'
+                      underline='hover'
                       sx={{ fontWeight: 'bold' }}
-                      variant="body2"
+                      variant='body2'
                     >
                       Example Projects Application
                     </Link>
                   </Box>
                   <Typography
-                    component="span"
-                    variant="body2"
+                    component='span'
+                    variant='body2'
                     sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
+                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
                     }}
                   >
                     This is yet another search result pointing to a app page.
@@ -225,41 +249,44 @@ function HeaderSearch() {
                 </Box>
                 <ChevronRightTwoToneIcon />
               </ListItem>
-              <Divider sx={{ my: 1 }} component="li" />
+              <Divider
+                sx={{ my: 1 }}
+                component='li'
+              />
               <ListItem button>
                 <Hidden smDown>
                   <ListItemAvatar>
                     <Avatar
                       sx={{
-                        background: (theme: Theme) =>
-                          theme.palette.secondary.main
+                        background: (theme: Theme) => theme.palette.secondary.main,
                       }}
                     >
                       <FindInPageTwoToneIcon />
                     </Avatar>
                   </ListItemAvatar>
                 </Hidden>
-                <Box flex="1">
-                  <Box display="flex" justifyContent="space-between">
+                <Box flex='1'>
+                  <Box
+                    display='flex'
+                    justifyContent='space-between'
+                  >
                     <Link
-                      href="#"
-                      underline="hover"
+                      href='#'
+                      underline='hover'
                       sx={{ fontWeight: 'bold' }}
-                      variant="body2"
+                      variant='body2'
                     >
                       Search Results Page
                     </Link>
                   </Box>
                   <Typography
-                    component="span"
-                    variant="body2"
+                    component='span'
+                    variant='body2'
                     sx={{
-                      color: (theme: Theme) =>
-                        lighten(theme.palette.secondary.main, 0.5)
+                      color: (theme: Theme) => lighten(theme.palette.secondary.main, 0.5),
                     }}
                   >
-                    Choose if you would like to show or not this typography
-                    section here...
+                    Choose if you would like to show or not this typography section here...
                   </Typography>
                 </Box>
                 <ChevronRightTwoToneIcon />
@@ -267,7 +294,7 @@ function HeaderSearch() {
             </List>
             <Divider sx={{ mt: 1, mb: 2 }} />
             <Box sx={{ textAlign: 'center' }}>
-              <Button color="primary">View all search results</Button>
+              <Button color='primary'>View all search results</Button>
             </Box>
           </DialogContent>
         )}

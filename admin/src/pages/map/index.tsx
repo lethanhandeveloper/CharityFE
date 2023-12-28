@@ -11,18 +11,14 @@ import {
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
+import Paper from '@mui/material/Paper';
+import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { Search, SearchIconWrapper, StyledInputBase } from './style';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from '@mui/material';
+import DirectionsIcon from '@mui/icons-material/Directions';
+import { Box, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import DialogChooseCampaign from './dialogChooseCampaign';
 import serviceAPI from '@services/api';
 import { mapUIs } from '@services/mapdata/map';
@@ -304,48 +300,67 @@ const MapPage = () => {
           />
           <div
             style={{
+              zIndex: 999999999999999,
               position: 'absolute',
               top: '10px',
               left: '10px',
-              backgroundColor: 'white',
-              padding: '5px',
-              zIndex: 9999999999,
-              borderRadius: '50px',
             }}
           >
-            <Grid container>
-              <Grid item>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder='Search…'
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setSearch(e.target.value);
-                    }}
-                    onKeyUp={(e) => {
-                      if (e.code === 'Enter') {
-                        getAddress(search);
-                      }
-                    }}
-                  />
-                </Search>
-              </Grid>
-              <Grid item>
-                <Button
-                  onClick={() => {
-                    setChooseCampaign(!openChooseCampaign);
-                  }}
-                >
-                  Tạo điểm
-                </Button>
-              </Grid>
-            </Grid>
+            <Paper
+              sx={{
+                p: '2px 4px',
+                display: 'flex',
+                alignItems: 'center',
+                width: 400,
+              }}
+            >
+              <IconButton
+                sx={{ p: '10px' }}
+                aria-label='menu'
+              >
+                <MenuIcon />
+              </IconButton>
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder='Search  Maps'
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.code === 'Enter') {
+                    getAddress(search);
+                  }
+                }}
+                inputProps={{ 'aria-label': 'search google maps' }}
+              />
+              <IconButton
+                type='button'
+                onClick={() => {
+                  getAddress(search);
+                }}
+                sx={{ p: '10px' }}
+                aria-label='search'
+              >
+                <SearchIcon />
+              </IconButton>
+              <Divider
+                sx={{ height: 28, m: 0.5 }}
+                orientation='vertical'
+              />
+              <IconButton
+                color='primary'
+                onClick={() => {
+                  console.log('test');
+                  setChooseCampaign(!openChooseCampaign);
+                }}
+                sx={{ p: '10px' }}
+                aria-label='directions'
+              >
+                <DirectionsIcon />
+              </IconButton>
+            </Paper>
           </div>
+
           {postionSearch.lat !== 0 && (
             <Marker
               position={[postionSearch.lat, postionSearch.long]}

@@ -3,7 +3,7 @@ const getAPIList = async (url: string, page: number, noItemPerPage: number, sear
   return await apiService.post(url, {
     page: page,
     noItemPerPage,
-    searchText,
+    search_text: searchText,
   });
 };
 export default { getAPIList };

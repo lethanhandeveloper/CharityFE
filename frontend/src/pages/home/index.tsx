@@ -6,7 +6,6 @@ import data from './data';
 
 import ShareSection from './components/ShareSection';
 import FundSection from './components/FundSection';
-import NewsSection from './components/NewsSection';
 
 import AccountSection from './components/AccountSection';
 import BannerSection from './components/BannerSection';
@@ -20,6 +19,8 @@ import { mapUsersUI } from '@mapdata/user';
 import { mapCampainUIs } from '@mapdata/campain';
 import CarouselSection from './components/CarouselSection';
 import { SimpleValueKey } from '@models/meta';
+import { FeedbackUI } from '@models/feedback';
+import { mapFeedbackUIs } from '@mapdata/feedback';
 
 const HomePage = () => {
   const [banners, setBanners] = useState<BannerUI[]>([]);
@@ -27,6 +28,7 @@ const HomePage = () => {
   const [campagins, setCampaigns] = useState<CampainUI[]>([]);
   const [categorys, setCategorys] = useState<SimpleValueKey[]>([]);
   const [home, setHome] = useState();
+  const [feedbacks, setFeedback] = useState<FeedbackUI[]>([]);
   useEffect(() => {
     const initData = async () => {
       const banner = await serviceAPI.banner.getBannerList();
@@ -44,6 +46,9 @@ const HomePage = () => {
       );
       const home = await serviceAPI.home.getCountForHome();
       setHome(home.data.result);
+      const feedback = await serviceAPI.home.getFeedBacksForHome();
+      console.log(mapFeedbackUIs(feedback.data.result), feedback.data.result);
+      setFeedback(mapFeedbackUIs(feedback.data.result));
     };
     initData();
   }, []);
@@ -59,13 +64,11 @@ const HomePage = () => {
 
       <BannerSection data={home} />
 
-      <NewsSection newsList={data.CardNews} />
-
       <FundSection fundlist={data.CardFund} />
 
       <AccountSection list={users} />
 
-      <ShareSection ShareCard={data.CardShare} />
+      <ShareSection ShareCard={feedbacks} />
 
       <div id='fb-root'></div>
 

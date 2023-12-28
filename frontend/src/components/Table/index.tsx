@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
-import { Avatar, Box, InputAdornment } from '@mui/material';
+import { Avatar, Box, Button, InputAdornment } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
 import serviceAPI from '@services/api';
@@ -102,6 +102,9 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                   {column.label}
                 </TableCell>
               ))}
+              <TableCell>
+                <Button>View on chain</Button>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

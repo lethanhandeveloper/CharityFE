@@ -68,10 +68,20 @@ const DetailDistrict = (props: DetailDistrictProps) => {
             justifyContent={'space-between'}
           >
             <Grid item>
-              <Button onClick={onClose}>Đóng</Button>
+              <Button
+                onClick={onClose}
+                variant='outlined'
+              >
+                Đóng
+              </Button>
             </Grid>
             <Grid item>
-              <Button onClick={onSave}>Save</Button>
+              <Button
+                onClick={onSave}
+                variant='contained'
+              >
+                Lưu
+              </Button>
             </Grid>
           </Grid>
         }

@@ -1,10 +1,11 @@
 import EnhancedTable, { Column } from '@components/Table';
-import serviceAPI from '@services/api';
-import { useEffect, useState } from 'react';
+
+import { useState } from 'react';
 import DetailProvince from './detail';
-import apiEndPoint from '@constants/apiEndPoint';
+
 import { RequestUI } from '@models/request';
 import { mapRequestUI } from '@services/mapdata/request';
+import apiEndPoint from '@constants/apiEndPoint';
 
 interface RequestTableProps {
   isActive: boolean;
@@ -12,7 +13,7 @@ interface RequestTableProps {
 
 const RequestTable = (props: RequestTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  const [dataTable, setDataTable] = useState();
+  console.log(props);
   const [data, setData] = useState<RequestUI>();
   const columns: Column[] = [
     {
@@ -36,11 +37,6 @@ const RequestTable = (props: RequestTableProps) => {
       nameField: 'status',
     },
   ];
-  const loadData = async (page: number, noItemPerPage: number, searchText: string) => {
-    const link = apiEndPoint.request.list;
-    const api = await serviceAPI.common.getAPIList(link, page, noItemPerPage, searchText);
-    setDataTable(api.data.result);
-  };
 
   const handleRowEvent = (row: any) => {
     setData(mapRequestUI(row));
@@ -50,9 +46,7 @@ const RequestTable = (props: RequestTableProps) => {
   const handleClose = () => {
     setOpenDetail(false);
   };
-  useEffect(() => {
-    loadData(1, 10, '');
-  }, [props.isActive]);
+
   const renderButton = () => {
     return <></>;
   };
@@ -60,8 +54,7 @@ const RequestTable = (props: RequestTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        data={dataTable}
-        loadTable={loadData}
+        api={apiEndPoint.request.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />
@@ -70,7 +63,7 @@ const RequestTable = (props: RequestTableProps) => {
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            loadData(1, 10, '');
+            console.log('check');
           }}
           onClose={handleClose}
         />

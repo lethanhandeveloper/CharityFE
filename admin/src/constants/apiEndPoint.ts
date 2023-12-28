@@ -24,7 +24,7 @@ const apiEndPoint = {
     getCampainPendingList: '/campaign/filter',
     create: '/campaign',
     getDetail: (id: string) => `/campaign/${id}`,
-    list: '/campaign/list',
+    list: '/campaign/paginate',
     updateStatus: '/campaign/updateStatus',
   },
   banner: {
@@ -43,12 +43,12 @@ const apiEndPoint = {
   province: {
     create: '/area/province/create',
     update: '/area/province/update',
-    list: '/area/province/list',
+    list: '/area/province/paginate',
   },
   district: {
     create: '/area/district/create',
     update: '/area/district/update',
-    list: '/area/district/list',
+    list: '/area/district/paginate',
     getByProvince: (id: string) => `/district/${id}/province`,
   },
   map: {
@@ -59,6 +59,12 @@ const apiEndPoint = {
   request: {
     update: (id: string) => `/user/verification/${id}`,
     list: '/user/verification/paginate',
+  },
+  feedback: {
+    list: '/feedback/paginate',
+    create: '/feedback',
+    update: (id: string) => `/feedback/${id}`,
+    updateStatus: (id: string) => `/feedback/setshowinhomepage/${id}`,
   },
 };
 export default apiEndPoint;

@@ -7,6 +7,7 @@ import province from './province';
 import district from './district';
 import commune from './commune';
 import map from './map';
+import feedback from './feedback';
 const serviceAPI = {
   auth,
   location,
@@ -17,5 +18,6 @@ const serviceAPI = {
   district,
   commune,
   map,
+  feedback,
 };
 export default serviceAPI;

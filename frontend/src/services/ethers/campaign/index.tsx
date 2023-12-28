@@ -43,7 +43,7 @@ const getCampainDetail = async (id: string) => {
 
     return tx;
   } catch (error) {
-    return {};
+    return null;
   }
 };
 

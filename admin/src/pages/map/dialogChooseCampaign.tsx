@@ -118,7 +118,7 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
                 id='outlined-select-currency'
                 select
                 sx={{ width: '100px' }}
-                label='Loại chiến dịch'
+                placeholder='Loại chiến dịch'
                 defaultValue='EUR'
                 onChange={(e) => setCampaign({ ...campaign, value: e.target.value })}
               >
@@ -139,16 +139,23 @@ export default function DialogChooseCampaign(props: DialogChooseCampaignProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleClose}>Đóng</Button>
+          <Button
+            onClick={props.handleClose}
+            variant='outlined'
+          >
+            Đóng
+          </Button>
           {props.id ? (
             <Button
               onClick={update}
               autoFocus
+              variant='contained'
             >
               Cập nhật
             </Button>
           ) : (
             <Button
+              variant='contained'
               onClick={create}
               autoFocus
             >

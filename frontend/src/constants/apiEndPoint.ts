@@ -45,6 +45,7 @@ const apiEndPoint = {
   },
   home: {
     home: '/home/user',
+    feedback: '/feedback/getforhomepage',
   },
 };
 export default apiEndPoint;

@@ -1,3 +1,4 @@
+import TypographyTitle from '@common/Typography';
 import { Grid, Typography } from '@mui/material';
 
 const BannerSection = ({ data }: { data: any }) => {
@@ -5,44 +6,46 @@ const BannerSection = ({ data }: { data: any }) => {
     <Grid
       item
       xs={12}
-      style={{ background: 'linear-gradient(281deg,#f54a00,#ff9252 102.8%)' }}
+      style={{
+        height: '350px',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundImage:
+          'linear-gradient(281deg,rgba(0,0,0,0.7),rgba(0,0,0,0.7)), url(https://media.vneconomy.vn/w800/images/upload/2023/02/22/blockchain.jpg)',
+      }}
     >
       <Grid
         container
-        textAlign='left'
+        textAlign='center'
         padding='20px'
       >
         <Grid
           item
-          xs={4}
+          xs={12}
         >
-          <img src='https://thiennguyen.app/_next/static/phone-infor-86ba5e6613144aa680d166a4de5addbe.svg' />
-        </Grid>
-        <Grid
-          item
-          xs={8}
-        >
-          <Typography
+          <TypographyTitle
             color='#fff'
             fontSize='24px'
-            marginTop='30px'
+            marginTop='10px'
           >
             Đồng hành dễ dàng hơn cùng
+          </TypographyTitle>
+          <Typography
+            sx={{
+              textAlign: 'center',
+              color: 'white',
+            }}
+          >
+            Chào mừng bạn đến với trang web của chúng tôi - nơi kết hợp công nghệ tiên tiến và đổi
+            mới để mang đến trải nghiệm độc đáo và an toàn. Chúng tôi tự hào thông báo rằng trang
+            web của chúng tôi sử dụng công nghệ blockchain để tối ưu hóa quy trình và đảm bảo tính
+            minh bạch và an toàn cho tất cả người dùng.
           </Typography>
           <Typography
             color='#fff'
             fontSize='28px'
             marginBottom='30px'
           ></Typography>
-
-          <img
-            src='https://thiennguyen.app/_next/static/media/download_ios.be3c8ac5.png'
-            style={{ height: '40px', width: '150px', marginRight: '10px' }}
-          />
-          <img
-            src='https://thiennguyen.app/_next/static/media/download_android.d8811978.png'
-            style={{ height: '40px', width: '150px' }}
-          />
 
           <Grid
             container

@@ -1,23 +1,20 @@
 import EnhancedTable, { Column } from '@components/Table';
 import apiEndPoint from '@constants/apiEndPoint';
 import Button from '@mui/material/Button';
-import serviceAPI from '@services/api';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import DetailProvince from './detail';
 import { Grid } from '@mui/material';
 import { ProvinceUI } from '@models/area';
 import { mapProvinceUI } from '@services/mapdata/area';
+import ExportToExcelButton from '@components/Excel';
 
-interface ProvinceTableProps {
-  isActive: boolean;
-}
-
-const ProvinceTable = (props: ProvinceTableProps) => {
+const ProvinceTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  const [dataTable, setDataTable] = useState();
+
   const [data, setData] = useState<ProvinceUI>();
+
   const columns: Column[] = [
     {
       title: 'Tỉnh',
@@ -27,11 +24,6 @@ const ProvinceTable = (props: ProvinceTableProps) => {
 
     { title: 'Hiển thị', nameField: 'isActive' },
   ];
-  const loadData = async (page: number, noItemPerPage: number, searchText: string) => {
-    const link = apiEndPoint.province.list;
-    const api = await serviceAPI.common.getAPIList(link, page, noItemPerPage, searchText);
-    setDataTable(api.data.result);
-  };
 
   const handleRowEvent = (row: any) => {
     setData(mapProvinceUI(row));
@@ -41,14 +33,13 @@ const ProvinceTable = (props: ProvinceTableProps) => {
   const handleClose = () => {
     setOpenDetail(false);
   };
-  useEffect(() => {
-    loadData(1, 10, '');
-  }, [props.isActive]);
+
   const renderButton = () => {
     return (
       <Grid container>
         <Grid item>
           <Button
+            variant='contained'
             onClick={() => {
               setOpenDetail(true);
               setData(mapProvinceUI({}));
@@ -56,6 +47,26 @@ const ProvinceTable = (props: ProvinceTableProps) => {
           >
             Tạo mới
           </Button>
+          <ExportToExcelButton
+            data={[
+              ['Name', 'Age', 'City'],
+              ['John', 25, 'New York'],
+              ['Alice', 30, 'London'],
+              ['Bob', 22, 'Paris'],
+              ['Name', 'Age', 'City'],
+              ['John', 25, 'New York'],
+              ['Alice', 30, 'London'],
+              ['Bob', 22, 'Paris'],
+              ['Name', 'Age', 'City'],
+              ['John', 25, 'New York'],
+              ['Alice', 30, 'London'],
+              ['Bob', 22, 'Paris'],
+              ['Name', 'Age', 'City'],
+              ['John', 25, 'New York'],
+              ['Alice', 30, 'London'],
+              ['Bob', 22, 'Paris'],
+            ]}
+          />
         </Grid>
       </Grid>
     );
@@ -64,8 +75,7 @@ const ProvinceTable = (props: ProvinceTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        data={dataTable}
-        loadTable={loadData}
+        api={apiEndPoint.province.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />
@@ -74,7 +84,7 @@ const ProvinceTable = (props: ProvinceTableProps) => {
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            loadData(1, 10, '');
+            console.log('zxcxz');
           }}
           onClose={handleClose}
         />

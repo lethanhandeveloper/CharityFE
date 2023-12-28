@@ -21,6 +21,7 @@ const DashboardPage = Loader(lazy(() => import('@pages/dashboards/Crypto')));
 const CampaignPage = Loader(lazy(() => import('@pages/campaign')));
 const BannerPage = Loader(lazy(() => import('@pages/banner')));
 const RequestPage = Loader(lazy(() => import('@pages/request')));
+const FeedbackPage = Loader(lazy(() => import('@pages/feedback')));
 const routers: RouteObject[] = [
   {
     path: '/',
@@ -94,6 +95,10 @@ const routers: RouteObject[] = [
       {
         path: 'request',
         element: <RequestPage isActive={false} />,
+      },
+      {
+        path: 'feedback',
+        element: <FeedbackPage isActive={false} />,
       },
     ],
   },

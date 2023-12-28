@@ -137,10 +137,16 @@ export default function DialogAddItem(props: DialogAddItemProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleClose}>Đóng</Button>
+          <Button
+            onClick={props.handleClose}
+            variant='outlined'
+          >
+            Đóng
+          </Button>
           <Button
             onClick={addItem}
             autoFocus
+            variant='contained'
           >
             Thêm
           </Button>

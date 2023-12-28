@@ -1,11 +1,12 @@
 import TypographyTitle from '@common/Typography';
+import { FeedbackUI } from '@models/feedback';
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
 interface ShareCardProps {
-  ShareCard: any;
+  ShareCard: FeedbackUI[];
 }
 const ShareSection = (props: ShareCardProps) => {
-  const renderCardShare = (share: any) => {
+  const renderCardShare = (share: FeedbackUI) => {
     return (
       <React.Fragment>
         <div
@@ -37,7 +38,7 @@ const ShareSection = (props: ShareCardProps) => {
             {share.fullName}
           </Typography>
           <Typography color={'#f54a00'}>{share.title}</Typography>
-          <Typography lineHeight={'26px'}>{share.describe}</Typography>
+          <Typography lineHeight={'26px'}>{share.content}</Typography>
         </div>
         <div
           style={{
@@ -72,7 +73,7 @@ const ShareSection = (props: ShareCardProps) => {
           <TypographyTitle>Chia sẻ từ người dùng Thiện nguyện</TypographyTitle>
         </Grid>
 
-        {props.ShareCard?.map((item: any) => (
+        {props.ShareCard?.map((item) => (
           <Grid
             item
             xs={4}

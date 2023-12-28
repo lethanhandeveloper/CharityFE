@@ -81,10 +81,20 @@ const DetailCommune = (props: DetailCommuneProps) => {
             justifyContent={'space-between'}
           >
             <Grid item>
-              <Button onClick={onClose}>Đóng</Button>
+              <Button
+                onClick={onClose}
+                variant='outlined'
+              >
+                Đóng
+              </Button>
             </Grid>
             <Grid item>
-              <Button onClick={onSave}>Save</Button>
+              <Button
+                variant='contained'
+                onClick={onSave}
+              >
+                Lưu
+              </Button>
             </Grid>
           </Grid>
         }

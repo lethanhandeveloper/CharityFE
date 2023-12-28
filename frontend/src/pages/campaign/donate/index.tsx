@@ -26,6 +26,8 @@ import { mapCampainContract } from '@mapdata/contract';
 import TableRender from '@components/Table';
 import DialogContentText from '@mui/material/DialogContentText';
 import { ButtonCancel, ButtonConfirm } from '@common/Button';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 export const calculatePercent = (number1: number, number2: number) =>
   Math.floor((number1 / number2) * 100).toFixed(2);
@@ -35,16 +37,22 @@ const DonatePage = () => {
   const [number, setNumber] = useState<number>(0);
   const [detail, setDetail] = useState<CampainUI>();
   const [campaignContract, setCampaign] = useState<CampaignContractUI>();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const initData = async () => {
-      if (id) {
-        const response = await serviceAPI.campain.getCampainDetail(id);
-        if (response.status === 200) {
-          setDetail(mapCampain(response.data.result));
+      try {
+        if (id) {
+          const response = await serviceAPI.campain.getCampainDetail(id);
+          if (response.status === 200) {
+            setDetail(mapCampain(response.data.result));
+          }
+          const contract = await campaign.getCampainDetail(id);
+          if (contract) {
+            setCampaign(mapCampainContract(contract));
+          }
         }
-        const contract = await campaign.getCampainDetail(id);
-
-        setCampaign(mapCampainContract(contract));
+      } catch (err) {
+        dispatch(setInfoAlert({ open: true, title: 'Hệ thống đang lỗi!', type: 'error' }));
       }
     };
     initData();

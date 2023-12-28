@@ -1,69 +1,73 @@
 const SiderLink = [
   {
-    title: 'User Management',
+    title: 'Quản lý người dùng',
     children: [
       {
-        title: 'Active',
+        title: 'Danh sách',
         link: '/user/active',
       },
     ],
   },
   {
-    title: 'Area',
+    title: 'Địa chỉ',
     children: [
       {
-        title: 'Province',
+        title: 'Tỉnh',
         link: '/province',
       },
       {
-        title: 'District',
+        title: 'Huyện',
         link: '/district',
       },
       {
-        title: 'Commune',
+        title: 'Xã',
         link: 'commune',
       },
     ],
   },
 
   {
-    title: 'Campaign',
+    title: 'Chiến dịch',
     children: [
       {
-        title: 'Pending Aprrove',
+        title: 'Đợi duyệt',
         link: '/campaign/pending',
       },
       {
-        title: 'Start',
+        title: 'Đang kêu gọi',
         link: '/campaign/start',
       },
       {
-        title: 'Finish',
+        title: 'Đã kết thúc',
         link: '/campaign/finish',
       },
     ],
   },
   {
-    title: 'Request',
+    title: 'Yêu cầu đăng ký',
     children: [
       {
-        title: 'Request',
+        title: 'Đăng ký',
         link: '/request',
+      },
+      {
+        title: 'Đánh giá',
+        link: '/feedback',
       },
     ],
   },
   {
-    title: 'Setting',
+    title: 'Cài đặt',
     children: [
       {
         title: 'Banner',
         link: '/banner',
       },
       {
-        title: 'Statistical',
+        title: 'Thống kê',
         link: '/statistical',
       },
-      { title: 'Map', link: '/map' },
+      { title: 'Bản đồ', link: '/map' },
     ],
   },
 ];
