@@ -10,7 +10,7 @@ import { setInfoAlert } from '@store/redux/alert';
 import React from 'react';
 import PersonalTab from './component/personal';
 import CommitTab from './component/commit';
-import SurveyTab from './component/survey';
+import ConfirmDialog from '@components/ConfirmDialog';
 
 interface DetailRequestProps {
   data: RequestUI;
@@ -28,7 +28,7 @@ const DetailRequest = (props: DetailRequestProps) => {
 
   const onSave = async () => {
     try {
-      const response = await serviceAPI.auth.updateRequest(data.id);
+      const response = await serviceAPI.auth.updateRequest(data.id, 2);
       if (response.status === 200) {
         dispatch(setInfoAlert({ title: 'Tạo banner thành công!', open: true, type: 'success' }));
         onClose();
@@ -45,7 +45,10 @@ const DetailRequest = (props: DetailRequestProps) => {
       <PanelDetail
         title={'Chi tiết quyền'}
         buttonChildren={
-          <Grid container>
+          <Grid
+            container
+            justifyContent={'space-between'}
+          >
             <Grid item>
               <Button
                 onClick={onClose}
@@ -55,12 +58,18 @@ const DetailRequest = (props: DetailRequestProps) => {
               </Button>
             </Grid>
             <Grid item>
-              <Button
-                onClick={onSave}
-                variant='contained'
-              >
-                Lưu
-              </Button>
+              <ConfirmDialog
+                buttonText='Duyệt'
+                message='Duyệt đơn đăng ký'
+                title='Xác nhận duyệt đơn đăng ký'
+                onSucess={onSave}
+              />
+              <ConfirmDialog
+                buttonText='Từ chối'
+                message='Xác nhận từ chối đơn đăng ký'
+                title='Xác nhận từ chối'
+                onSucess={onSave}
+              />
             </Grid>
           </Grid>
         }
@@ -80,10 +89,6 @@ const DetailRequest = (props: DetailRequestProps) => {
               label='Commit'
               {...a11yProps(1)}
             />
-            <Tab
-              label='Survey'
-              {...a11yProps(2)}
-            />
           </Tabs>
         </Box>
 
@@ -99,13 +104,6 @@ const DetailRequest = (props: DetailRequestProps) => {
           index={1}
         >
           <CommitTab data={data.commitInfoVerificationUI} />
-        </CustomTabPanel>
-
-        <CustomTabPanel
-          value={value}
-          index={2}
-        >
-          <SurveyTab data={data.surveyInfoVerificationUI} />
         </CustomTabPanel>
       </PanelDetail>
     </>

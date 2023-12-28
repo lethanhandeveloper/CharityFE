@@ -1,7 +1,7 @@
 import EnhancedTable, { Column } from '@components/Table';
 
 import { useState } from 'react';
-import DetailProvince from './detail';
+import DetailRequest from './detail';
 
 import { RequestUI } from '@models/request';
 import { mapRequestUI } from '@services/mapdata/request';
@@ -59,7 +59,7 @@ const RequestTable = (props: RequestTableProps) => {
         buttons={<> {renderButton()}</>}
       />
       {openDetail && data && (
-        <DetailProvince
+        <DetailRequest
           openDetail={openDetail}
           data={data}
           loadTable={() => {

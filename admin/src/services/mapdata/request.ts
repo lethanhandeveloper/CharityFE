@@ -1,9 +1,4 @@
-import {
-  CommitInfoVerificationUI,
-  PersonalGeneralInfoUI,
-  RequestUI,
-  SurveyInfoVerificationUI,
-} from '@models/request';
+import { CommitInfoVerificationUI, PersonalGeneralInfoUI, RequestUI } from '@models/request';
 
 const mapComitInfoVerificationUI = (data: any): CommitInfoVerificationUI => ({
   endDate: data.endDate,
@@ -29,21 +24,10 @@ const mapPersonalGeneralInfoUI = (data: any): PersonalGeneralInfoUI => ({
   user: data.user,
 });
 
-const mapSurvayInfoVerificationUI = (data: any): SurveyInfoVerificationUI => ({
-  chanel: data.chanel,
-  lawFiveOption: data.lawFiveOption,
-  lawFourOption: data.lawFourOption,
-  lawOneOption: data.lawOneOption,
-  lawThreeOption: data.lawThreeOption,
-  lawTwoOption: data.lawTwoOption,
-  surveyInfoVerification: data.surveyInfoVerification,
-});
-
 export const mapRequestUI = (data: any): RequestUI => ({
   commitInfoVerificationUI: mapComitInfoVerificationUI(data.commitInfoVerification),
   id: data.id,
   status: data.status,
   personalGeneralInfoUI: mapPersonalGeneralInfoUI(data.personalGeneralInfo),
-  surveyInfoVerificationUI: mapSurvayInfoVerificationUI(data.surveyInfoVerification),
   type: data.type,
 });

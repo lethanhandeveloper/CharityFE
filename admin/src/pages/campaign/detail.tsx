@@ -11,6 +11,7 @@ import { setInfoAlert } from '@store/redux/alert';
 import React, { useState } from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import TableRender from '@components/Table/tableCapaign';
+import ConfirmDialog from '@components/ConfirmDialog';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -125,19 +126,34 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               item
               gap={3}
             >
-              <Button
-                onClick={onReject}
-                variant='outlined'
-              >
-                Từ chối
-              </Button>
-              <Button
-                onClick={onTransfer}
-                variant='contained'
-              >
-                Chuyển tiền
-              </Button>
-              {detail.status === 'DRAFT' && <Button onClick={onApprove}>Duyệt</Button>}
+              {detail.status === 'START' ||
+                (detail.status === 'END' && (
+                  <>
+                    <ConfirmDialog
+                      buttonText='Giải ngân'
+                      message='Xác nhận giải nhân chiến dịch'
+                      onSucess={onTransfer}
+                      title='Xác nhận giải ngân'
+                    />
+                  </>
+                ))}
+
+              {detail.status === 'DRAFT' && (
+                <>
+                  <ConfirmDialog
+                    buttonText='Từ chối'
+                    message='Xác nhận đóng chiến dịch'
+                    onSucess={onReject}
+                    title='Xác nhận hủy chiến dịch'
+                  />
+                  <ConfirmDialog
+                    buttonText='Duyệt'
+                    message='Xác nhận bắt bầu chiến dịch'
+                    onSucess={onApprove}
+                    title='Xác nhận duyệt chiến dịch'
+                  />
+                </>
+              )}
             </Grid>
           </Grid>
         }

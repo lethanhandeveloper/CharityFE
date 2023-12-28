@@ -21,12 +21,12 @@ const updateAvatar = async (image_url: string) => {
   return await apiService.patch(apiEndPoint.user.updateAvatar, { image_url: image_url });
 };
 
-const updateRequest = async (id: string) => {
-  return await apiService.patch(apiEndPoint.request.update(id), { status: 2 });
+const updateRequest = async (id: string, status: number) => {
+  return await apiService.patch(apiEndPoint.request.update(id), { status: status });
 };
 
 const setActive = async (id: string, isActive: boolean) => {
-  return await apiService.post(apiEndPoint.user.setactive, { id: id, isActive: isActive });
+  return await apiService.patch(apiEndPoint.user.setactive(id), { isActive: isActive });
 };
 
 const getUserList = async () => {

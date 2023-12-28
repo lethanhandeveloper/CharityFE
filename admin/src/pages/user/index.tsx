@@ -11,6 +11,7 @@ import { mapUserUI } from '@services/mapdata/user';
 import { Grid } from '@mui/material';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import ConfirmDialog from '@components/ConfirmDialog';
 
 interface UserTableProps {
   isActive: boolean;
@@ -18,7 +19,7 @@ interface UserTableProps {
 
 const UserTable = (props: UserTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<UserUI>();
   const dispatch = useAppDispatch();
   const columns: Column[] = [
@@ -36,6 +37,10 @@ const UserTable = (props: UserTableProps) => {
       title: 'Sđt liên hệ',
       nameField: 'phoneNumber',
     },
+    {
+      title: 'Hoạt động',
+      nameField: 'isActive',
+    },
   ];
 
   const handleRowEvent = (row: any) => {
@@ -51,10 +56,8 @@ const UserTable = (props: UserTableProps) => {
     try {
       if (data?.id) {
         const response = await serviceAPI.auth.setActive(data.id, isActive);
-        if (response.status === 200) {
+        if (response.status === 204) {
           dispatch(setInfoAlert({ open: true, title: 'Thay đổi thành công', type: 'success' }));
-        } else {
-          dispatch(setInfoAlert({ open: true, title: 'Thay đổi không thành công', type: 'error' }));
         }
         handleClose();
       }
@@ -69,6 +72,7 @@ const UserTable = (props: UserTableProps) => {
         api={props.isActive ? apiEndPoint.user.getActiveList : apiEndPoint.user.getInActiveList}
         columns={columns}
         onRowEvent={handleRowEvent}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <PanelDetail
@@ -87,21 +91,27 @@ const UserTable = (props: UserTableProps) => {
                 </Button>
               </Grid>
               <Grid item>
-                <Button
-                  variant='contained'
-                  onClick={() => {
-                    handleSetActive(false);
-                  }}
-                >
-                  Khóa tài khoản
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleSetActive(true);
-                  }}
-                >
-                  Mở khóa tài khoản
-                </Button>
+                {data.isActive ? (
+                  <ConfirmDialog
+                    buttonText='Khóa tài khoản'
+                    message='Xác nhận khóa tài khoản'
+                    onSucess={() => {
+                      handleSetActive(false);
+                      setOutSideLoad({ id: '1' });
+                    }}
+                    title='Xác nhận khóa'
+                  />
+                ) : (
+                  <ConfirmDialog
+                    buttonText='Mở khóa tài khoản'
+                    message='Xác nhận mở khóa tài khoản'
+                    onSucess={() => {
+                      handleSetActive(true);
+                      setOutSideLoad({ id: '1' });
+                    }}
+                    title='Xác nhận mở khóa'
+                  />
+                )}
               </Grid>
             </Grid>
           }

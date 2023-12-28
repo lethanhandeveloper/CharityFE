@@ -8,7 +8,7 @@ const apiEndPoint = {
     updateAvatar: '/user/avatar',
     getActiveList: '/user/list',
     getInActiveList: '/user/listinactive',
-    setactive: '/user/setactive',
+    setactive: (id: string) => `/user/changeactivestatus/${id}`,
     getByID: (id: string) => `/user/getbyid/${id}`,
   },
 

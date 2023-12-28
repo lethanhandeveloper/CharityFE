@@ -39,5 +39,4 @@ export interface RequestUI {
   status: string;
   personalGeneralInfoUI: PersonalGeneralInfoUI;
   commitInfoVerificationUI: CommitInfoVerificationUI;
-  surveyInfoVerificationUI: SurveyInfoVerificationUI;
 }

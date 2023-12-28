@@ -17,6 +17,9 @@ import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { Avatar, InputAdornment } from '@mui/material';
 import SearchField from '@common/SearchField';
 import serviceAPI from '@services/api';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
+import { AntSwitch } from '@common/Switch';
 
 interface Data {
   id: number;
@@ -174,6 +177,7 @@ interface EnhancedTableProps {
   onRowEvent?: (data: any) => void;
   onToggle?: () => void;
   buttons?: React.ReactNode;
+  outSideLoad?: any;
 }
 
 export default function EnhancedTable(props: EnhancedTableProps) {
@@ -184,11 +188,15 @@ export default function EnhancedTable(props: EnhancedTableProps) {
   const [page, setPage] = React.useState(0);
   const [searchText, setSearchText] = React.useState<string>('');
   const [totalItems, setTotalItems] = React.useState<number>(0);
-
+  const dispatch = useAppDispatch();
   const loadTable = async (page: number, noItemPerPage: number, searchText: string) => {
-    const api = await serviceAPI.common.getAPIList(props.api, page, noItemPerPage, searchText);
-    setDataTable(api.data.result);
-    setTotalItems(api.data.totalItems);
+    try {
+      const api = await serviceAPI.common.getAPIList(props.api, page, noItemPerPage, searchText);
+      setDataTable(api.data.result);
+      setTotalItems(api.data.totalItems);
+    } catch {
+      dispatch(setInfoAlert({ open: true, title: 'Hệ thống lỗi', type: 'error' }));
+    }
   };
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -230,7 +238,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
         // eslint-disable-next-line no-mixed-operators
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage, dataTable?.length],
+    [dataTable],
   );
   const handleGetData = (row: any, name: string) => {
     const spilitName = name.split('.');
@@ -254,7 +262,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
     if (props.api) {
       loadTable(page, rowsPerPage, searchText);
     }
-  }, [props.api]);
+  }, [props.api, props.outSideLoad]);
   return (
     <Box
       sx={{
@@ -319,26 +327,34 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                     </TableCell>
                     {props.columns?.map((item) => (
                       <TableCell align='left'>
-                        {item.nameField === 'email' ? (
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}
-                          >
-                            <Avatar
-                              alt='Remy Sharp'
-                              src={handleGetDataImage(row, item.nameField)}
-                            />
-                            <Typography marginLeft={'10px'}>
-                              {handleGetData(row, item.nameField)}
-                            </Typography>
-                          </Box>
+                        {item.nameField === 'isActive' ? (
+                          <>
+                            <AntSwitch checked={handleGetData(row, item.nameField)} />
+                          </>
                         ) : (
-                          <Typography marginLeft={'10px'}>
-                            {handleGetData(row, item.nameField)}
-                          </Typography>
+                          <>
+                            {item.nameField === 'email' ? (
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <Avatar
+                                  alt='Remy Sharp'
+                                  src={handleGetDataImage(row, item.nameField)}
+                                />
+                                <Typography marginLeft={'10px'}>
+                                  {handleGetData(row, item.nameField)}
+                                </Typography>
+                              </Box>
+                            ) : (
+                              <Typography marginLeft={'10px'}>
+                                {handleGetData(row, item.nameField)}
+                              </Typography>
+                            )}
+                          </>
                         )}
                       </TableCell>
                     ))}
