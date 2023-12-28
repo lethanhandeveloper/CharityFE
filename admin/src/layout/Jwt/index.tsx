@@ -32,6 +32,10 @@ const JWTProvider = (props: JWTProviderProps) => {
         localStorage.removeItem('tokenAdmin');
         navigate('/login');
       }
+      if (error.response.status === 403) {
+        localStorage.removeItem('tokenAdmin');
+        navigate('/login');
+      }
       return Promise.reject(error);
     },
   );

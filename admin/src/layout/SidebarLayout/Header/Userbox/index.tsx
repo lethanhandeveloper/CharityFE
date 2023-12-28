@@ -10,6 +10,8 @@ import LockOpenTwoToneIcon from '@mui/icons-material/LockOpenTwoTone';
 import serviceAPI from '@services/api';
 import { mapUserUI } from '@services/mapdata/user';
 import { UserUI } from '@models/user';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -47,11 +49,11 @@ const UserBoxDescription = styled(Typography)(
 );
 
 function HeaderUserbox() {
-  const token = localStorage.getItem('tokenAdmin');
   const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const navigation = useNavigate();
+  const dispatch = useAppDispatch();
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -60,13 +62,18 @@ function HeaderUserbox() {
     setOpen(false);
   };
   useEffect(() => {
-    if (!token) return;
     const initData = async () => {
-      const data = await serviceAPI.auth.getProfile();
-      setUser(mapUserUI(data.data.result));
+      try {
+        const data = await serviceAPI.auth.getProfile();
+        setUser(mapUserUI(data.data.result));
+      } catch (err) {
+        dispatch(
+          setInfoAlert({ open: true, title: 'Không có quyền truy cập hệ thống!', type: 'error' }),
+        );
+      }
     };
     initData();
-  }, [token]);
+  }, []);
 
   const handleLogOut = () => {
     localStorage.removeItem('role');

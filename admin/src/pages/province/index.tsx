@@ -48,6 +48,7 @@ const ProvinceTable = () => {
             Tạo mới
           </Button>
           <ExportToExcelButton
+            nameFile='campaign'
             data={[
               ['Name', 'Age', 'City'],
               ['John', 25, 'New York'],

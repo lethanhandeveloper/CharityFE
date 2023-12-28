@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
-import { Divider, Grid, Typography, IconButton, InputAdornment } from '@mui/material';
+import { Grid, Typography, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import FacebookIcon from '@mui/icons-material/Facebook';
 
 import { ButtonStyle2 } from '@common/Button';
 import { BoxColum } from '@common/Box';
@@ -12,6 +11,8 @@ import { TextFieldStyle1 } from '@common/TextField';
 import style from './auth.module.scss';
 import serviceAPI from '@services/api/index';
 import { UserAPI } from '@models/user';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -19,29 +20,35 @@ const LoginPage = () => {
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
   const navigation = useNavigate();
-  const [messageError, setMessageError] = useState<string>('');
+
   const token = localStorage.getItem('tokenAdmin');
+  const dispatch = useAppDispatch();
   const onSubmit = async () => {
     try {
       const loginInfo = await serviceAPI.auth.login(user);
       if (loginInfo.status === 200) {
         if (loginInfo.data.result.role !== 4) {
-          setMessageError('test');
+          dispatch(
+            setInfoAlert({ open: true, title: 'Không có quyền truy cập hệ thống!', type: 'error' }),
+          );
         } else {
           localStorage.setItem('tokenAdmin', loginInfo.data.result.token);
           localStorage.setItem('role', loginInfo.data.result.role);
           navigation('/');
         }
       } else {
-        setMessageError('test');
+        dispatch(
+          setInfoAlert({ open: true, title: 'Không có quyền truy cập hệ thống!', type: 'error' }),
+        );
       }
     } catch (error) {
-      setMessageError('Thông tin không chính xác!');
+      dispatch(
+        setInfoAlert({ open: true, title: 'Không có quyền truy cập hệ thống!', type: 'error' }),
+      );
     }
   };
 
   const handleOnChange = (e: any) => {
-    setMessageError('');
     setUserInfo({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -131,42 +138,6 @@ const LoginPage = () => {
                 Đăng nhập
               </ButtonStyle2>
             </BoxColum>
-            <Typography>{messageError}</Typography>
-            <Typography
-              style={{ color: '8d8d8d', fontSize: '12px' }}
-              textAlign={'center'}
-              className={style['mt-40']}
-            >
-              Bạn chưa có tài khoản
-              <Link
-                to={'/register'}
-                style={{
-                  textDecoration: 'none',
-                  color: '#f54a00',
-                }}
-              >
-                Đăng ký ngay
-              </Link>
-            </Typography>
-            <div>
-              <Divider
-                className={`${style['divider']} ${style['mt-20']}`}
-                sx={{
-                  '& .MuiDivider-wrapper': {
-                    backgroundColor: '#f2f5f9',
-                  },
-                }}
-              >
-                hoặc tiếp tục với
-              </Divider>
-            </div>
-
-            <FacebookIcon
-              className={`${style['mt-40']} ${style['icon']}`}
-              sx={{
-                margin: '0 auto',
-              }}
-            />
           </BoxColum>
         </Grid>
         <Grid
