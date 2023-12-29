@@ -9,6 +9,7 @@ import {
   Popup,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
 import Paper from '@mui/material/Paper';
@@ -29,6 +30,7 @@ import { Link } from 'react-router-dom';
 import { ButtonStyle1 } from '@common/Button';
 import { isLandSeaGeoJSON, isLand2SeaGeoJSON } from './json';
 import DialogAddItem from './dialogAddItem';
+
 interface IMap {
   lat: number;
   long: number;
@@ -72,8 +74,10 @@ const iconItem = L.icon({
 //   });
 //   return <></>;
 // };
+
 const MapPage = () => {
   // const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
+
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
   const [search, setSearch] = useState<string>('');
   const [listMap, setListMap] = useState<MapUI[]>([]);
@@ -105,9 +109,31 @@ const MapPage = () => {
 
   useEffect(() => {
     try {
-      (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
+      // (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 20);
+      console.log('start');
+      const markers = L.markerClusterGroup();
+      const locations = [
+        { lat: 37.7749, lon: -122.4194 },
+        { lat: 34.0522, lon: -118.2437 },
+        // Add more locations as needed
+      ];
+
+      console.log('start');
+      locations.forEach((location) => {
+        const marker = L.marker([location.lat, location.lon], {
+          icon: iconItem,
+          zIndexOffset: 99999,
+        });
+        markers.addLayer(marker);
+      });
+
+      // Add the marker cluster group to the map
+
+      console.log('start');
+      (mapRef.current as any).addLayer(markers);
+      console.log('end');
     } catch (e) {
-      console.log(e);
+      console.log('check,', e);
     }
   }, [postionSearch]);
 
@@ -350,7 +376,6 @@ const MapPage = () => {
               <IconButton
                 color='primary'
                 onClick={() => {
-                  console.log('test');
                   setChooseCampaign(!openChooseCampaign);
                 }}
                 sx={{ p: '10px' }}
