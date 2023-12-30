@@ -1,4 +1,5 @@
 import PanelDetail from '@common/Panel';
+import TypographyLabel from '@components/Typography';
 import { BannerUI } from '@models/banner';
 
 import { Avatar, Box, Button, Grid, Switch, TextField } from '@mui/material';
@@ -55,10 +56,20 @@ const DetailBanner = (props: DetailBannerProps) => {
             justifyContent={'space-between'}
           >
             <Grid item>
-              <Button onClick={onClose}>Đóng</Button>
+              <Button
+                onClick={onClose}
+                variant='outlined'
+              >
+                Đóng
+              </Button>
             </Grid>
             <Grid item>
-              <Button onClick={onSave}>Save</Button>
+              <Button
+                onClick={onSave}
+                variant='contained'
+              >
+                Lưu
+              </Button>
             </Grid>
           </Grid>
         }
@@ -66,7 +77,8 @@ const DetailBanner = (props: DetailBannerProps) => {
       >
         <Grid
           container
-          gap={3}
+          rowGap={1}
+          columnSpacing={1}
         >
           <Grid
             item
@@ -97,9 +109,9 @@ const DetailBanner = (props: DetailBannerProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Tiêu đề</TypographyLabel>
             <TextField
               value={detail.title}
-              label='Tiêu đề'
               fullWidth
               name='title'
               size='small'
@@ -110,9 +122,9 @@ const DetailBanner = (props: DetailBannerProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Mô tả</TypographyLabel>
             <TextField
               value={detail.description}
-              label='Mô tả'
               fullWidth
               name='description'
               size='small'
@@ -120,13 +132,19 @@ const DetailBanner = (props: DetailBannerProps) => {
             />
           </Grid>
 
-          <Switch
-            checked={detail.isActive}
-            onChange={() => {
-              setDetail({ ...detail, isActive: !detail.isActive });
-            }}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
+          <Grid
+            item
+            xs={12}
+          >
+            <TypographyLabel>Hiển thị</TypographyLabel>
+            <Switch
+              checked={detail.isActive}
+              onChange={() => {
+                setDetail({ ...detail, isActive: !detail.isActive });
+              }}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Grid>
         </Grid>
       </PanelDetail>
     </>

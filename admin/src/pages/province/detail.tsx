@@ -1,4 +1,5 @@
 import PanelDetail from '@common/Panel';
+import TypographyLabel from '@components/Typography';
 import { ProvinceUI } from '@models/area';
 
 import { Button, Grid, TextField } from '@mui/material';
@@ -77,9 +78,9 @@ const DetailProvince = (props: DetailProvinceProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Tên tỉnh</TypographyLabel>
             <TextField
               value={detail.name}
-              label='Tên'
               fullWidth
               name='name'
               size='small'

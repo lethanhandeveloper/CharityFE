@@ -5,4 +5,14 @@
   stroke: red !important; /* Adjust the color as needed */
   stroke-width: 2 !important;
   background-color: black !important;
+  border-radius: 50%;
+}
+.marker {
+  background-color: rgb(26, 128, 162);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

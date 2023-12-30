@@ -6,7 +6,6 @@ import {
   // useMapEvents,
   GeoJSON,
   ImageOverlay,
-  Popup,
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
@@ -30,15 +29,13 @@ import { Link } from 'react-router-dom';
 import { ButtonStyle1 } from '@common/Button';
 import { isLandSeaGeoJSON, isLand2SeaGeoJSON } from './json';
 import DialogAddItem from './dialogAddItem';
+import style from './map.module.scss';
 
 interface IMap {
   lat: number;
   long: number;
 }
-// interface IMapComponent {
-//   setLagLog: (data: IMap) => void;
-//   isOn: boolean;
-// }
+
 const icon = L.icon({
   iconSize: [13, 20],
   iconAnchor: [5, 20],
@@ -85,6 +82,7 @@ const MapPage = () => {
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
   const [openChooseCampaign, setChooseCampaign] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState({ open: false, campaignId: '' });
+  const [detailCampaign, setDetailCampaign] = useState<CampainUI>();
   useEffect(() => {
     const initCurrentAddress = () => {
       if ('geolocation' in navigator) {
@@ -109,33 +107,51 @@ const MapPage = () => {
 
   useEffect(() => {
     try {
-      // (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 20);
-      console.log('start');
-      const markers = L.markerClusterGroup();
-      const locations = [
-        { lat: 37.7749, lon: -122.4194 },
-        { lat: 34.0522, lon: -118.2437 },
-        // Add more locations as needed
-      ];
-
-      console.log('start');
-      locations.forEach((location) => {
-        const marker = L.marker([location.lat, location.lon], {
-          icon: iconItem,
-          zIndexOffset: 99999,
-        });
-        markers.addLayer(marker);
-      });
-
-      // Add the marker cluster group to the map
-
-      console.log('start');
-      (mapRef.current as any).addLayer(markers);
-      console.log('end');
+      (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 20);
     } catch (e) {
       console.log('check,', e);
     }
   }, [postionSearch]);
+  useEffect(() => {
+    try {
+      const markers = L.markerClusterGroup({
+        iconCreateFunction: (cluster: L.MarkerCluster) => {
+          const childCount = cluster.getChildCount();
+          const markerOptions: L.DivIconOptions = {
+            iconSize: [20, 20], // Adjust the size as needed
+            html: `<div ><span>${childCount}</span></div>`, // Custom HTML content
+            className: style.marker,
+          };
+
+          return L.divIcon(markerOptions);
+        },
+      });
+      const locations = listMap.map((item) => {
+        const marker = L.marker([item.lat, item.long], {
+          icon:
+            item.type === 'EMERGENCY'
+              ? iconEmergency
+              : item.type === 'NORMAL'
+              ? iconNormal
+              : iconItem,
+        });
+
+        marker.on('click', () => {
+          setDetailCampaign(item.campaign);
+        });
+        marker.on('mouseover', () => {
+          setDetailCampaign(item.campaign);
+        });
+
+        return marker;
+      });
+      markers.addLayers(locations);
+
+      (mapRef.current as any).addLayer(markers);
+    } catch (e) {
+      console.log('check,', e);
+    }
+  }, [mapRef.current, listMap]);
 
   useEffect(() => {
     const initData = async () => {
@@ -385,6 +401,18 @@ const MapPage = () => {
               </IconButton>
             </Paper>
           </div>
+          {detailCampaign && (
+            <div
+              style={{
+                zIndex: 999999999999999,
+                position: 'absolute',
+                top: '70px',
+                left: '10px',
+              }}
+            >
+              {renderCard(detailCampaign)}
+            </div>
+          )}
 
           {postionSearch.lat !== 0 && (
             <Marker
@@ -392,21 +420,6 @@ const MapPage = () => {
               icon={icon}
             />
           )}
-
-          {listMap?.map((item) => (
-            <Marker
-              position={[item.lat, item.long]}
-              icon={
-                item.type === 'EMERGENCY'
-                  ? iconEmergency
-                  : item.type === 'NORMAL'
-                  ? iconNormal
-                  : iconItem
-              }
-            >
-              <Popup>{renderCard(item.campaign)}</Popup>
-            </Marker>
-          ))}
         </MapContainer>
       )}
     </React.Fragment>

@@ -44,6 +44,7 @@ const apiEndPoint = {
     create: '/area/province/create',
     update: '/area/province/update',
     list: '/area/province/paginate',
+    listall: '/area/province/list',
   },
   district: {
     create: '/area/district/create',

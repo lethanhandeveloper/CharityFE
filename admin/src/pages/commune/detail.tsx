@@ -1,4 +1,5 @@
 import PanelDetail from '@common/Panel';
+import TypographyLabel from '@components/Typography';
 import { CommuneUI } from '@models/area';
 import { SimpleValueKey } from '@models/meta';
 
@@ -108,9 +109,9 @@ const DetailCommune = (props: DetailCommuneProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Tỉnh/TP</TypographyLabel>
             <TextField
               id='standard-select-currency'
-              label='Tỉnh/TP'
               select
               fullWidth
               onChange={(e) => {
@@ -134,9 +135,9 @@ const DetailCommune = (props: DetailCommuneProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Quận/Huyện</TypographyLabel>
             <TextField
               id='standard-select-currency'
-              label='Quận/Huyện'
               select
               fullWidth
               name='districtId'
@@ -158,9 +159,9 @@ const DetailCommune = (props: DetailCommuneProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Tên</TypographyLabel>
             <TextField
               value={detail.name}
-              label='Tên'
               fullWidth
               name='name'
               size='small'

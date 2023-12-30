@@ -82,12 +82,16 @@ const DetailRequest = (props: DetailRequestProps) => {
             aria-label='basic tabs example'
           >
             <Tab
-              label='Personal Info'
+              label='Thông tin đăng ký'
               {...a11yProps(0)}
             />
             <Tab
-              label='Commit'
+              label='Thông tin cam kết'
               {...a11yProps(1)}
+            />
+            <Tab
+              label='File xác thực'
+              {...a11yProps(2)}
             />
           </Tabs>
         </Box>
@@ -104,6 +108,27 @@ const DetailRequest = (props: DetailRequestProps) => {
           index={1}
         >
           <CommitTab data={data.commitInfoVerificationUI} />
+        </CustomTabPanel>
+        <CustomTabPanel
+          value={value}
+          index={2}
+        >
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <object
+              data={data.personalGeneralInfoUI.achivementDoc}
+              style={{
+                width: '100%',
+                height: '60vh',
+                scrollbarWidth: 'auto',
+              }}
+              type='application/pdf'
+            />
+          </Box>
         </CustomTabPanel>
       </PanelDetail>
     </>

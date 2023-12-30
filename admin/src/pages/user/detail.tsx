@@ -1,4 +1,5 @@
 import TableRender from '@components/Table/tableCapaign';
+import TypographyLabel from '@components/Typography';
 import { UserUI } from '@models/user';
 import { Avatar, Box, Grid, Tab, Tabs, TextField } from '@mui/material';
 import { a11yProps, CustomTabPanel } from '@pages/campaign/detail';
@@ -19,7 +20,6 @@ const DetailUser = (props: DetailUserProps) => {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label='basic tabs example'
         >
           <Tab
             label='Thông tin chi tiết'
@@ -41,7 +41,8 @@ const DetailUser = (props: DetailUserProps) => {
       >
         <Grid
           container
-          gap={3}
+          rowGap={1}
+          columnSpacing={2}
         >
           <Grid
             item
@@ -52,78 +53,79 @@ const DetailUser = (props: DetailUserProps) => {
             <Avatar
               src={data.imageUrl}
               sx={{ width: 100, height: 100 }}
+              variant='rounded'
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Họ và tên</TypographyLabel>
             <TextField
               value={data.fullname}
-              label='Họ và tên'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Tuổi</TypographyLabel>
             <TextField
               value={data.age}
-              label='Tuổi'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Email</TypographyLabel>
             <TextField
               value={data.email}
-              label='Email'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Số điện thoại</TypographyLabel>
             <TextField
               value={data.phoneNumber}
-              label='Số điện thoại'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Nickname</TypographyLabel>
             <TextField
               value={data.userName}
-              label='User name'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={6}
           >
+            <TypographyLabel>Giới tính</TypographyLabel>
             <TextField
               value={data.gender}
-              label='Giới tính'
               fullWidth
               size='small'
-              disabled
+              contentEditable={false}
             />
           </Grid>
         </Grid>

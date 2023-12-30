@@ -19,6 +19,9 @@ import { styled } from '@mui/material/styles';
 import { UserUI } from '@models/user';
 import { HistoryContractUI } from '@models/contract';
 import { mapHistoryContracts } from '@services/mapdata/contract';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
+import EmptyOverlayGrid from '@components/Grid';
 
 const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
@@ -57,6 +60,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [list, setList] = React.useState<HistoryContractUI[]>();
   const [userList, setUserList] = React.useState<UserUI[]>([]);
+  const dispatch = useAppDispatch();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -67,95 +71,120 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
   };
   React.useEffect(() => {
     const initData = async () => {
-      let history;
-      if (isCampaign) {
-        history = await campaign.getHistoryByCampaign(id);
-      } else {
-        history = await campaign.getHistoryByUser(id);
+      try {
+        let history;
+        if (isCampaign) {
+          history = await campaign.getHistoryByCampaign(id);
+        } else {
+          history = await campaign.getHistoryByUser(id);
+        }
+        setList(mapHistoryContracts(history));
+        const users: UserUI[] = [];
+        for (let index = 0; index < history.length; index++) {
+          const data = await serviceAPI.auth.getUserById(history[index].donatorId);
+          users.push(mapUserUI(data.data.result));
+        }
+        setUserList(users);
+      } catch (e) {
+        setList([]);
+        dispatch(
+          setInfoAlert({
+            open: true,
+            title: 'Đăng nhập ví MetaMask để kiểm tra thông tin',
+            type: 'error',
+          }),
+        );
       }
-      setList(mapHistoryContracts(history));
-      const users: UserUI[] = [];
-      for (let index = 0; index < history.length; index++) {
-        const data = await serviceAPI.auth.getUserById(history[index].donatorId);
-        users.push(mapUserUI(data.data.result));
-      }
-      setUserList(users);
     };
     initData();
   }, []);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <SearchInputWrapper
-        autoFocus={true}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position='start'>
-              <SearchTwoToneIcon />
-            </InputAdornment>
-          ),
-        }}
-        placeholder='Tìm kiếm người ủng hộ...'
-        fullWidth
-        size='small'
-      />
-      <TableContainer sx={{ maxHeight: 440 }}>
-        <Table
-          stickyHeader
-          aria-label='sticky table'
-        >
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {list?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-              return (
-                <TableRow
-                  hover
-                  role='checkbox'
-                  tabIndex={-1}
-                >
-                  <TableCell>
-                    <Box
-                      display={'flex'}
-                      flexDirection={'row'}
-                      alignItems={'center'}
-                      gap={3}
+      {list?.length || 0 > 0 ? (
+        <>
+          <SearchInputWrapper
+            autoFocus={true}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <SearchTwoToneIcon />
+                </InputAdornment>
+              ),
+            }}
+            placeholder='Tìm kiếm người ủng hộ...'
+            fullWidth
+            size='small'
+            sx={{
+              margin: '10px 0 10px 0',
+            }}
+          />
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table
+              stickyHeader
+              aria-label='sticky table'
+            >
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{
+                        minWidth: column.minWidth,
+                        textTransform: 'none',
+                        paddingTop: '8px',
+                        paddingBottom: '8px',
+                      }}
                     >
-                      <Avatar
-                        alt={userList.find((item) => item.id === row.userId)?.fullname}
-                        src={userList.find((item) => item.id === row.userId)?.imageUrl}
-                      />
-                      {userList.find((item) => item.id === row.userId)?.fullname}
-                    </Box>
-                  </TableCell>
-                  <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.time.toString()}</TableCell>
+                      {column.label}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component='div'
-        count={list?.length || 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+              </TableHead>
+              <TableBody>
+                {list?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role='checkbox'
+                      tabIndex={-1}
+                    >
+                      <TableCell>
+                        <Box
+                          display={'flex'}
+                          flexDirection={'row'}
+                          alignItems={'center'}
+                          gap={3}
+                        >
+                          <Avatar
+                            alt={userList.find((item) => item.id === row.userId)?.fullname}
+                            src={userList.find((item) => item.id === row.userId)?.imageUrl}
+                          />
+                          {userList.find((item) => item.id === row.userId)?.fullname}
+                        </Box>
+                      </TableCell>
+                      <TableCell>{row.value}</TableCell>
+                      <TableCell>{row.time.toString()}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component='div'
+            count={list?.length || 0}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </>
+      ) : (
+        <EmptyOverlayGrid />
+      )}
     </Paper>
   );
 }

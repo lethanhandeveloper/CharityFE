@@ -1,20 +1,21 @@
+import TypographyLabel from '@components/Typography';
 import { CommitInfoVerificationUI } from '@models/request';
 import { Grid, TextField } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
 
 const CommitTab = ({ data }: { data: CommitInfoVerificationUI }) => {
   return (
     <Grid
       container
-      gap={3}
+      spacing={2}
     >
       <Grid
         item
         xs={12}
       >
+        <TypographyLabel>Slogan</TypographyLabel>
         <TextField
           value={data.goalName}
-          label='Slogan'
+          contentEditable={false}
           fullWidth
           name='name'
           size='small'
@@ -24,29 +25,36 @@ const CommitTab = ({ data }: { data: CommitInfoVerificationUI }) => {
         item
         xs={12}
       >
-        <DatePicker
-          label='Start'
-          sx={{ width: 260 }}
-          value={new Date()}
+        <TypographyLabel>Dự kiến bắt dầu</TypographyLabel>
+        <TextField
+          value={data.goalName}
+          contentEditable={false}
+          fullWidth
+          name='name'
+          size='small'
         />
       </Grid>
       <Grid
         item
         xs={12}
       >
-        <DatePicker
-          label='End'
-          sx={{ width: 260 }}
-          value={new Date()}
+        <TypographyLabel>Dự kiến kết thúc</TypographyLabel>
+        <TextField
+          value={data.goalName}
+          contentEditable={false}
+          fullWidth
+          name='name'
+          size='small'
         />
       </Grid>
       <Grid
         item
         xs={12}
       >
+        <TypographyLabel>Mục tiêu của nhóm/tổ chức</TypographyLabel>
         <TextField
           value={data.targetAmount}
-          label='Mục tiêu'
+          contentEditable={false}
           fullWidth
           name='name'
           size='small'

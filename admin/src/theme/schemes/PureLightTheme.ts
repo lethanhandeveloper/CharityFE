@@ -786,48 +786,11 @@ export const PureLightTheme = createTheme({
         },
       },
     },
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          height: 38,
-          minHeight: 38,
-          overflow: 'visible',
-        },
-        indicator: {
-          height: 38,
-          minHeight: 38,
-          borderRadius: 6,
-          border: '1px solid ' + colors.primary.dark,
-          boxShadow: '0px 2px 10px ' + colors.primary.light,
-        },
-        scrollableX: {
-          overflow: 'visible !important',
-        },
-      },
-    },
+
     MuiTab: {
       styleOverrides: {
         root: {
-          padding: 0,
-          height: 38,
-          minHeight: 38,
-          borderRadius: 6,
-          transition: 'color .2s',
-          textTransform: 'capitalize',
-
-          '&.MuiButtonBase-root': {
-            minWidth: 'auto',
-            paddingLeft: 20,
-            paddingRight: 20,
-            marginRight: 4,
-          },
-          '&.Mui-selected, &.Mui-selected:hover': {
-            color: colors.alpha.white[100],
-            zIndex: 5,
-          },
-          '&:hover': {
-            color: colors.alpha.black[100],
-          },
+          textTransform: 'none',
         },
       },
     },

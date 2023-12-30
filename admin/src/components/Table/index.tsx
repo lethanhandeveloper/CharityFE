@@ -12,7 +12,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { Avatar, InputAdornment } from '@mui/material';
 import SearchField from '@common/SearchField';
@@ -87,22 +86,9 @@ interface EnhancedTableHeaderProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableHeaderProps) {
-  const { onSelectAllClick, numSelected, rowCount } = props;
-
   return (
     <TableHead sx={{ background: 'rgb(243, 246, 249)' }}>
       <TableRow>
-        <TableCell padding='checkbox'>
-          <Checkbox
-            color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {props.columns.map((headCell) => (
           <TableCell
             key={headCell.nameField}
@@ -111,8 +97,9 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
             sortDirection={false}
           >
             <TableSortLabel
-              active={true}
-              direction={'asc'}
+              // active={true}
+              // direction={'asc'}
+              sx={{ textTransform: 'none', fontSize: '20px' }}
             >
               {headCell.title}
             </TableSortLabel>
@@ -297,9 +284,8 @@ export default function EnhancedTable(props: EnhancedTableProps) {
               columns={props.columns}
             />
             <TableBody>
-              {visibleRows?.map((row, index) => {
+              {visibleRows?.map((row) => {
                 const isItemSelected = isSelected(row.id as number);
-                const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -309,22 +295,12 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                         props.onRowEvent(row);
                       }
                     }}
-                    role='checkbox'
                     aria-checked={isItemSelected}
                     tabIndex={-1}
                     key={row.id}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding='checkbox'>
-                      <Checkbox
-                        color='primary'
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    </TableCell>
                     {props.columns?.map((item) => (
                       <TableCell align='left'>
                         {item.nameField === 'isActive' ? (

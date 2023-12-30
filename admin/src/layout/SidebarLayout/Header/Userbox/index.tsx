@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Avatar, Box, Button, Divider, Hidden, lighten, Popover, Typography } from '@mui/material';
+import { Avatar, Box, Button, Divider, Hidden, Popover, Typography } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
@@ -39,12 +39,6 @@ const UserBoxLabel = styled(Typography)(
         font-weight: ${theme.typography.fontWeightBold};
         color: ${theme.palette.secondary.main};
         display: block;
-`,
-);
-
-const UserBoxDescription = styled(Typography)(
-  ({ theme }) => `
-        color: ${lighten(theme.palette.secondary.main, 0.5)}
 `,
 );
 
@@ -95,7 +89,6 @@ function HeaderUserbox() {
         <Hidden mdDown>
           <UserBoxText>
             <UserBoxLabel variant='body1'>{user?.fullname}</UserBoxLabel>
-            <UserBoxDescription variant='body2'>{user?.age}</UserBoxDescription>
           </UserBoxText>
         </Hidden>
         <Hidden smDown>
@@ -126,7 +119,6 @@ function HeaderUserbox() {
           />
           <UserBoxText>
             <UserBoxLabel variant='body1'>{user?.fullname}</UserBoxLabel>
-            <UserBoxDescription variant='body2'>{user?.age}</UserBoxDescription>
           </UserBoxText>
         </MenuUserBox>
         <Divider sx={{ mb: 0 }} />

@@ -9,7 +9,7 @@ const update = async (data: any) => {
 };
 
 const getList = async () => {
-  return await apiService.get(apiEndPoint.province.list);
+  return await apiService.get(apiEndPoint.province.listall);
 };
 export default {
   create,

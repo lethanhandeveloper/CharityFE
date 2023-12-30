@@ -1,32 +1,5 @@
 const SiderLink = [
   {
-    title: 'Quản lý người dùng',
-    children: [
-      {
-        title: 'Danh sách',
-        link: '/user/active',
-      },
-    ],
-  },
-  {
-    title: 'Địa chỉ',
-    children: [
-      {
-        title: 'Tỉnh',
-        link: '/province',
-      },
-      {
-        title: 'Huyện',
-        link: '/district',
-      },
-      {
-        title: 'Xã',
-        link: 'commune',
-      },
-    ],
-  },
-
-  {
     title: 'Chiến dịch',
     children: [
       {
@@ -57,6 +30,15 @@ const SiderLink = [
     ],
   },
   {
+    title: 'Quản lý người dùng',
+    children: [
+      {
+        title: 'Danh sách',
+        link: '/user/active',
+      },
+    ],
+  },
+  {
     title: 'Cài đặt',
     children: [
       {
@@ -68,6 +50,23 @@ const SiderLink = [
         link: '/statistical',
       },
       { title: 'Bản đồ', link: '/map' },
+    ],
+  },
+  {
+    title: 'Địa chỉ',
+    children: [
+      {
+        title: 'Tỉnh',
+        link: '/province',
+      },
+      {
+        title: 'Huyện',
+        link: '/district',
+      },
+      {
+        title: 'Xã',
+        link: 'commune',
+      },
     ],
   },
 ];

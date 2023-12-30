@@ -1,4 +1,5 @@
 import PanelDetail from '@common/Panel';
+import TypographyLabel from '@components/Typography';
 import { DistrictUI } from '@models/area';
 import { SimpleValueKey } from '@models/meta';
 
@@ -95,9 +96,9 @@ const DetailDistrict = (props: DetailDistrictProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Tỉnh</TypographyLabel>
             <TextField
               id='standard-select-currency'
-              label='Tỉnh'
               select
               fullWidth
               name='provinceId'
@@ -119,9 +120,9 @@ const DetailDistrict = (props: DetailDistrictProps) => {
             item
             xs={12}
           >
+            <TypographyLabel>Huyện</TypographyLabel>
             <TextField
               value={detail.name}
-              label='Tên đường'
               fullWidth
               name='name'
               size='small'

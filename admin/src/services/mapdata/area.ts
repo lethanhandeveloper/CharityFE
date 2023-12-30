@@ -25,7 +25,7 @@ export const mapDistrictUI = (dataAPI: any): DistrictUI => {
   return {
     id: dataAPI._id,
     name: dataAPI.name,
-    provinceId: dataAPI?.provinceId?._id,
+    provinceId: dataAPI?.provinceId?._id || dataAPI?.provinceId,
   };
 };
 export const mapDistrictsUI = (listAPI: any): DistrictUI[] => {

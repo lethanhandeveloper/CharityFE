@@ -9,6 +9,7 @@ import { setInfoAlert } from '@store/redux/alert';
 import { useEffect, useState } from 'react';
 import { mapUsersUI } from '@services/mapdata/user';
 import { UserUI } from '@models/user';
+import TypographyLabel from '@components/Typography';
 
 interface DetailFeedBackProps {
   data: FeedbackUI;
@@ -97,23 +98,31 @@ const DetailFeedBack = (props: DetailFeedBackProps) => {
             xs={12}
             justifyContent={'center'}
             display={'flex'}
+          ></Grid>
+          <Grid
+            item
+            xs={12}
           >
-            <Box
-              sx={{
-                position: 'relative',
-              }}
-            ></Box>
+            <TypographyLabel>Tiêu đề</TypographyLabel>
+            <TextField
+              value={detail.title}
+              fullWidth
+              name='title'
+              size='small'
+              onChange={handleChange}
+            />
           </Grid>
           <Grid
             item
             xs={12}
           >
-            {' '}
+            <TypographyLabel>Người đánh giá</TypographyLabel>
             <Autocomplete
               id='country-select-demo'
               sx={{ width: 260 }}
               options={userList}
               autoHighlight
+              size='small'
               onChange={(e, value) => console.log(value)}
               getOptionLabel={(option) => option.email}
               renderOption={(props, option) => (
@@ -129,28 +138,17 @@ const DetailFeedBack = (props: DetailFeedBackProps) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label='Người quyên góp'
+                  label=''
                 />
               )}
             />
           </Grid>
+
           <Grid
             item
             xs={12}
           >
-            <TextField
-              value={detail.title}
-              label='Tiêu đề'
-              fullWidth
-              name='title'
-              size='small'
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-          >
+            <TypographyLabel>Mô tả</TypographyLabel>
             <Editor
               apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
               onEditorChange={(e) => {
@@ -162,7 +160,7 @@ const DetailFeedBack = (props: DetailFeedBackProps) => {
                 toolbar:
                   'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
               }}
-              initialValue='Welcome to TinyMCE!'
+              initialValue=''
             />
           </Grid>
         </Grid>
