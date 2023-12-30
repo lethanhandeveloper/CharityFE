@@ -1,60 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MapContainer, TileLayer, Marker, GeoJSON, ImageOverlay, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, ImageOverlay } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import hoangsa from './hoangsa.png';
 
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  IconButton,
+  Paper,
+  Typography,
+} from '@mui/material';
 import serviceAPI from '@services/api';
 import { mapUIs } from '@mapdata/map';
+import MenuIcon from '@mui/icons-material/Menu';
 import { MapUI } from '@models/map';
 import { CampainUI } from '@models/campain';
 import ProgressCustom from '@common/Progess';
 import { Link } from 'react-router-dom';
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+import 'leaflet.markercluster';
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
-    },
-  },
-}));
+import style from './map.module.scss';
 
 interface IMap {
   lat: number;
@@ -85,6 +58,7 @@ const MapPage = () => {
   const [search, setSearch] = useState<string>('');
   const [listMap, setListMap] = useState<MapUI[]>([]);
   const mapRef = useRef(null);
+  const [detailCampaign, setDetailCampaign] = useState<CampainUI>();
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
   const isLandSeaGeoJSON = {
     type: 'Feature',
@@ -151,21 +125,6 @@ const MapPage = () => {
     const data = await response.json();
     if (data[0]) setPostionSearch({ lat: data[0].boundingbox[0], long: data[0].boundingbox[2] });
   };
-
-  useEffect(() => {
-    try {
-      (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
-    } catch (e) {
-      console.log(e);
-    }
-  }, [postionSearch]);
-  useEffect(() => {
-    const initData = async () => {
-      const response = await serviceAPI.map.list();
-      setListMap(mapUIs(response.data.result));
-    };
-    initData();
-  }, []);
 
   const calculatePercent = (current: number, target: number): number => {
     return Number(((current / target) * 100).toFixed(2));
@@ -288,7 +247,56 @@ const MapPage = () => {
       </CardContent>
     </Card>
   );
+  useEffect(() => {
+    try {
+      (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [postionSearch]);
+  useEffect(() => {
+    const initData = async () => {
+      const response = await serviceAPI.map.list();
+      setListMap(mapUIs(response.data.result));
+    };
+    initData();
+  }, []);
+  useEffect(() => {
+    try {
+      const markers = L.markerClusterGroup({
+        iconCreateFunction: (cluster: L.MarkerCluster) => {
+          const childCount = cluster.getChildCount();
+          const markerOptions: L.DivIconOptions = {
+            iconSize: [20, 20], // Adjust the size as needed
+            html: `<div ><span>${childCount}</span></div>`, // Custom HTML content
+            className: style.marker,
+          };
 
+          return L.divIcon(markerOptions);
+        },
+      });
+      const locations = listMap.map((item) => {
+        const marker = L.marker([item.lat, item.long], {
+          icon:
+            item.type === 'EMERGENCY' ? iconEmergency : item.type === 'NORMAL' ? icon : iconItem,
+        });
+
+        marker.on('click', () => {
+          setDetailCampaign(item.campaign);
+        });
+        marker.on('mouseover', () => {
+          setDetailCampaign(item.campaign);
+        });
+
+        return marker;
+      });
+      markers.addLayers(locations);
+
+      (mapRef.current as any).addLayer(markers);
+    } catch (e) {
+      console.log('check,', e);
+    }
+  }, [mapRef.current, listMap]);
   return (
     <React.Fragment>
       {currentPosition.lat > 0 && (
@@ -324,50 +332,67 @@ const MapPage = () => {
           />
           <div
             style={{
+              zIndex: 999999999999999,
               position: 'absolute',
               top: '10px',
               left: '10px',
-              backgroundColor: 'white',
-              padding: '5px',
-              zIndex: 9999999999,
-              borderRadius: '50px',
             }}
           >
-            <Grid container>
-              <Grid item>
-                <Search>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder='Search…'
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setSearch(e.target.value);
-                    }}
-                    onKeyUp={(e) => {
-                      if (e.code === 'Enter') {
-                        getAddress(search);
-                      }
-                    }}
-                  />
-                </Search>
-              </Grid>
-            </Grid>
-          </div>
-
-          {listMap?.map((item) => (
-            <Marker
-              position={[item.lat, item.long]}
-              icon={
-                item.type === 'EMERGENCY' ? iconEmergency : item.type === 'NORMAL' ? icon : iconItem
-              }
+            <Paper
+              sx={{
+                p: '2px 4px',
+                display: 'flex',
+                alignItems: 'center',
+                width: 400,
+              }}
             >
-              <Popup>{renderCard(item.campaign)}</Popup>
-            </Marker>
-          ))}
+              <IconButton
+                sx={{ p: '10px' }}
+                aria-label='menu'
+              >
+                <MenuIcon />
+              </IconButton>
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder='Search  Maps'
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                onKeyUp={(e) => {
+                  if (e.code === 'Enter') {
+                    getAddress(search);
+                  }
+                }}
+                inputProps={{ 'aria-label': 'search google maps' }}
+              />
+              <IconButton
+                type='button'
+                onClick={() => {
+                  getAddress(search);
+                }}
+                sx={{ p: '10px' }}
+                aria-label='search'
+              >
+                <SearchIcon />
+              </IconButton>
+              <Divider
+                sx={{ height: 28, m: 0.5 }}
+                orientation='vertical'
+              />
+            </Paper>
+          </div>
+          {detailCampaign && (
+            <div
+              style={{
+                zIndex: 999999999999999,
+                position: 'absolute',
+                top: '70px',
+                left: '10px',
+              }}
+            >
+              {renderCard(detailCampaign)}
+            </div>
+          )}
         </MapContainer>
       )}
     </React.Fragment>
