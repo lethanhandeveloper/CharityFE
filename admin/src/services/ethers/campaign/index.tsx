@@ -4,7 +4,7 @@ import campaignContract from '@abi/campaign.json';
 import transactionContract from '@abi/transactionHistory.json';
 import itemContract from '@abi/item.json';
 import { CampainUI } from '@models/campain';
-import campaignAddress from './campaignAddress';
+import campaignAddress from '../../../abi/campaignAddress';
 import campaignWidth from '@abi/withdraw.json';
 const getCurrentDate = (): string => {
   return new Date().toLocaleString('en-US', {

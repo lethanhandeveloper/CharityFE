@@ -3,7 +3,7 @@ import ExtendedWindow from 'models/ether';
 import campaign from '@abi/campaign.json';
 import transitionHistory from '@abi/transactionHistory.json';
 
-import campaignAddress from './campaignAddress';
+import campaignAddress from '../../../abi/campaignAddress';
 import campaignWidth from '@abi/withdraw.json';
 
 const getCurrentDate = (): string => {
