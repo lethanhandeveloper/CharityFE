@@ -9,17 +9,18 @@ import { useEffect, useState } from 'react';
 import serviceAPI from '@services/api';
 import { UserUI } from '@models/user';
 import { mapUserUI } from '@mapdata/user';
+import { useNavigate } from 'react-router';
 
 const ManagementUserProfile = () => {
   const [user, setUserData] = useState<UserUI>();
-
+  const naviga = useNavigate();
   useEffect(() => {
     const initData = async () => {
       try {
         const response = await serviceAPI.auth.getProfile();
         setUserData(mapUserUI(response.data.result));
       } catch (error) {
-        console.log(error);
+        naviga('/login');
       }
     };
     initData();

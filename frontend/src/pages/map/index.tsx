@@ -28,6 +28,8 @@ import { Link } from 'react-router-dom';
 import 'leaflet.markercluster';
 
 import style from './map.module.scss';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 interface IMap {
   lat: number;
@@ -60,6 +62,7 @@ const MapPage = () => {
   const mapRef = useRef(null);
   const [detailCampaign, setDetailCampaign] = useState<CampainUI>();
   const [postionSearch, setPostionSearch] = useState<IMap>({ lat: 0, long: 0 });
+  const dispatch = useAppDispatch();
   const isLandSeaGeoJSON = {
     type: 'Feature',
     properties: {
@@ -251,7 +254,7 @@ const MapPage = () => {
     try {
       (mapRef.current as any).flyTo([postionSearch.lat, postionSearch.long], 12);
     } catch (e) {
-      console.log(e);
+      dispatch(setInfoAlert({ open: true, title: 'Hệ thống đang khởi tạo', type: 'info' }));
     }
   }, [postionSearch]);
   useEffect(() => {
@@ -280,21 +283,15 @@ const MapPage = () => {
           icon:
             item.type === 'EMERGENCY' ? iconEmergency : item.type === 'NORMAL' ? icon : iconItem,
         });
-
         marker.on('click', () => {
           setDetailCampaign(item.campaign);
         });
-        marker.on('mouseover', () => {
-          setDetailCampaign(item.campaign);
-        });
-
         return marker;
       });
       markers.addLayers(locations);
-
       (mapRef.current as any).addLayer(markers);
     } catch (e) {
-      console.log('check,', e);
+      dispatch(setInfoAlert({ open: true, title: 'Hệ thống đang khởi tạo', type: 'info' }));
     }
   }, [mapRef.current, listMap]);
   return (

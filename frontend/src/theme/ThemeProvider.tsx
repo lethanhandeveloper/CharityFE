@@ -2,10 +2,8 @@ import React, { ReactNode, useState } from 'react';
 import { ThemeProvider } from '@mui/material';
 import { StylesProvider } from '@mui/styles';
 import { themeCreator } from './base';
+import { ThemeContext } from '@emotion/react';
 
-export const ThemeContext = React.createContext((themeName: string): void => {
-  console.log(themeName);
-});
 interface ThemeProviderProps {
   children: ReactNode;
 }
