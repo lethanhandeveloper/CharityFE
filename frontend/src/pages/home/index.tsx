@@ -47,7 +47,6 @@ const HomePage = () => {
       const home = await serviceAPI.home.getCountForHome();
       setHome(home.data.result);
       const feedback = await serviceAPI.home.getFeedBacksForHome();
-      console.log(mapFeedbackUIs(feedback.data.result), feedback.data.result);
       setFeedback(mapFeedbackUIs(feedback.data.result));
     };
     initData();

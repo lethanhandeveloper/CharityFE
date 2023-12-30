@@ -1,12 +1,10 @@
 /* eslint-disable no-mixed-operators */
 import { useEffect, useState } from 'react';
-
-// material-ui
 import { useTheme } from '@mui/material/styles';
-
 import ReactApexChart from 'react-apexcharts';
 import Search, { ChartStructure } from '@components/Chart/calculateChart';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { Box, Container } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
@@ -48,70 +46,79 @@ const MonthlyBarChart = ({
   }, [type, isLine, id]);
   return (
     <Container>
-      <Box
-        sx={{
-          width: '100%',
-          justifyContent: 'center',
-        }}
-      >
-        <DatePicker
-          onChange={(e) => {
-            setData({ ...data, startDate: e ? new Date(e.toString()) : new Date() });
-          }}
-        />
-        <DatePicker
-          onChange={(e) => setData({ ...data, endDate: e ? new Date(e.toString()) : new Date() })}
-        />
-      </Box>
-      <ReactApexChart
-        options={{
-          chart: {
-            type: 'bar',
-            height: 365,
-            toolbar: {
-              show: false,
-            },
-          },
-          plotOptions: {
-            bar: {
-              columnWidth: '45%',
-              borderRadius: 4,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          xaxis: {
-            categories: data.searchData.map((item) => item.name),
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false,
-            },
-          },
-          yaxis: {
-            show: false,
-          },
-          grid: {
-            show: false,
-          },
-          colors: [info],
-          tooltip: {
-            theme: 'light',
-          },
-          stroke: {
-            curve: 'smooth',
-          },
-        }}
-        series={[
-          {
-            data: data.searchData.map((item) => item.value),
-          },
-        ]}
-        type={isLine ? 'line' : 'bar'}
-        height={365}
-      />
+      {data.searchData.length > 1 && (
+        <>
+          <Box
+            sx={{
+              width: '100%',
+              justifyContent: 'center',
+            }}
+          >
+            <DemoContainer components={['DateRangePicker']}>
+              <DateRangePicker
+                localeText={{ start: 'Check-in', end: 'Check-out' }}
+                autoFocus={true}
+                onChange={(e) => {
+                  setData({
+                    ...data,
+                    startDate: new Date(e[0] as string),
+                    endDate: new Date(e[1] as string),
+                  });
+                }}
+              />
+            </DemoContainer>
+          </Box>
+          <ReactApexChart
+            options={{
+              chart: {
+                type: 'bar',
+                height: 365,
+                toolbar: {
+                  show: false,
+                },
+              },
+              plotOptions: {
+                bar: {
+                  columnWidth: '45%',
+                  borderRadius: 4,
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              xaxis: {
+                categories: data.searchData.map((item) => item.name),
+                axisBorder: {
+                  show: false,
+                },
+                axisTicks: {
+                  show: false,
+                },
+              },
+              yaxis: {
+                show: false,
+              },
+              grid: {
+                show: false,
+              },
+              colors: [info],
+              tooltip: {
+                theme: 'light',
+              },
+              stroke: {
+                curve: 'smooth',
+              },
+            }}
+            series={[
+              {
+                data: data.searchData.map((item) => item.value),
+              },
+            ]}
+            type={isLine ? 'line' : 'bar'}
+            height={365}
+          />
+        </>
+      )}
     </Container>
   );
 };

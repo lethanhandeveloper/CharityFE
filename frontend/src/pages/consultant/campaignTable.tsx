@@ -33,6 +33,9 @@ import { LinkCustom } from '@common/Link';
 import campaign from '@services/ethers/campaign';
 import ExtendedWindow from '@models/ether';
 import { ethers } from 'ethers';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
+import EmptyOverlayGrid from '@components/Empty';
 export interface SearchStructure {
   id: string;
   categoryId: string;
@@ -47,6 +50,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const [transfer, setTransfer] = useState({
     number: 0,
     message: '',
@@ -112,22 +116,17 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
 
   const withDraw = async (id: string) => {
     try {
-      // Request account access if needed
       await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
 
-      // Use MetaMask provider
       const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
 
-      // Get signer (account) from provider
       const signer = provider.getSigner();
 
-      // Get the user's Ethereum address
       const address = await signer.getAddress();
 
-      // Display the Ethereum address
       alert(`Connected with address: ${address}`);
     } catch (error) {
-      console.error('Error connecting to MetaMask:', error);
+      dispatch(setInfoAlert({ open: true, title: 'Không thể kết nối bây giờ', type: 'error' }));
     }
     campaign.addRequest(
       id,
@@ -276,201 +275,210 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
 
   return (
     <React.Fragment>
-      {openDialog && (
-        <Dialog
-          open={openDialog}
-          onClose={() => {
-            setOpenDialog(false);
-          }}
-          aria-labelledby='alert-dialog-title'
-          aria-describedby='alert-dialog-description'
-        >
-          <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
-              <TextField
-                type='number'
-                onChange={(e) => {
-                  setTransfer({ ...transfer, number: parseInt(e.target.value) });
-                }}
-              />
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <ButtonConfirm
-              onClick={() => {
-                campaign.addRequest(
-                  transfer.id,
-                  transfer.number,
-                  '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
-                  localStorage.getItem('userId') || 'anonymous',
-                  transfer.message,
-                );
+      {campainList.length > 0 ? (
+        <>
+          {' '}
+          {openDialog && (
+            <Dialog
+              open={openDialog}
+              onClose={() => {
                 setOpenDialog(false);
               }}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
             >
-              Chuyển
-            </ButtonConfirm>
-            <ButtonCancel
-              onClick={() => {
-                setOpenDialog(false);
+              <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  <TextField
+                    type='number'
+                    onChange={(e) => {
+                      setTransfer({ ...transfer, number: parseInt(e.target.value) });
+                    }}
+                  />
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <ButtonConfirm
+                  onClick={() => {
+                    campaign.addRequest(
+                      transfer.id,
+                      transfer.number,
+                      '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
+                      localStorage.getItem('userId') || 'anonymous',
+                      transfer.message,
+                    );
+                    setOpenDialog(false);
+                  }}
+                >
+                  Chuyển
+                </ButtonConfirm>
+                <ButtonCancel
+                  onClick={() => {
+                    setOpenDialog(false);
+                  }}
+                  autoFocus
+                >
+                  Đóng
+                </ButtonCancel>
+              </DialogActions>
+            </Dialog>
+          )}
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                textAlign: 'center',
               }}
-              autoFocus
             >
-              Đóng
-            </ButtonCancel>
-          </DialogActions>
-        </Dialog>
-      )}
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            textAlign: 'center',
-          }}
-        >
-          <TypographyTitle>Chiến dịch nổi bật</TypographyTitle>
-          <Grid
-            container
-            justifyContent={'center'}
-            spacing={3}
-            padding={'30px'}
-          >
-            <Grid
-              item
-              xs={2}
-            >
-              <TextField
-                id='standard-select-currency'
-                label='Tỉnh/TP'
-                select
-                fullWidth
-                name='provinceId'
-                onChange={handleChange}
-                variant='standard'
+              <TypographyTitle>Chiến dịch nổi bật</TypographyTitle>
+              <Grid
+                container
+                justifyContent={'center'}
+                spacing={3}
+                padding={'30px'}
               >
-                {provinceList.map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    value={option.id}
+                <Grid
+                  item
+                  xs={2}
+                >
+                  <TextField
+                    id='standard-select-currency'
+                    label='Tỉnh/TP'
+                    select
+                    fullWidth
+                    name='provinceId'
+                    onChange={handleChange}
+                    variant='standard'
                   >
-                    {option.value}
-                  </MenuItem>
-                ))}
-              </TextField>
+                    {provinceList.map((option) => (
+                      <MenuItem
+                        key={option.id}
+                        value={option.id}
+                      >
+                        {option.value}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid
+                  item
+                  xs={2}
+                >
+                  <TextField
+                    id='standard-select-currency'
+                    label='Danh mục'
+                    select
+                    name='categoryId'
+                    onChange={handleChange}
+                    fullWidth
+                    variant='standard'
+                  >
+                    {categoryList.map((option) => (
+                      <MenuItem
+                        key={option.id}
+                        value={option.id}
+                      >
+                        {option.value}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid
+                  item
+                  xs={2}
+                >
+                  <TextField
+                    id='standard-select-currency'
+                    label='Trạng thái'
+                    select
+                    name='status'
+                    onChange={handleChange}
+                    fullWidth
+                    variant='standard'
+                  >
+                    {[
+                      { id: 'FINISH', value: 'Kết thúc' },
+                      { id: 'PENDING', value: 'Đang thực hiện' },
+                      { id: 'TARGET', value: 'Đã mục tiêu' },
+                      { id: 'TARGET', value: 'Đợi duyệt' },
+                    ].map((option) => (
+                      <MenuItem
+                        key={option.id}
+                        value={option.id}
+                      >
+                        {option.value}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid
+                  item
+                  xs={6}
+                >
+                  <TextField
+                    id='standard-select-currency'
+                    label='Tìm kiếm theo tên ...'
+                    name='search_text'
+                    inputRef={refInput}
+                    onKeyUp={(e) => {
+                      if (e.code === 'Enter') {
+                        setSearchConfig({
+                          ...searchConfig,
+                          search_text: refInput.current?.value || '',
+                          page: 1,
+                        });
+                      }
+                    }}
+                    fullWidth
+                    variant='standard'
+                    sx={{
+                      width: '50%',
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <SearchTwoTone />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid
-              item
-              xs={2}
-            >
-              <TextField
-                id='standard-select-currency'
-                label='Danh mục'
-                select
-                name='categoryId'
-                onChange={handleChange}
-                fullWidth
-                variant='standard'
+            {campainList.map((item: any) => (
+              <Grid
+                item
+                xs={4}
               >
-                {categoryList.map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    value={option.id}
-                  >
-                    {option.value}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+                {renderCard(item)}
+              </Grid>
+            ))}
             <Grid
               item
-              xs={2}
+              xs={12}
+              sx={{
+                justifyContent: 'center',
+                display: 'flex',
+              }}
             >
-              <TextField
-                id='standard-select-currency'
-                label='Trạng thái'
-                select
-                name='status'
-                onChange={handleChange}
-                fullWidth
-                variant='standard'
-              >
-                {[
-                  { id: 'FINISH', value: 'Kết thúc' },
-                  { id: 'PENDING', value: 'Đang thực hiện' },
-                  { id: 'TARGET', value: 'Đã mục tiêu' },
-                  { id: 'TARGET', value: 'Đợi duyệt' },
-                ].map((option) => (
-                  <MenuItem
-                    key={option.id}
-                    value={option.id}
-                  >
-                    {option.value}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-            <Grid
-              item
-              xs={6}
-            >
-              <TextField
-                id='standard-select-currency'
-                label='Search ...'
-                name='search_text'
-                inputRef={refInput}
-                onKeyUp={(e) => {
-                  if (e.code === 'Enter') {
-                    setSearchConfig({
-                      ...searchConfig,
-                      search_text: refInput.current?.value || '',
-                      page: 1,
-                    });
-                  }
-                }}
-                fullWidth
-                variant='standard'
+              <ButtonStyle1
+                onClick={handleGetMoreItem}
                 sx={{
-                  width: '50%',
+                  marginBottom: '20px',
                 }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position='end'>
-                      <SearchTwoTone />
-                    </InputAdornment>
-                  ),
-                }}
-              />
+              >
+                Xem thêm
+              </ButtonStyle1>
             </Grid>
           </Grid>
-        </Grid>
-        {campainList.map((item: any) => (
-          <Grid
-            item
-            xs={4}
-          >
-            {renderCard(item)}
-          </Grid>
-        ))}
-        <Grid
-          item
-          xs={12}
-          sx={{
-            justifyContent: 'center',
-            display: 'flex',
-          }}
-        >
-          <ButtonStyle1
-            onClick={handleGetMoreItem}
-            sx={{
-              marginBottom: '20px',
-            }}
-          >
-            Xem thêm
-          </ButtonStyle1>
-        </Grid>
-      </Grid>
+        </>
+      ) : (
+        <>
+          <EmptyOverlayGrid />
+        </>
+      )}
     </React.Fragment>
   );
 };

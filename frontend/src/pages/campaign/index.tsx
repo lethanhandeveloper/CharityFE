@@ -301,7 +301,7 @@ const CampainPage = () => {
             >
               <TextField
                 id='standard-select-currency'
-                label='Search ...'
+                label='Tìm kiếm theo tên ...'
                 name='search_text'
                 inputRef={refInput}
                 onKeyUp={(e) => {

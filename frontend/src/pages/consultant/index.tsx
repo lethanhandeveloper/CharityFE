@@ -1,5 +1,5 @@
 import { Facebook, LinkedIn, YouTube } from '@mui/icons-material';
-import { Avatar, Box, Container, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Grid, Typography } from '@mui/material';
 import MonthlyBarChart from '../../components/Chart';
 import { useParams } from 'react-router';
 import CampaignTable from './campaignTable';
@@ -25,16 +25,24 @@ const DetailAccount = () => {
     initData();
   }, []);
   return (
-    <Grid container>
-      <Grid
-        item
-        xs={4}
-      ></Grid>
-      <Grid
-        item
-        xs={8}
+    <Grid
+      container
+      style={{
+        backgroundColor: 'white',
+        padding: '30px',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 2,
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center' }}>
+        <Box>
           <Avatar
             src={data?.logo}
             sx={{
@@ -42,26 +50,28 @@ const DetailAccount = () => {
               height: '120px',
             }}
           />
+          <Box
+            gap={2}
+            display={'flex'}
+            flexDirection={'row'}
+            alignItems={'center'}
+          >
+            <Facebook sx={{ height: 40, width: 40 }} />
+            <YouTube sx={{ height: 40, width: 40 }} />
+            <LinkedIn sx={{ height: 40, width: 40 }} />
+          </Box>
+        </Box>
 
-          <Container>
-            <Typography>Tên: {data?.clubName}</Typography>
-            <Typography>Mô tả: {data?.goalName}</Typography>
-            <Typography>Tham gia từ: {data?.startDate}</Typography>
-            <Typography>{data?.actionDescSocialLink}</Typography>
-            <Typography>{data?.socialNetworkLink}</Typography>
-          </Container>
+        <Box>
+          <Typography>Tên nhóm/tổ chức: {data?.clubName}</Typography>
+          <Typography>Mô tả: {data?.goalName}</Typography>
+          <Typography>Tham gia từ: {data?.startDate}</Typography>
+          <Typography>Tên người đại diện {data?.name}</Typography>
+          <Typography>Địa chỉ: {data?.address}</Typography>
+          <Typography>Email tổ chức: {data?.representativeEmail}</Typography>
         </Box>
-        <Box
-          gap={2}
-          display={'flex'}
-          flexDirection={'row'}
-          alignItems={'center'}
-        >
-          <Facebook sx={{ height: 40, width: 40 }} />
-          <YouTube sx={{ height: 40, width: 40 }} />
-          <LinkedIn sx={{ height: 40, width: 40 }} />
-        </Box>
-      </Grid>
+      </Box>
+
       <Grid
         item
         xs={12}

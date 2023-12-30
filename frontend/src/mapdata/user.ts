@@ -2,7 +2,7 @@ import { UserUI } from 'models/user';
 
 export const mapUserUI = (userAPI: any): UserUI => {
   return {
-    id: userAPI._id,
+    id: userAPI._id || userAPI.id,
     age: userAPI?.age,
     email: userAPI?.email,
     fullname: userAPI?.name,
