@@ -55,8 +55,8 @@ const DonatePage = () => {
         dispatch(setInfoAlert({ open: true, title: 'Hệ thống đang lỗi!', type: 'error' }));
       }
     };
-    initData();
-  }, []);
+    if (id) initData();
+  }, [id]);
 
   return (
     <React.Fragment>
@@ -221,20 +221,22 @@ const DonatePage = () => {
               >
                 Chia sẻ
               </Button>
-              <Button
-                style={{
-                  color: 'white',
-                  padding: '5px 25px 5px 25px',
-                  borderRadius: '20px',
-                  border: '1px solid #f54a00',
-                  background: '#f54a00',
-                }}
-                onClick={() => {
-                  setOpenDialog(true);
-                }}
-              >
-                Ủng hộ
-              </Button>
+              {(detail?.endDate?.getTime() || 0) > new Date().getTime() && (
+                <Button
+                  style={{
+                    color: 'white',
+                    padding: '5px 25px 5px 25px',
+                    borderRadius: '20px',
+                    border: '1px solid #f54a00',
+                    background: '#f54a00',
+                  }}
+                  onClick={() => {
+                    setOpenDialog(true);
+                  }}
+                >
+                  Ủng hộ
+                </Button>
+              )}
             </Box>
           </Box>
           <Box> {parse(detail?.description || '')}</Box>

@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
-import { Avatar, Box, Button, InputAdornment } from '@mui/material';
+import { Avatar, Box, InputAdornment } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
 import serviceAPI from '@services/api';
@@ -70,7 +70,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
       setUserList(users);
     };
     initData();
-  }, []);
+  }, [id, isCampaign]);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -102,9 +102,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                   {column.label}
                 </TableCell>
               ))}
-              <TableCell>
-                <Button>View on chain</Button>
-              </TableCell>
+              <TableCell>View on chain</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -130,7 +128,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                     </Box>
                   </TableCell>
                   <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.time.toString()}</TableCell>
+                  <TableCell>{row.timeString}</TableCell>
                 </TableRow>
               );
             })}

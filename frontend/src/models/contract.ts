@@ -9,4 +9,5 @@ export interface HistoryContractUI {
   time: Date;
   campaignId: string;
   userId: string;
+  timeString: string;
 }

@@ -10,8 +10,8 @@ interface ICardSlide {
 }
 const CardSlice: FC<ICardSlide> = (props) => {
   const { handleDragStart, data } = props;
-  const handleGetDay = (endDate: Date): string => {
-    return Math.floor((endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24).toFixed(0);
+  const handleGetDay = (endDate: Date): number => {
+    return Math.floor((endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24);
   };
   return (
     <React.Fragment>
@@ -40,7 +40,11 @@ const CardSlice: FC<ICardSlide> = (props) => {
             }}
             fontSize={'13px'}
           >
-            Còn {handleGetDay(data.endDate)} ngày
+            {handleGetDay(data.endDate) > 0 ? (
+              <>Còn {handleGetDay(data.endDate).toFixed(0)} ngày</>
+            ) : (
+              <>Đã kết thúc</>
+            )}
           </Typography>
 
           <Typography

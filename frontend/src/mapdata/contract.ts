@@ -23,6 +23,7 @@ export const mapHistoryContract = (data: any): HistoryContractUI => ({
   userId: data.donatorId,
   time: convertDate(data.time),
   value: parseFloat(ethers.utils.formatEther(BigNumber.from(data.value).toString())),
+  timeString: data.time,
 });
 
 export const mapHistoryContracts = (list: any): HistoryContractUI[] => {

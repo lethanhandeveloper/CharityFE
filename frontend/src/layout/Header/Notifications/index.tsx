@@ -14,10 +14,11 @@ import { useEffect, useRef, useState } from 'react';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import { styled } from '@mui/material/styles';
 
-import { formatDistance, subDays } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
 import { HistoryContractUI } from '@models/contract';
+import { useNavigate } from 'react-router';
 
 const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -47,6 +48,7 @@ function HeaderNotifications() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [list, setList] = useState<HistoryContractUI[]>([]);
+  const navigate = useNavigate();
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -109,18 +111,25 @@ function HeaderNotifications() {
         <Divider />
         <List sx={{ p: 0 }}>
           {list?.map((item) => (
-            <ListItem sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}>
+            <ListItem
+              sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}
+              button
+              onClick={() => {
+                navigate(`/campaign/donate/${item.campaignId}`);
+                setOpen(false);
+              }}
+            >
               <Box flex='1'>
                 <Box
                   display='flex'
                   justifyContent='space-between'
                 >
-                  <Typography sx={{ fontWeight: 'bold' }}>{item.value}</Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Đã quyên góp {item.value}</Typography>
                   <Typography
                     variant='caption'
                     sx={{ textTransform: 'none' }}
                   >
-                    {formatDistance(subDays(new Date(), 3), new Date(), {
+                    {formatDistance(item.time, new Date(), {
                       addSuffix: true,
                     })}
                   </Typography>
@@ -130,7 +139,7 @@ function HeaderNotifications() {
                   variant='body2'
                   color='text.secondary'
                 >
-                  {item.time.toString()}
+                  {item.timeString}
                 </Typography>
               </Box>
             </ListItem>
