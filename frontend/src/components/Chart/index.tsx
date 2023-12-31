@@ -26,19 +26,20 @@ const MonthlyBarChart = ({
     endDate: Date;
     searchData: ChartStructure[];
   }>({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: new Date('2023-12-01'),
+    endDate: new Date('2024-01-01'),
     searchData: [],
   });
 
   const info = theme.palette.info.light;
   useEffect(() => {
     setData({ ...data, searchData: Search(data.startDate, data.endDate, rootList) });
+    console.log(Search(data.startDate, data.endDate, rootList), rootList, data.endDate);
   }, [data.startDate, data.endDate, rootList]);
   useEffect(() => {
     const initData = async () => {
       if (type === 'User') {
-        const user = await campaign.getHistoryByUser(id);
+        const user = await campaign.getHistoryByOwner('655885f6b034a37de687bd1a');
         setRootList(mapHistoryContracts(user));
       }
     };
@@ -46,7 +47,7 @@ const MonthlyBarChart = ({
   }, [type, isLine, id]);
   return (
     <Container>
-      {data.searchData.length > 1 && (
+      {data.searchData.length > 0 && (
         <>
           <Box
             sx={{

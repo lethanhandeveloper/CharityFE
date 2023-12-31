@@ -5,21 +5,33 @@ import { useParams } from 'react-router';
 import CampaignTable from './campaignTable';
 import serviceAPI from '@services/api';
 import { useEffect, useState } from 'react';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const DetailAccount = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>();
-
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const initData = async () => {
-      if (id) {
-        const data = await serviceAPI.auth.getRequestByUserId(id);
-        if (data.data.result.type === 1) {
-          setData({
-            ...data.data.result.commitInfoVerification,
-            ...data.data.result.personalGeneralInfo,
-          });
+      try {
+        if (id) {
+          const data = await serviceAPI.auth.getRequestByUserId(id);
+          if (data.data.result.type === 1) {
+            setData({
+              ...data.data.result.commitInfoVerification,
+              ...data.data.result.personalGeneralInfo,
+            });
+          }
         }
+      } catch (e) {
+        dispatch(
+          setInfoAlert({
+            open: true,
+            title: 'Tài khoản chưa đăng ký quyền cộng tác viên',
+            type: 'info',
+          }),
+        );
       }
     };
     initData();

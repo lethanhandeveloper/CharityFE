@@ -93,14 +93,13 @@ const getListDataMonth = (startDate: Date, endDate: Date, list: HistoryContractU
             total: pre.total + current.value,
           };
         }
-
         return pre;
       },
       { count: 0, total: 0 },
     );
     listReturn.push({
       count: total.count,
-      name: `${day.getMonth()}/${day.getFullYear()}`,
+      name: `${day.getMonth() + 1}/${day.getFullYear()}`,
       value: total.total,
     });
   });
@@ -110,8 +109,8 @@ const getListDataMonth = (startDate: Date, endDate: Date, list: HistoryContractU
 const getListDataWeek = (startDate: Date, endDate: Date, list: HistoryContractUI[]) => {
   const weeksList: Date[] = getWeeksListBetweenDates(startDate, endDate);
   const listReturn: ChartStructure[] = [];
-  const time = 24 * 60 * 60 * 1000;
-  weeksList.forEach((day) => {
+  const time = 24 * 60 * 60 * 1000 * 7;
+  weeksList.forEach((day, index) => {
     const total = list.reduce(
       (pre, current) => {
         if (
@@ -128,9 +127,10 @@ const getListDataWeek = (startDate: Date, endDate: Date, list: HistoryContractUI
       },
       { count: 0, total: 0 },
     );
+
     listReturn.push({
       count: total.count,
-      name: `test`,
+      name: `Tuần ${index} ngày ${day.getDate()}`,
       value: total.total,
     });
   });
@@ -139,10 +139,10 @@ const getListDataWeek = (startDate: Date, endDate: Date, list: HistoryContractUI
 
 const Search = (startDate: Date, endDate: Date, list: HistoryContractUI[]): ChartStructure[] => {
   const diffDays = getDaysBetweenDates(startDate, endDate);
-  if (diffDays > 14) {
-    return getListDataWeek(startDate, endDate, list);
-  } else if (diffDays > 40) {
+  if (diffDays > 40) {
     return getListDataMonth(startDate, endDate, list);
+  } else if (diffDays > 14) {
+    return getListDataWeek(startDate, endDate, list);
   } else {
     return getListDataDay(startDate, endDate, list);
   }

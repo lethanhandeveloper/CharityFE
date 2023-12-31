@@ -53,7 +53,7 @@ const ManagementUserProfile = () => {
             xs={12}
             md={6}
           >
-            <RecentActivity id={user?.id || ''} />
+            {user?.id && <RecentActivity id={user?.id} />}
           </Grid>
         </Grid>
       </Container>
