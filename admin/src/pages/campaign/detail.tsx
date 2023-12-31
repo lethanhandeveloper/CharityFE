@@ -12,6 +12,8 @@ import React, { useState } from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
 import TableRender from '@components/Table/tableCapaign';
 import ConfirmDialog from '@components/ConfirmDialog';
+import TableRenderHistoryItem from '@components/Table/tableItem';
+import OppositeContentTimeline from '@components/TimeLine';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -85,8 +87,8 @@ const DetailCampaign = (props: DetailCampaignProps) => {
   const onTransfer = async () => {
     try {
       const reuslt = await campaign.getRequestByCampaign(detail.id);
-      await campaign.approveRequest(reuslt.id._hex);
-      await campaign.withDraw(reuslt.id._hex);
+      await campaign.approveRequest(reuslt[0].id._hex);
+      await campaign.withDraw(reuslt[0].id._hex);
     } catch (error) {
       dispatch(setInfoAlert({ title: 'Không thể thực hiện rút tiền!', open: true, type: 'error' }));
     }
@@ -126,17 +128,24 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               item
               gap={3}
             >
-              {detail.status === 'START' ||
-                (detail.status === 'END' && (
-                  <>
-                    <ConfirmDialog
-                      buttonText='Giải ngân'
-                      message='Xác nhận giải nhân chiến dịch'
-                      onSucess={onTransfer}
-                      title='Xác nhận giải ngân'
-                    />
-                  </>
-                ))}
+              {(detail.status === 'START' || detail.status === 'END') && (
+                <>
+                  <ConfirmDialog
+                    buttonText='Giải ngân'
+                    message='Xác nhận giải nhân chiến dịch'
+                    onSucess={onTransfer}
+                    title='Xác nhận giải ngân'
+                  />
+                  <ConfirmDialog
+                    buttonText='Hoàn tiền'
+                    message='Xác nhận từ chối đơn đăng ký'
+                    title='Xác nhận từ chối'
+                    onSucess={() => {
+                      campaign.refund(detail.id);
+                    }}
+                  />
+                </>
+              )}
 
               {detail.status === 'DRAFT' && (
                 <>
@@ -174,7 +183,6 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='File xác thực'
                 {...a11yProps(1)}
               />
-              {/* {detail.status !== 'DRAFT' && ( */}
 
               <Tab
                 label='Biểu đồ'
@@ -184,8 +192,14 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='Lịch sử giao dịch'
                 {...a11yProps(3)}
               />
-
-              {/* )} */}
+              <Tab
+                label='Vật phẩm quyên góp'
+                {...a11yProps(4)}
+              />
+              <Tab
+                label='Lịch sử rút tiền'
+                {...a11yProps(5)}
+              />
             </Tabs>
           </Box>
           <CustomTabPanel
@@ -328,6 +342,21 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               id={detail.id}
               isCampaign={true}
             />
+          </CustomTabPanel>
+          <CustomTabPanel
+            value={value}
+            index={4}
+          >
+            <TableRenderHistoryItem
+              id={detail.id}
+              isCampaign={true}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel
+            value={value}
+            index={4}
+          >
+            <OppositeContentTimeline campaignId={detail.id} />
           </CustomTabPanel>
         </Box>
       </PanelDetail>

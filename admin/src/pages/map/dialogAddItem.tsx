@@ -34,6 +34,7 @@ export default function DialogAddItem(props: DialogAddItemProps) {
     time: new Date(),
   });
   const [userList, setUserList] = React.useState<UserUI[]>([]);
+
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     const initData = async () => {
@@ -53,6 +54,7 @@ export default function DialogAddItem(props: DialogAddItemProps) {
         itemContract?.creatorId || '',
         itemContract?.message || '',
       );
+      props.handleClose();
     } catch (error) {
       dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
@@ -114,7 +116,7 @@ export default function DialogAddItem(props: DialogAddItemProps) {
                     label={'Ngày quyên góp'}
                     disableFuture
                     onChange={(e) => {
-                      console.log(e);
+                      setItemContract({ ...itemContract, time: new Date((e as string) || '') });
                     }}
                   />
                 </Box>

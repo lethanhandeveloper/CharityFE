@@ -12,6 +12,7 @@ import { mapUserUI } from '@services/mapdata/user';
 import { UserUI } from '@models/user';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import campaign from '@services/ethers/campaign';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -125,6 +126,16 @@ function HeaderUserbox() {
 
         <Divider />
         <Box sx={{ m: 1 }}>
+          <Button
+            color='primary'
+            fullWidth
+            onClick={() => {
+              // campaign.setAddress('0x5Ab3AaFbEEdc60316a3C667787a6C52d6BfAC3d7');
+              campaign.setHistoryAddress();
+            }}
+          >
+            Thêm địa chỉ ví
+          </Button>
           <Button
             color='primary'
             fullWidth

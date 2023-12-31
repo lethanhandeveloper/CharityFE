@@ -6,6 +6,7 @@ import itemContract from '@abi/item.json';
 import { CampainUI } from '@models/campain';
 import campaignAddress from '../../../abi/campaignAddress';
 import campaignWidth from '@abi/withdraw.json';
+import adminContract from '@abi/admin.json';
 const getCurrentDate = (): string => {
   return new Date().toLocaleString('en-US', {
     year: 'numeric',
@@ -17,35 +18,49 @@ const getCurrentDate = (): string => {
   });
 };
 
-const setHistoryAddress = async () => {
+const setAddress = async (address: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
-    const tx = await contract.setTransactionHistoryAddress(campaignAddress.historyAddress);
-    const txWith = await contract.setWithdrawRequestAddress(campaignAddress.withdrawAddress);
-
-    const contractHis = new Contract(
-      campaignAddress.historyAddress,
-      transactionContract.abi,
-      signer,
-    );
-    const txHis = await contractHis.setCampaignAddress(campaignAddress.contractAddress);
-
-    const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
-    const txWithContract = await contractWith.setCampaignAddress(campaignAddress.contractAddress);
-
+    const contract = new Contract(campaignAddress.adminAddress, adminContract.abi, signer);
+    const tx = await contract.setAdminAddress(address);
     await tx.wait();
-    await txWith.wait();
-    await txWithContract.await();
-    await txHis.wait();
-
     return true;
-  } catch (err) {
+  } catch (e) {
     return false;
   }
+};
+const setHistoryAddress = async () => {
+  const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+  await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+  const signer = provider.getSigner();
+
+  //campaign
+  const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+  let tx = await contract.settransactionHistoryContractAddress(campaignAddress.historyAddress);
+  await tx.wait();
+  tx = await contract.setAdminContractAddress(campaignAddress.adminAddress);
+  await tx.wait();
+  tx = await contract.setwithdrawRequestContractAddress(campaignAddress.withdrawAddress);
+  await tx.wait();
+
+  //history
+  const contractHistory = new Contract(
+    campaignAddress.historyAddress,
+    transactionContract.abi,
+    signer,
+  );
+  tx = await contractHistory.setCampaignAddress(campaignAddress.contractAddress);
+  //item
+  const contractItem = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+  tx = await contractItem.setAdminContractAddress(campaignAddress.adminAddress);
+  await tx.wait();
+  //withDraw
+  const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+  tx = await contractWith.setAdminContractAddress(campaignAddress.adminAddress);
+
+  return true;
 };
 
 const addNew = async (data: CampainUI) => {
@@ -55,7 +70,7 @@ const addNew = async (data: CampainUI) => {
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
     const id = data.id;
-    const creatorUserName = data.categoryId;
+    const creatorUserName = data.creatorId;
     const title = data.title;
     const currentValue = 0;
     const targetValue = data.targetValue;
@@ -67,9 +82,7 @@ const addNew = async (data: CampainUI) => {
       targetValue,
       getCurrentDate(),
     );
-    const test = await tx.wait();
-    console.log(test, tx, 'xcvcxv');
-    setHistoryAddress();
+    await tx.wait();
     return true;
   } catch (err) {
     return false;
@@ -83,7 +96,7 @@ const addItem = async (campaignId: string, creatorId: string, message: string) =
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
 
-    const tx = await contract.addNew(campaignId, creatorId, message, getCurrentDate());
+    const tx = await contract.addNewItem(campaignId, creatorId, message, getCurrentDate());
     await tx.wait();
     return true;
   } catch (err) {
@@ -130,6 +143,14 @@ const getHistoryByCampaign = async (id: string) => {
   } catch (error) {
     return {};
   }
+};
+const refund = async (id: string) => {
+  const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+  await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+  const signer = provider.getSigner();
+  const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+  const tx = await contract.refundAllByCampaignId(id);
+  return tx;
 };
 
 const getItemByCampaign = async (id: string) => {
@@ -221,9 +242,10 @@ export default {
   addItem,
   getItemByCampaign,
   getItemByUser,
-
+  setAddress,
   addRequest,
   approveRequest,
   getRequestByCampaign,
   withDraw,
+  refund,
 };

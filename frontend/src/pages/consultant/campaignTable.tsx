@@ -123,18 +123,10 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
       const signer = provider.getSigner();
 
       const address = await signer.getAddress();
-
-      alert(`Connected with address: ${address}`);
+      campaign.addRequest(id, 50, address, localStorage.getItem('userId') || 'anonymous', 'xzcxzc');
     } catch (error) {
       dispatch(setInfoAlert({ open: true, title: 'Không thể kết nối bây giờ', type: 'error' }));
     }
-    campaign.addRequest(
-      id,
-      50,
-      '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
-      localStorage.getItem('userId') || 'anonymous',
-      'xzcxzc',
-    );
   };
 
   const renderCard = (data: CampainUI) => (

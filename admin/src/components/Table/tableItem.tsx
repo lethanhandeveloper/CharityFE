@@ -30,7 +30,7 @@ const SearchInputWrapper = styled(TextField)(
 `,
 );
 interface Column {
-  id: 'user' | 'amount' | 'time' | 'size' | 'density';
+  id: 'user' | 'amount' | 'time' | 'size' | 'message';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -40,10 +40,9 @@ interface Column {
 const columns: readonly Column[] = [
   { id: 'user', label: 'Tài khoản', minWidth: 170 },
   {
-    id: 'amount',
-    label: 'Số tiền',
+    id: 'message',
+    label: 'Hàng hóa',
     minWidth: 100,
-    format: (value: number) => value.toLocaleString('en-US'),
   },
   {
     id: 'time',

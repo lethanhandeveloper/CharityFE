@@ -25,6 +25,8 @@ import serviceAPI from '@services/api';
 import { mapUserUI } from '@mapdata/user';
 import { UserUI } from '@models/user';
 import Can from '@caslConfig/can';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -67,6 +69,7 @@ function HeaderUserbox() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const navigation = useNavigate();
+  const dispatch = useAppDispatch();
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -77,8 +80,12 @@ function HeaderUserbox() {
   useEffect(() => {
     if (!token) return;
     const initData = async () => {
-      const data = await serviceAPI.auth.getProfile();
-      setUser(mapUserUI(data.data.result));
+      try {
+        const data = await serviceAPI.auth.getProfile();
+        setUser(mapUserUI(data.data.result));
+      } catch (err) {
+        dispatch(setInfoAlert({ open: true, title: 'Yêu cầu đăng nhập', type: 'error' }));
+      }
     };
     initData();
   }, [token]);
@@ -88,6 +95,7 @@ function HeaderUserbox() {
     localStorage.removeItem('token');
     navigation('/login');
   };
+
   return (
     <>
       <UserBoxButton

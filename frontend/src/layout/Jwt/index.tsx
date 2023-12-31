@@ -1,13 +1,14 @@
 import apiService from '@services/api/config';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 interface JWTProviderProps {
   children: React.ReactNode;
 }
 const JWTProvider = (props: JWTProviderProps) => {
   const [isLoading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   apiService.interceptors.request.use(
     (config) => {
       setLoading(true);
@@ -30,7 +31,7 @@ const JWTProvider = (props: JWTProviderProps) => {
     (error) => {
       if (error.response.status === 401) {
         localStorage.removeItem('token');
-        navigate('/login');
+        dispatch(setInfoAlert({ open: true, title: 'Yêu cầu đăng nhập', type: 'error' }));
       }
       return Promise.reject(error);
     },

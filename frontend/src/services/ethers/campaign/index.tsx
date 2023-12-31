@@ -106,6 +106,7 @@ const addRequest = async (
       getCurrentDate(),
       createdId,
       message,
+      'test',
     );
     await tx.wait();
   } catch (error) {
