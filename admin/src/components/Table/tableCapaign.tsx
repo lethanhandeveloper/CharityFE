@@ -79,6 +79,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
           history = await campaign.getHistoryByUser(id);
         }
         setList(mapHistoryContracts(history));
+
         const users: UserUI[] = [];
         for (let index = 0; index < history.length; index++) {
           const data = await serviceAPI.auth.getUserById(history[index].donatorId);

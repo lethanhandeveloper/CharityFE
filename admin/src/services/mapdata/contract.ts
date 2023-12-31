@@ -11,7 +11,7 @@ export const mapCampainContract = (data: any): CampaignContractUI => ({
 export const mapHistoryContract = (data: any): HistoryContractUI => ({
   campaignId: data.campaignId,
   userId: data.donatorId,
-  time: new Date(BigNumber.from(data.time).toNumber()),
+  time: data.time,
   value: parseFloat(ethers.utils.formatEther(BigNumber.from(data.value).toString())),
 });
 export const mapHistoryItemContract = (data: any): HistoryItemContractUI => ({

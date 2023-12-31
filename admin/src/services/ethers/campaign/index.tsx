@@ -67,7 +67,8 @@ const addNew = async (data: CampainUI) => {
       targetValue,
       getCurrentDate(),
     );
-    await tx.wait();
+    const test = await tx.wait();
+    console.log(test, tx, 'xcvcxv');
     setHistoryAddress();
     return true;
   } catch (err) {

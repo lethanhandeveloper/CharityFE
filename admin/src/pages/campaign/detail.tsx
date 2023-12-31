@@ -88,7 +88,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
       await campaign.approveRequest(reuslt.id._hex);
       await campaign.withDraw(reuslt.id._hex);
     } catch (error) {
-      console.log(error);
+      dispatch(setInfoAlert({ title: 'Không thể thực hiện rút tiền!', open: true, type: 'error' }));
     }
   };
   const onReject = async () => {
@@ -174,6 +174,8 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='File xác thực'
                 {...a11yProps(1)}
               />
+              {/* {detail.status !== 'DRAFT' && ( */}
+
               <Tab
                 label='Biểu đồ'
                 {...a11yProps(2)}
@@ -182,6 +184,8 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='Lịch sử giao dịch'
                 {...a11yProps(3)}
               />
+
+              {/* )} */}
             </Tabs>
           </Box>
           <CustomTabPanel

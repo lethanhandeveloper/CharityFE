@@ -60,21 +60,8 @@ const iconItem = L.icon({
   popupAnchor: [2, -20],
   iconUrl: 'https://img.icons8.com/plasticine/100/exterior.png',
 });
-// const MapComponent: FC<IMapComponent> = (props) => {
-//   useMapEvents({
-//     click(e) {
-//       if (props.isOn) {
-//         props.setLagLog({ lat: e.latlng.lat, long: e.latlng.lng });
-//         alert(e.latlng.lng + ',' + e.latlng.lat);
-//       }
-//     },
-//   });
-//   return <></>;
-// };
 
 const MapPage = () => {
-  // const [dataMap, setLocation] = useState<IMap>({ lat: 0, long: 0 });
-
   const [currentPosition, setCurrentPosition] = useState<IMap>({ lat: 0, long: 0 });
   const [search, setSearch] = useState<string>('');
   const [listMap, setListMap] = useState<MapUI[]>([]);
