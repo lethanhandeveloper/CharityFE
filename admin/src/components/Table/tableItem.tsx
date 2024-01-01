@@ -73,6 +73,7 @@ export default function TableRenderHistoryItem({
   React.useEffect(() => {
     const initData = async () => {
       let history;
+
       if (isCampaign) {
         history = await campaign.getItemByCampaign(id);
       } else {
@@ -82,7 +83,7 @@ export default function TableRenderHistoryItem({
       const checkList = [];
       if (isCampaign) {
         for (let index = 0; index < history.length; index++) {
-          const data = await serviceAPI.auth.getUserById(history[index].donatorId);
+          const data = await serviceAPI.auth.getUserById(history[index].creatorId);
           checkList.push(mapUserUI(data.data.result));
         }
       } else {
@@ -97,7 +98,7 @@ export default function TableRenderHistoryItem({
   }, []);
 
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '20px' }}>
       <SearchInputWrapper
         autoFocus={true}
         InputProps={{
@@ -116,13 +117,17 @@ export default function TableRenderHistoryItem({
           stickyHeader
           aria-label='sticky table'
         >
-          <TableHead>
+          <TableHead
+            sx={{
+              textTransform: 'none',
+            }}
+          >
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, textTransform: 'none' }}
                 >
                   {column.label}
                 </TableCell>

@@ -14,6 +14,8 @@ import ConfirmDialog from '@components/ConfirmDialog';
 import TableRenderHistoryItem from '@components/Table/tableItem';
 import OppositeContentTimeline from '@components/TimeLine';
 import TypographyLabel from '@components/Typography';
+import { BoxRow } from '@common/Box';
+import MonthlyBarChart from '@components/Chart';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -38,7 +40,7 @@ export function CustomTabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, padding: 0 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -134,18 +136,16 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               gap={3}
             >
               {(detail.status === 'START' || detail.status === 'END') && (
-                <>
-                  <ConfirmDialog
-                    buttonText='Hoàn tiền'
-                    message='Xác nhận chiến dịch vi phạm tiêu chuẩn/thông tin không đúng thực tế'
-                    title='Xác nhận hủy chuyển dịch'
-                    onSucess={onCancel}
-                  />
-                </>
+                <ConfirmDialog
+                  buttonText='Hoàn tiền'
+                  message='Xác nhận chiến dịch vi phạm tiêu chuẩn/thông tin không đúng thực tế'
+                  title='Xác nhận hủy chuyển dịch'
+                  onSucess={onCancel}
+                />
               )}
 
               {detail.status === 'DRAFT' && (
-                <>
+                <BoxRow sx={{ gap: 2 }}>
                   <ConfirmDialog
                     buttonText='Từ chối'
                     message='Xác nhận đóng chiến dịch'
@@ -158,7 +158,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                     onSucess={onApprove}
                     title='Xác nhận duyệt chiến dịch'
                   />
-                </>
+                </BoxRow>
               )}
             </Grid>
           </Grid>
@@ -218,8 +218,9 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                   }}
                 >
                   <Avatar
+                    variant='square'
                     src={detail.thumbnail}
-                    sx={{ width: 100, height: 100 }}
+                    sx={{ width: 550, height: 200, borderRadius: '5px', marginTop: '10px' }}
                   />
                 </Box>
               </Grid>
@@ -321,6 +322,13 @@ const DetailCampaign = (props: DetailCampaignProps) => {
             index={2}
           >
             <OppositeContentTimeline campaignId={detail.id} />
+            <MonthlyBarChart
+              endDate={new Date()}
+              startDate={new Date('2023-12-29')}
+              isLine={false}
+              type='Campaign'
+              id={detail.id}
+            />
           </CustomTabPanel>
           <CustomTabPanel
             value={value}
@@ -340,10 +348,6 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               isCampaign={true}
             />
           </CustomTabPanel>
-          <CustomTabPanel
-            value={value}
-            index={4}
-          ></CustomTabPanel>
         </Box>
       </PanelDetail>
     </>

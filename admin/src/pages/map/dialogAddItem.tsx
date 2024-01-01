@@ -55,6 +55,7 @@ export default function DialogAddItem(props: DialogAddItemProps) {
         itemContract?.message || '',
       );
       props.handleClose();
+      dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
     } catch (error) {
       dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
     }
@@ -64,7 +65,6 @@ export default function DialogAddItem(props: DialogAddItemProps) {
     <React.Fragment>
       <Dialog
         open={props.open}
-        onClose={props.handleClose}
         aria-labelledby='alert-dialog-title'
         aria-describedby='alert-dialog-description'
       >

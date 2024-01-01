@@ -16,12 +16,13 @@ import serviceAPI from '@services/api';
 
 import { mapUserUI } from '@services/mapdata/user';
 import { styled } from '@mui/material/styles';
-import { UserUI } from '@models/user';
+
 import { HistoryContractUI } from '@models/contract';
 import { mapHistoryContracts } from '@services/mapdata/contract';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import EmptyOverlayGrid from '@components/Grid';
+import { mapCampainUI } from '@services/mapdata/campain';
 
 const SearchInputWrapper = styled(TextField)(
   ({ theme }) => `
@@ -59,7 +60,7 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [list, setList] = React.useState<HistoryContractUI[]>();
-  const [userList, setUserList] = React.useState<UserUI[]>([]);
+  const [userList, setUserList] = React.useState<any>([]);
   const dispatch = useAppDispatch();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -78,14 +79,22 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
         } else {
           history = await campaign.getHistoryByUser(id);
         }
-        setList(mapHistoryContracts(history));
+        const dataList = mapHistoryContracts(history);
+        setList(dataList);
 
-        const users: UserUI[] = [];
-        for (let index = 0; index < history.length; index++) {
-          const data = await serviceAPI.auth.getUserById(history[index].donatorId);
-          users.push(mapUserUI(data.data.result));
+        const checkList = [];
+        if (isCampaign) {
+          for (let index = 0; index < dataList.length; index++) {
+            const data = await serviceAPI.auth.getUserById(dataList[index].userId);
+            checkList.push(mapUserUI(data.data.result));
+          }
+        } else {
+          for (let index = 0; index < dataList.length; index++) {
+            const data = await serviceAPI.campain.getCampainDetail(dataList[index].campaignId);
+            checkList.push(mapCampainUI(data.data.result));
+          }
         }
-        setUserList(users);
+        setUserList(checkList);
       } catch (e) {
         setList([]);
         dispatch(
@@ -158,15 +167,31 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
                           alignItems={'center'}
                           gap={3}
                         >
-                          <Avatar
-                            alt={userList.find((item) => item.id === row.userId)?.fullname}
-                            src={userList.find((item) => item.id === row.userId)?.imageUrl}
-                          />
-                          {userList.find((item) => item.id === row.userId)?.fullname}
+                          {isCampaign ? (
+                            <>
+                              <Avatar
+                                alt={userList.find((item: any) => item.id === row.userId)?.fullname}
+                                src={userList.find((item: any) => item.id === row.userId)?.imageUrl}
+                              />
+                              {userList.find((item: any) => item.id === row.userId)?.fullname}
+                            </>
+                          ) : (
+                            <>
+                              <Avatar
+                                alt={
+                                  userList.find((item: any) => item.id === row.campaignId)?.title
+                                }
+                                src={
+                                  userList.find((item: any) => item.id === row.campaignId)?.imageUrl
+                                }
+                              />
+                              {userList.find((item: any) => item.id === row.campaignId)?.title}
+                            </>
+                          )}
                         </Box>
                       </TableCell>
                       <TableCell>{row.value}</TableCell>
-                      <TableCell>{row.time.toString()}</TableCell>
+                      <TableCell>{row.timeString}</TableCell>
                     </TableRow>
                   );
                 })}

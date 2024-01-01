@@ -7,6 +7,7 @@ export interface CampaignContractUI {
 export interface HistoryContractUI {
   value: number;
   time: Date;
+  timeString: string;
   campaignId: string;
   userId: string;
 }

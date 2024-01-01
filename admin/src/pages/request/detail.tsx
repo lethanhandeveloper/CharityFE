@@ -11,6 +11,7 @@ import React from 'react';
 import PersonalTab from './component/personal';
 import CommitTab from './component/commit';
 import ConfirmDialog from '@components/ConfirmDialog';
+import { BoxRow } from '@common/Box';
 
 interface DetailRequestProps {
   data: RequestUI;
@@ -58,18 +59,20 @@ const DetailRequest = (props: DetailRequestProps) => {
               </Button>
             </Grid>
             <Grid item>
-              <ConfirmDialog
-                buttonText='Duyệt'
-                message='Duyệt đơn đăng ký'
-                title='Xác nhận duyệt đơn đăng ký'
-                onSucess={onSave}
-              />
-              <ConfirmDialog
-                buttonText='Từ chối'
-                message='Xác nhận từ chối đơn đăng ký'
-                title='Xác nhận từ chối'
-                onSucess={onSave}
-              />
+              <BoxRow gap={2}>
+                <ConfirmDialog
+                  buttonText='Duyệt'
+                  message='Duyệt đơn đăng ký'
+                  title='Xác nhận duyệt đơn đăng ký'
+                  onSucess={onSave}
+                />
+                <ConfirmDialog
+                  buttonText='Từ chối'
+                  message='Xác nhận từ chối đơn đăng ký'
+                  title='Xác nhận từ chối'
+                  onSucess={onSave}
+                />
+              </BoxRow>
             </Grid>
           </Grid>
         }

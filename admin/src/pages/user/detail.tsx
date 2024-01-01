@@ -1,4 +1,5 @@
 import TableRender from '@components/Table/tableCapaign';
+import TableRenderHistoryItem from '@components/Table/tableItem';
 import TypographyLabel from '@components/Typography';
 import { UserUI } from '@models/user';
 import { Avatar, Box, Grid, Tab, Tabs, TextField } from '@mui/material';
@@ -30,7 +31,7 @@ const DetailUser = (props: DetailUserProps) => {
             {...a11yProps(1)}
           />
           <Tab
-            label='Biểu đồ'
+            label='Lịch sử ủng hộ vật phẩm'
             {...a11yProps(2)}
           />
         </Tabs>
@@ -135,6 +136,15 @@ const DetailUser = (props: DetailUserProps) => {
         index={1}
       >
         <TableRender
+          isCampaign={false}
+          id={data.id}
+        />
+      </CustomTabPanel>
+      <CustomTabPanel
+        value={value}
+        index={2}
+      >
+        <TableRenderHistoryItem
           isCampaign={false}
           id={data.id}
         />

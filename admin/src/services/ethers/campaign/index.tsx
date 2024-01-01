@@ -125,7 +125,7 @@ const getHistoryByUser = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transactionContract.abi, signer);
     const tx = await contract.getDonateByUser(id);
 
     return tx;
@@ -179,7 +179,7 @@ const getItemByUser = async (id: string) => {
     const signer = provider.getSigner();
 
     const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
-    const tx = await contract.getTransactionHistoryByCampaignId(id);
+    const tx = await contract.getTransactionHistoryByCreatorId(id);
     return tx;
   } catch (error) {
     return [];

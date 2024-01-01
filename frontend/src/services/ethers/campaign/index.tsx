@@ -92,6 +92,7 @@ const addRequest = async (
   address: string,
   createdId: string,
   message: string,
+  fileUrl: string,
 ) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
@@ -107,6 +108,7 @@ const addRequest = async (
       getCurrentDate(),
       address,
       message,
+      fileUrl,
     );
     await tx.wait();
     return true;

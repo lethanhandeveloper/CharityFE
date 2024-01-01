@@ -4,16 +4,10 @@ import { Link } from 'react-router-dom';
 import { SearchTwoTone } from '@mui/icons-material';
 import {
   Box,
-  Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Grid,
   InputAdornment,
   MenuItem,
@@ -25,7 +19,7 @@ import serviceAPI from '@services/api';
 import { mapCampainUIs } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import { SimpleValueKey } from '@models/meta';
-import { ButtonCancel, ButtonConfirm, ButtonStyle1 } from '@common/Button';
+import { ButtonStyle1 } from '@common/Button';
 import ProgressCustom from '@common/Progess';
 
 import TypographyTitle from '@common/Typography';
@@ -36,6 +30,7 @@ import { ethers } from 'ethers';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import EmptyOverlayGrid from '@components/Empty';
+import FormConfirm from './dialog';
 export interface SearchStructure {
   id: string;
   categoryId: string;
@@ -49,13 +44,9 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
-  const [transfer, setTransfer] = useState({
-    number: 0,
-    message: '',
-    id: '',
-  });
+
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
     id: id,
     categoryId: '',
@@ -126,6 +117,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
         address,
         localStorage.getItem('userId') || 'anonymous',
         'Rút tiền trị bệnh',
+        ' url',
       );
       if (check) {
         dispatch(
@@ -256,20 +248,12 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
         {data.status === 'DRAFT' ? (
           <LinkCustom to={`/campaign/edit/${data.id}`}>Chỉnh sửa</LinkCustom>
         ) : (
-          <>
-            <Button onClick={() => withDraw(data.id)}>Rút tiền</Button>
-            <Button
-              onClick={() => {
-                setTransfer({
-                  id: data.id,
-                  message: '',
-                  number: 0,
-                });
-              }}
-            >
-              Tất toán
-            </Button>
-          </>
+          <FormConfirm
+            onSave={() => withDraw(data.id)}
+            buttonText='Rút tiền'
+            message='Mô tả yêu cầu rút tiền, lý do đính kèm file ảnh xác thực hoặc giấy tờ có liên quan'
+            title='Yêu cầu rút tiền'
+          />
         )}
       </CardActions>
     </Card>
@@ -279,53 +263,6 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
     <React.Fragment>
       {campainList.length > 0 ? (
         <>
-          {' '}
-          {openDialog && (
-            <Dialog
-              open={openDialog}
-              onClose={() => {
-                setOpenDialog(false);
-              }}
-              aria-labelledby='alert-dialog-title'
-              aria-describedby='alert-dialog-description'
-            >
-              <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
-              <DialogContent>
-                <DialogContentText id='alert-dialog-description'>
-                  <TextField
-                    type='number'
-                    onChange={(e) => {
-                      setTransfer({ ...transfer, number: parseInt(e.target.value) });
-                    }}
-                  />
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <ButtonConfirm
-                  onClick={() => {
-                    campaign.addRequest(
-                      transfer.id,
-                      transfer.number,
-                      '0x7DeF04705Ee2120B7c9f37AA7853879D49b965dc',
-                      localStorage.getItem('userId') || 'anonymous',
-                      transfer.message,
-                    );
-                    setOpenDialog(false);
-                  }}
-                >
-                  Chuyển
-                </ButtonConfirm>
-                <ButtonCancel
-                  onClick={() => {
-                    setOpenDialog(false);
-                  }}
-                  autoFocus
-                >
-                  Đóng
-                </ButtonCancel>
-              </DialogActions>
-            </Dialog>
-          )}
           <Grid container>
             <Grid
               item

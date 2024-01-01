@@ -12,6 +12,7 @@ import {
 import ShoppingBagTwoToneIcon from '@mui/icons-material/ShoppingBagTwoTone';
 
 import TableRender from '@components/Table';
+import React from 'react';
 
 const AvatarPrimary = styled(Avatar)(
   ({ theme }) => `
@@ -24,7 +25,7 @@ const AvatarPrimary = styled(Avatar)(
 
 function RecentActivity({ id }: { id: string }) {
   const theme = useTheme();
-
+  const [data, setCount] = React.useState<{ total: number; value: number }>({ total: 0, value: 0 });
   return (
     <Card>
       <CardHeader title='Ủng hộ gần đây' />
@@ -49,28 +50,29 @@ function RecentActivity({ id }: { id: string }) {
             <Box pr={8}>
               <Typography
                 gutterBottom
-                variant='caption'
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
                 Tổng tiền quyên góp
               </Typography>
-              <Typography variant='h2'>485</Typography>
+              <Typography variant='h2'>{data.value}</Typography>
             </Box>
             <Box>
               <Typography
                 gutterBottom
-                variant='caption'
                 sx={{ fontSize: `${theme.typography.pxToRem(16)}` }}
               >
                 Số lần quyên góp
               </Typography>
-              <Typography variant='h2'>8</Typography>
+              <Typography variant='h2'>{data.total}</Typography>
             </Box>
           </Box>
         </Box>
       </Box>
       <Divider />
       <TableRender
+        setCount={(a, b) => {
+          setCount({ total: a, value: b });
+        }}
         id={id}
         isCampaign={false}
       />
