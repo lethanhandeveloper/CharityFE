@@ -37,6 +37,10 @@ const DonatePage = () => {
   const [number, setNumber] = useState<number>(0);
   const [detail, setDetail] = useState<CampainUI>();
   const [campaignContract, setCampaign] = useState<CampaignContractUI>();
+  const [countDonate, setCoutDonate] = useState<{ countUser: number; countDonate: number }>({
+    countUser: 0,
+    countDonate: 0,
+  });
   const dispatch = useAppDispatch();
   useEffect(() => {
     const initData = async () => {
@@ -57,7 +61,21 @@ const DonatePage = () => {
     };
     if (id) initData();
   }, [id]);
-
+  const handleDonate = async () => {
+    setOpenDialog(false);
+    if (detail) {
+      const check = await campaign.donateCampaign(
+        detail?.id,
+        number,
+        localStorage.getItem('userId') || 'anonymous',
+      );
+      if (check) {
+        dispatch(setInfoAlert({ open: true, title: 'Giao dịch thành công', type: 'success' }));
+      } else {
+        dispatch(setInfoAlert({ open: true, title: 'Giao dịch thất bại', type: 'error' }));
+      }
+    }
+  };
   return (
     <React.Fragment>
       {openDialog && (
@@ -95,20 +113,7 @@ const DonatePage = () => {
               >
                 Đóng
               </ButtonCancel>
-              <ButtonConfirm
-                onClick={() => {
-                  if (detail) {
-                    campaign.donateCampaign(
-                      detail?.id,
-                      number,
-                      localStorage.getItem('userId') || 'anonymous',
-                    );
-                  }
-                  setOpenDialog(false);
-                }}
-              >
-                Chuyển
-              </ButtonConfirm>
+              <ButtonConfirm onClick={handleDonate}>Chuyển</ButtonConfirm>
             </Box>
           </DialogActions>
         </Dialog>
@@ -167,9 +172,10 @@ const DonatePage = () => {
               flexDirection={'row'}
               justifyContent={'space-between'}
             >
-              Đã đạt được <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
+              Đã đạt được <span style={{ color: '#f54a00' }}>{campaignContract?.donateValue}</span>.
+              Số dư còn lại{' '}
+              <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
               <b>
-                {' '}
                 {calculatePercent(
                   campaignContract?.currentValue || 0,
                   campaignContract?.targetValue || 1,
@@ -206,7 +212,13 @@ const DonatePage = () => {
                 fontSize={'13px'}
                 color={'#999'}
               >
-                {campaignContract?.donatorCount} người đã ủng hộ
+                {countDonate.countUser} người đã ủng hộ
+              </Typography>
+              <Typography
+                fontSize={'13px'}
+                color={'#999'}
+              >
+                {countDonate.countDonate} lượt ủng hộ
               </Typography>
             </Box>
 
@@ -252,6 +264,9 @@ const DonatePage = () => {
             <TableRender
               id={id}
               isCampaign={true}
+              setCount={(a, b) => {
+                setCoutDonate({ countDonate: b, countUser: a });
+              }}
             />
           )}
         </Grid>

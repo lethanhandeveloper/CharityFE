@@ -40,7 +40,15 @@ const columns: readonly Column[] = [
   },
 ];
 
-export default function TableRender({ id, isCampaign }: { id: string; isCampaign: boolean }) {
+export default function TableRender({
+  id,
+  isCampaign,
+  setCount,
+}: {
+  id: string;
+  isCampaign: boolean;
+  setCount?: (a: number, b: number) => void;
+}) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [list, setList] = React.useState<HistoryContractUI[]>();
@@ -60,6 +68,11 @@ export default function TableRender({ id, isCampaign }: { id: string; isCampaign
         history = await campaign.getHistoryByCampaign(id);
       } else {
         history = await campaign.getHistoryByUser(id);
+      }
+      if (setCount) {
+        const uniqueValues = new Set(history.map((item: any) => item.donatorId));
+        const count = Array.from(uniqueValues).length;
+        setCount(count, history.length);
       }
       setList(mapHistoryContracts(history));
       const users: UserUI[] = [];

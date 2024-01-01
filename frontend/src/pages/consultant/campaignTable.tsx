@@ -117,13 +117,23 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const withDraw = async (id: string) => {
     try {
       await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-
       const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-
       const signer = provider.getSigner();
-
       const address = await signer.getAddress();
-      campaign.addRequest(id, 50, address, localStorage.getItem('userId') || 'anonymous', 'xzcxzc');
+      const check = await campaign.addRequest(
+        id,
+        500,
+        address,
+        localStorage.getItem('userId') || 'anonymous',
+        'Rút tiền trị bệnh',
+      );
+      if (check) {
+        dispatch(
+          setInfoAlert({ open: true, title: 'Yêu cầu rút tiền đã được gửi', type: 'success' }),
+        );
+      } else {
+        dispatch(setInfoAlert({ open: true, title: 'Không thể yêu cầu bây giờ', type: 'error' }));
+      }
     } catch (error) {
       dispatch(setInfoAlert({ open: true, title: 'Không thể kết nối bây giờ', type: 'error' }));
     }

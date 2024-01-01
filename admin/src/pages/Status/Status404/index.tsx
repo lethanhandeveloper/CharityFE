@@ -75,7 +75,7 @@ function Status404() {
               >
                 <OutlinedInputWrapper
                   type='text'
-                  placeholder='Search terms here...'
+                  placeholder='Tìm kiếm thông tin...'
                   endAdornment={
                     <InputAdornment position='end'>
                       <ButtonSearch

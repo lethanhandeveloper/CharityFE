@@ -32,35 +32,42 @@ const setAddress = async (address: string) => {
   }
 };
 const setHistoryAddress = async () => {
-  const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-  await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-  const signer = provider.getSigner();
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
 
-  //campaign
-  const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
-  let tx = await contract.settransactionHistoryContractAddress(campaignAddress.historyAddress);
-  await tx.wait();
-  tx = await contract.setAdminContractAddress(campaignAddress.adminAddress);
-  await tx.wait();
-  tx = await contract.setwithdrawRequestContractAddress(campaignAddress.withdrawAddress);
-  await tx.wait();
+    //campaign
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    let tx = await contract.settransactionHistoryContractAddress(campaignAddress.historyAddress);
+    await tx.wait();
+    tx = await contract.setAdminContractAddress(campaignAddress.adminAddress);
+    await tx.wait();
+    tx = await contract.setwithdrawRequestContractAddress(campaignAddress.withdrawAddress);
+    await tx.wait();
 
-  //history
-  const contractHistory = new Contract(
-    campaignAddress.historyAddress,
-    transactionContract.abi,
-    signer,
-  );
-  tx = await contractHistory.setCampaignAddress(campaignAddress.contractAddress);
-  //item
-  const contractItem = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
-  tx = await contractItem.setAdminContractAddress(campaignAddress.adminAddress);
-  await tx.wait();
-  //withDraw
-  const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
-  tx = await contractWith.setAdminContractAddress(campaignAddress.adminAddress);
-
-  return true;
+    //history
+    const contractHistory = new Contract(
+      campaignAddress.historyAddress,
+      transactionContract.abi,
+      signer,
+    );
+    tx = await contractHistory.setCampaignAddress(campaignAddress.contractAddress);
+    await tx.wait();
+    //item
+    const contractItem = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+    tx = await contractItem.setAdminContractAddress(campaignAddress.adminAddress);
+    await tx.wait();
+    //withDraw
+    const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    tx = await contractWith.setAdminContractAddress(campaignAddress.adminAddress);
+    await tx.wait();
+    tx = await contractWith.setContractAddress(campaignAddress.contractAddress);
+    await tx.wait();
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 const addNew = async (data: CampainUI) => {
@@ -69,18 +76,14 @@ const addNew = async (data: CampainUI) => {
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
-    const id = data.id;
-    const creatorUserName = data.creatorId;
-    const title = data.title;
-    const currentValue = 0;
-    const targetValue = data.targetValue;
     const tx = await contract.addNewCampaign(
-      id,
-      creatorUserName,
-      title,
-      currentValue,
-      targetValue,
+      data.id,
+      data.creatorId,
+      data.title,
+      0,
+      data.targetValue,
       getCurrentDate(),
+      data.addressCreator,
     );
     await tx.wait();
     return true;
@@ -95,8 +98,7 @@ const addItem = async (campaignId: string, creatorId: string, message: string) =
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
-
-    const tx = await contract.addNewItem(campaignId, creatorId, message, getCurrentDate());
+    const tx = await contract.addNewItem(campaignId, message, creatorId, getCurrentDate());
     await tx.wait();
     return true;
   } catch (err) {
@@ -128,7 +130,7 @@ const getHistoryByUser = async (id: string) => {
 
     return tx;
   } catch (error) {
-    return {};
+    return [];
   }
 };
 
@@ -141,16 +143,21 @@ const getHistoryByCampaign = async (id: string) => {
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
-    return {};
+    return [];
   }
 };
 const refund = async (id: string) => {
-  const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-  await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-  const signer = provider.getSigner();
-  const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
-  const tx = await contract.refundAllByCampaignId(id);
-  return tx;
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const tx = await contract.refundAllByCampaignId(id, getCurrentDate());
+    await tx.wait();
+    return true;
+  } catch (err) {
+    return false;
+  }
 };
 
 const getItemByCampaign = async (id: string) => {
@@ -162,7 +169,7 @@ const getItemByCampaign = async (id: string) => {
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
-    return {};
+    return [];
   }
 };
 const getItemByUser = async (id: string) => {
@@ -175,7 +182,7 @@ const getItemByUser = async (id: string) => {
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
-    return {};
+    return [];
   }
 };
 
@@ -188,19 +195,19 @@ const addRequest = async (id: string, value: number, address: string) => {
     const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
     const tx = await contract.addNewWithdrawRequest(id, valueInWei, address);
     await tx.wait();
+    return true;
   } catch (error) {
-    return {};
+    return false;
   }
 };
 
-const approveRequest = async (id: string) => {
+const approveRequest = async (id: string, status: string, message: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-
     const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
-    const tx = await contract.approveWithdrawRequest(id);
+    const tx = await contract.approveWithdrawRequest(id, status, message, getCurrentDate());
     await tx.wait();
     return true;
   } catch (error) {
@@ -217,7 +224,7 @@ const getRequestByCampaign = async (id: string) => {
     const tx = await contract.getWithdrawRequestByCampaignId(id);
     return tx;
   } catch (error) {
-    return {};
+    return [];
   }
 };
 const withDraw = async (id: string) => {

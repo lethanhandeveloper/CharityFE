@@ -33,6 +33,7 @@ export interface Column {
   title: string;
   nameField: string;
   isShowImage?: boolean;
+  isDate?: boolean;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -87,7 +88,15 @@ interface EnhancedTableHeaderProps {
 
 function EnhancedTableHead(props: EnhancedTableHeaderProps) {
   return (
-    <TableHead sx={{ background: 'rgb(243, 246, 249)' }}>
+    <TableHead
+      sx={{
+        background: 'rgb(243, 246, 249)',
+        fontSize: '16px',
+        fontWeight: 600,
+        paddingTop: '8px',
+        paddingBottom: '8px',
+      }}
+    >
       <TableRow>
         {props.columns.map((headCell) => (
           <TableCell
@@ -99,7 +108,7 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
             <TableSortLabel
               // active={true}
               // direction={'asc'}
-              sx={{ textTransform: 'none', fontSize: '20px' }}
+              sx={{ textTransform: 'none', fontSize: '16px' }}
             >
               {headCell.title}
             </TableSortLabel>
@@ -327,7 +336,11 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                               </Box>
                             ) : (
                               <Typography marginLeft={'10px'}>
-                                {handleGetData(row, item.nameField)}
+                                {item.isDate
+                                  ? new Date(handleGetData(row, item.nameField)).toLocaleDateString(
+                                      'en-US',
+                                    )
+                                  : handleGetData(row, item.nameField)}
                               </Typography>
                             )}
                           </>

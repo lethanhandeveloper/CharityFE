@@ -107,9 +107,9 @@ export default function TableRenderHistoryItem({
             </InputAdornment>
           ),
         }}
-        placeholder='Search terms here...'
+        placeholder='Tìm kiếm thông tin...'
         fullWidth
-        label='Search'
+        size='small'
       />
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table

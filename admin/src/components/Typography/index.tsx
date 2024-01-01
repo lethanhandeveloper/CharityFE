@@ -6,6 +6,8 @@ const TypographyLabel = ({ children }: { children: React.ReactNode }) => {
     <Typography
       variant='subtitle2'
       gutterBottom
+      fontSize={'14px'}
+      fontWeight={'600'}
       color={'black'}
     >
       {children}

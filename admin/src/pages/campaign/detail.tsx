@@ -9,11 +9,11 @@ import campaign from '@services/ethers/campaign';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import React, { useState } from 'react';
-import { LineChart } from '@mui/x-charts/LineChart';
 import TableRender from '@components/Table/tableCapaign';
 import ConfirmDialog from '@components/ConfirmDialog';
 import TableRenderHistoryItem from '@components/Table/tableItem';
 import OppositeContentTimeline from '@components/TimeLine';
+import TypographyLabel from '@components/Typography';
 interface DetailCampaignProps {
   data: CampainUI;
   openDetail: boolean;
@@ -84,19 +84,24 @@ const DetailCampaign = (props: DetailCampaignProps) => {
       dispatch(setInfoAlert({ title: 'Không thể duyệt chiến dịch!', open: true, type: 'error' }));
     }
   };
-  const onTransfer = async () => {
-    try {
-      const reuslt = await campaign.getRequestByCampaign(detail.id);
-      await campaign.approveRequest(reuslt[0].id._hex);
-      await campaign.withDraw(reuslt[0].id._hex);
-    } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể thực hiện rút tiền!', open: true, type: 'error' }));
-    }
-  };
+
   const onReject = async () => {
     try {
       const response = await serviceAPI.campain.updateStatus(detail.id, 'REJECTED');
       if (response.status === 200) {
+        dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
+        onClose();
+        loadTable();
+      }
+    } catch (error) {
+      dispatch(setInfoAlert({ title: 'Hệ thống lỗi!', open: true, type: 'error' }));
+    }
+  };
+  const onCancel = async () => {
+    try {
+      const response = await serviceAPI.campain.updateStatus(detail.id, 'CANCEL');
+      if (response.status === 200) {
+        campaign.refund(detail.id);
         dispatch(setInfoAlert({ title: 'Cập nhật thành công!', open: true, type: 'success' }));
         onClose();
         loadTable();
@@ -131,18 +136,10 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               {(detail.status === 'START' || detail.status === 'END') && (
                 <>
                   <ConfirmDialog
-                    buttonText='Giải ngân'
-                    message='Xác nhận giải nhân chiến dịch'
-                    onSucess={onTransfer}
-                    title='Xác nhận giải ngân'
-                  />
-                  <ConfirmDialog
                     buttonText='Hoàn tiền'
-                    message='Xác nhận từ chối đơn đăng ký'
-                    title='Xác nhận từ chối'
-                    onSucess={() => {
-                      campaign.refund(detail.id);
-                    }}
+                    message='Xác nhận chiến dịch vi phạm tiêu chuẩn/thông tin không đúng thực tế'
+                    title='Xác nhận hủy chuyển dịch'
+                    onSucess={onCancel}
                   />
                 </>
               )}
@@ -183,13 +180,12 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='File xác thực'
                 {...a11yProps(1)}
               />
-
               <Tab
-                label='Biểu đồ'
+                label='Lịch sử rút'
                 {...a11yProps(2)}
               />
               <Tab
-                label='Lịch sử giao dịch'
+                label='Lịch sử quyên góp'
                 {...a11yProps(3)}
               />
               <Tab
@@ -208,7 +204,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
           >
             <Grid
               container
-              gap={3}
+              spacing={1}
             >
               <Grid
                 item
@@ -231,9 +227,9 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 item
                 xs={12}
               >
+                <TypographyLabel>Tiêu đề</TypographyLabel>
                 <TextField
                   value={detail.title}
-                  label='Tiêu đề'
                   fullWidth
                   name='title'
                   size='small'
@@ -244,9 +240,9 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 item
                 xs={12}
               >
+                <TypographyLabel>Mô tả</TypographyLabel>
                 <TextField
                   value={detail.description}
-                  label='Mô tả'
                   fullWidth
                   name='description'
                   size='small'
@@ -255,26 +251,26 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               </Grid>
               <Grid
                 item
-                xs={12}
+                xs={6}
               >
+                <TypographyLabel>Người tạo</TypographyLabel>
                 <TextField
                   value={detail.creatorId}
-                  label='Người tạo'
                   fullWidth
-                  name='description'
+                  name='creatorId'
                   size='small'
                   onChange={handleChangeData}
                 />
               </Grid>
               <Grid
                 item
-                xs={12}
+                xs={6}
               >
+                <TypographyLabel>Danh mục</TypographyLabel>
                 <TextField
                   value={detail.categoryId}
-                  label='Danh mục'
                   fullWidth
-                  name='description'
+                  name='categoryId'
                   size='small'
                   onChange={handleChangeData}
                 />
@@ -283,11 +279,11 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 item
                 xs={12}
               >
+                <TypographyLabel>Ngày kết thúc</TypographyLabel>
                 <TextField
                   value={detail.endDate.toString()}
-                  label='Ngày kết thúc'
                   fullWidth
-                  name='description'
+                  name='endDate'
                   size='small'
                   onChange={handleChangeData}
                 />
@@ -296,9 +292,10 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 item
                 xs={12}
               >
+                <TypographyLabel>Mục tiêu</TypographyLabel>
                 <TextField
                   value={detail.targetValue}
-                  label='Mục tiêu'
+                  name='targetValue'
                   fullWidth
                   size='small'
                   onChange={handleChangeData}
@@ -323,16 +320,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
             value={value}
             index={2}
           >
-            <LineChart
-              xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
-              series={[
-                {
-                  data: [2, 5.5, 2, 8.5, 1.5, 5],
-                },
-              ]}
-              width={500}
-              height={300}
-            />
+            <OppositeContentTimeline campaignId={detail.id} />
           </CustomTabPanel>
           <CustomTabPanel
             value={value}
@@ -355,9 +343,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
           <CustomTabPanel
             value={value}
             index={4}
-          >
-            <OppositeContentTimeline campaignId={detail.id} />
-          </CustomTabPanel>
+          ></CustomTabPanel>
         </Box>
       </PanelDetail>
     </>

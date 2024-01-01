@@ -16,7 +16,7 @@ interface CampaignTableProps {
 
 const CampaignTable = (props: CampaignTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  console.log(props);
+
   const [data, setData] = useState<CampainUI>();
 
   const columns: Column[] = [
@@ -24,6 +24,23 @@ const CampaignTable = (props: CampaignTableProps) => {
       title: 'Tiêu đề',
       nameField: 'title',
       isShowImage: true,
+    },
+    {
+      title: 'Loại',
+      nameField: 'itemTypeId.name',
+    },
+    {
+      title: 'Danh mục',
+      nameField: 'categoryId.name',
+    },
+    {
+      title: 'Người tạo',
+      nameField: 'creatorId.email',
+    },
+    {
+      title: 'Ngày kết thúc',
+      nameField: 'endDate',
+      isDate: true,
     },
   ];
 
@@ -56,7 +73,7 @@ const CampaignTable = (props: CampaignTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        api={apiEndPoint.campain.list}
+        api={`${apiEndPoint.campain.list}/${props.status}`}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
       />

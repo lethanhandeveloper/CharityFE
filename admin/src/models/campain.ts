@@ -1,4 +1,4 @@
-export type CampaignStatus = 'DRAFT' | 'START' | 'END' | 'REJECTED';
+export type CampaignStatus = 'DRAFT' | 'START' | 'END' | 'REJECTED' | 'CANCEL';
 export interface Campain {
   _id: string;
   creatorId: string;
@@ -26,4 +26,5 @@ export interface CampainUI {
   countdown: number;
   fileUrl: string;
   status: string;
+  addressCreator: string;
 }

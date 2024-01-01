@@ -101,16 +101,17 @@ const addRequest = async (
     const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
     const tx = await contract.addNewWithdrawRequest(
       id,
-      valueInWei,
-      address,
-      getCurrentDate(),
       createdId,
+      valueInWei,
+      'PENDING',
+      getCurrentDate(),
+      address,
       message,
-      'test',
     );
     await tx.wait();
+    return true;
   } catch (error) {
-    return {};
+    return false;
   }
 };
 

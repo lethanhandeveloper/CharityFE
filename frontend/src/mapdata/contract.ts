@@ -15,7 +15,7 @@ const convertDate = (inputString: string): Date => {
 export const mapCampainContract = (data: any): CampaignContractUI => ({
   id: data.id,
   currentValue: parseFloat(ethers.utils.formatEther(BigNumber.from(data.currentValue).toString())),
-  donatorCount: parseFloat(ethers.utils.formatEther(BigNumber.from(data.donateCount).toNumber())),
+  donateValue: parseFloat(ethers.utils.formatEther(BigNumber.from(data.donateValue).toString())),
   targetValue: parseFloat(data.targetValue),
 });
 export const mapHistoryContract = (data: any): HistoryContractUI => ({

@@ -1,7 +1,7 @@
 export interface CampaignContractUI {
   id: string;
   currentValue: number;
-  donatorCount: number;
+  donateValue: number;
   targetValue: number;
 }
 export interface HistoryContractUI {
