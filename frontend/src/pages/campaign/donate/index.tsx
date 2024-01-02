@@ -166,23 +166,35 @@ const DonatePage = () => {
             </Box>
 
             <Divider style={{ marginTop: '5px', marginBottom: '5px' }} />
-            <Typography
-              fontSize={'18px'}
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'space-between'}
-            >
-              Đã đạt được <span style={{ color: '#f54a00' }}>{campaignContract?.donateValue}</span>.
-              Số dư còn lại{' '}
-              <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
-              <b>
-                {calculatePercent(
-                  campaignContract?.currentValue || 0,
-                  campaignContract?.targetValue || 1,
-                )}
-                %
-              </b>
-            </Typography>
+            {campaignContract?.donateValue || 0 > 0 ? (
+              <Typography
+                fontSize={'18px'}
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+              >
+                Đã đạt được{' '}
+                <span style={{ color: '#f54a00' }}>{campaignContract?.donateValue}</span>. Số dư còn
+                lại <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
+                <b>
+                  {calculatePercent(
+                    campaignContract?.currentValue || 0,
+                    campaignContract?.targetValue || 1,
+                  )}
+                  %
+                </b>
+              </Typography>
+            ) : (
+              <Typography
+                fontSize={'18px'}
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'space-between'}
+              >
+                Hãy trở thành người ủng hộ chiến dịch đầu tiên
+              </Typography>
+            )}
+
             <ProgressCustom
               variant='determinate'
               sx={{ height: '10px', borderRadius: '10px' }}

@@ -44,7 +44,7 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
-
+  const [dataRequest, setData] = useState<any>();
   const dispatch = useAppDispatch();
 
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
@@ -172,7 +172,15 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
             fontWeight: 'bold',
           }}
         >
-          <Link to={`/campaign/donate/${data.id}`}>{data.title}</Link>
+          <Link
+            style={{
+              color: 'black',
+              textDecoration: 'none',
+            }}
+            to={`/campaign/donate/${data.id}`}
+          >
+            {data.title}
+          </Link>
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>
@@ -253,6 +261,8 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
             buttonText='Rút tiền'
             message='Mô tả yêu cầu rút tiền, lý do đính kèm file ảnh xác thực hoặc giấy tờ có liên quan'
             title='Yêu cầu rút tiền'
+            setData={setData}
+            data={dataRequest}
           />
         )}
       </CardActions>

@@ -10,7 +10,12 @@ const CommonForm = (props: CommonFormProps) => {
   const [helperText, setHelperText] = useState<string>('');
   const checkLinkExistence = async (url: string) => {
     try {
-      const response = await fetch(url, { method: 'HEAD' });
+      const response = await fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(response.status, response);
       if (response.ok) {
         setHelperText('');
       } else {

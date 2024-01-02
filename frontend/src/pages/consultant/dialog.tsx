@@ -6,17 +6,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Upload from '@services/firebase';
 
 export default function FormConfirm({
   title,
   message,
   onSave,
   buttonText,
+  setData,
+  data,
 }: {
   title: string;
   message: string;
   onSave: () => void;
   buttonText: string;
+  setData: (data: any) => void;
+  data: any;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -43,10 +48,31 @@ export default function FormConfirm({
           <TextField
             autoFocus
             margin='dense'
-            id='name'
-            type='email'
+            name='message'
+            onChange={(e) => {
+              setData({ ...data, message: e.target.value });
+            }}
             fullWidth
             variant='standard'
+          />
+          <DialogContentText>Số tiền muốn rút:</DialogContentText>
+          <TextField
+            autoFocus
+            type='number'
+            margin='dense'
+            onChange={(e) => {
+              setData({ ...data, number: e.target.value });
+            }}
+            fullWidth
+            variant='standard'
+          />
+          <DialogContentText>File xác thực</DialogContentText>
+          <Upload
+            folder='file'
+            setUrl={(url) => {
+              setData({ ...data, url });
+            }}
+            type='application/pdf'
           />
         </DialogContent>
         <DialogActions>

@@ -13,7 +13,15 @@ const OrginazationForm = (props: OrginazationFormProps) => {
   const [helperText, setHelperText] = useState<string>('');
   const checkLinkExistence = async (url: string) => {
     try {
-      const response = await fetch(url, { method: 'HEAD' });
+      const response = await fetch(url, {
+        method: 'HEAD',
+        mode: 'no-cors', // Ensure the request is treated as a CORS request
+        headers: {
+          'Content-Type': 'application/json',
+          // You can add other headers as needed
+        },
+      });
+      console.log(response);
       if (response.ok) {
         setHelperText('');
       } else {

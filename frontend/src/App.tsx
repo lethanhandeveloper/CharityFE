@@ -15,6 +15,7 @@ import React from 'react';
 import { buildAbilityFor } from '@caslConfig/ability';
 import { AbilityContext } from '@caslConfig/can';
 import AlertSnackbar from '@components/SnackBar';
+import FacebookChatbox from '@components/ShareFB/messager';
 
 function App() {
   const content = useRoutes(routers);
@@ -36,6 +37,7 @@ function App() {
           <JWTProvider>
             <LocalizationProvider dateAdapter={AdapterDateFns as any}>
               <CssBaseline />
+              <FacebookChatbox pageId='' />
               <AbilityContext.Provider value={ability}>{content}</AbilityContext.Provider>
               <AlertSnackbar />
             </LocalizationProvider>

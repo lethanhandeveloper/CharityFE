@@ -1,9 +1,9 @@
-import { Campain, CampainUI } from 'models/campain';
-export const mapCampain = (data: Campain): CampainUI => ({
+import { CampainUI } from 'models/campain';
+export const mapCampain = (data: any): CampainUI => ({
   id: data._id,
   categoryId: data.categoryId,
   countdown: 0,
-  creatorId: data.creatorId,
+  creatorId: data.creatorId?.userName || data.creatorId,
   description: data.description,
   endDate: new Date(data.endDate),
   itemTypeId: data.itemTypeId,
