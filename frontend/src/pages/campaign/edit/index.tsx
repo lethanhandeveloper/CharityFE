@@ -123,6 +123,7 @@ const CampaignEditPage = () => {
       <Grid
         container
         spacing={3}
+        sx={{ padding: '20px 100px 20px 100px ' }}
       >
         <Grid
           item

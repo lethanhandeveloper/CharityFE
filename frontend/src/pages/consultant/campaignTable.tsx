@@ -1,36 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { SearchTwoTone } from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Grid, InputAdornment, MenuItem, TextField } from '@mui/material';
 
 import serviceAPI from '@services/api';
 import { mapCampainUIs } from '@mapdata/campain';
 import { CampainUI } from '@models/campain';
 import { SimpleValueKey } from '@models/meta';
 import { ButtonStyle1 } from '@common/Button';
-import ProgressCustom from '@common/Progess';
 
 import TypographyTitle from '@common/Typography';
-import { LinkCustom } from '@common/Link';
-import campaign from '@services/ethers/campaign';
-import ExtendedWindow from '@models/ether';
-import { ethers } from 'ethers';
-import { useAppDispatch } from '@store/hook';
-import { setInfoAlert } from '@store/redux/alert';
+
 import EmptyOverlayGrid from '@components/Empty';
-import FormConfirm from './dialog';
+
+import CardCampaign from '@components/Card/cardCampaign';
+
 export interface SearchStructure {
   id: string;
   categoryId: string;
@@ -44,8 +28,6 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
-  const [dataRequest, setData] = useState<any>();
-  const dispatch = useAppDispatch();
 
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
     id: id,
@@ -55,10 +37,6 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
     page: 1,
     no_item_per_page: 5,
   });
-
-  const calculatePercent = (current: number, target: number): number => {
-    return Number(((current / target) * 100).toFixed(2));
-  };
 
   const initData = async () => {
     let dataMapUI;
@@ -81,10 +59,6 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
     setSearchConfig({ ...searchConfig, [e.target.name]: e.target.value });
   };
 
-  const calculateDayCountDown = (endDate: Date): number => {
-    return Math.ceil((new Date(endDate).getTime() - new Date().getTime()) / 1000 / 60 / 24);
-  };
-
   useEffect(() => {
     initData();
   }, [searchConfig]);
@@ -104,170 +78,6 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
     };
     initProvince();
   }, []);
-
-  const withDraw = async (id: string) => {
-    try {
-      await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-      const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      const check = await campaign.addRequest(
-        id,
-        500,
-        address,
-        localStorage.getItem('userId') || 'anonymous',
-        'Rút tiền trị bệnh',
-        ' url',
-      );
-      if (check) {
-        dispatch(
-          setInfoAlert({ open: true, title: 'Yêu cầu rút tiền đã được gửi', type: 'success' }),
-        );
-      } else {
-        dispatch(setInfoAlert({ open: true, title: 'Không thể yêu cầu bây giờ', type: 'error' }));
-      }
-    } catch (error) {
-      dispatch(setInfoAlert({ open: true, title: 'Không thể kết nối bây giờ', type: 'error' }));
-    }
-  };
-
-  const renderCard = (data: CampainUI) => (
-    <Card
-      variant='outlined'
-      sx={{
-        margin: '10px 10px 20px',
-        boxShadow: '0 8px 24px hsla(210,8%,62%,.2)',
-        borderRadius: '10px',
-      }}
-    >
-      <CardMedia
-        sx={{ height: 200 }}
-        image={data.thumbnail}
-      />
-      <CardContent>
-        <Typography
-          sx={{
-            background: '#f4f4f4',
-            padding: '3px 15px',
-            position: 'absolute',
-            borderRadius: '12px',
-            top: '10px',
-            margin: '5px 0 0 5px',
-          }}
-          fontSize={'13px'}
-        >
-          Còn {calculateDayCountDown(data.endDate)} ngày
-        </Typography>
-
-        <Typography
-          sx={{
-            fontSize: '20px',
-            lineHeight: '22px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            WebkitLineClamp: 2,
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            textAlign: 'start',
-            fontWeight: 'bold',
-          }}
-        >
-          <Link
-            style={{
-              color: 'black',
-              textDecoration: 'none',
-            }}
-            to={`/campaign/donate/${data.id}`}
-          >
-            {data.title}
-          </Link>
-        </Typography>
-
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', marginTop: '10px' }}>
-          <Typography
-            fontSize={16}
-            variant='body2'
-            color='text.secondary'
-          >
-            Tạo bởi
-          </Typography>
-          <Typography
-            fontSize={14}
-            color='#f54a00'
-            fontWeight='bold'
-          >
-            {data.creatorId}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            alignItems: 'center',
-            marginTop: '30px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-            <Typography
-              fontSize={16}
-              color='#f54a00'
-              fontWeight='bold'
-            >
-              {data.targetValue?.toLocaleString()} VNĐ
-            </Typography>
-            <Typography
-              variant='body2'
-              fontSize={16}
-              color='text.secondary'
-            >
-              đã đạt được
-            </Typography>
-          </Box>
-
-          <Typography fontSize={16}>{calculatePercent(data.targetValue, 10000000000)}%</Typography>
-        </Box>
-        <ProgressCustom
-          variant='determinate'
-          value={calculatePercent(data.targetValue, 10000000000)}
-          sx={{ height: '10px', borderRadius: '10px', marginTop: '10px' }}
-        />
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            alignItems: 'center',
-            marginTop: '10px',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Typography
-            variant='body2'
-            color='text.secondary'
-            fontSize={16}
-          >
-            của mục tiêu {data.targetValue.toLocaleString()} VNĐ
-          </Typography>
-
-          <Typography fontSize={16}>953 người ủng hộ</Typography>
-        </Box>
-      </CardContent>
-      <CardActions>
-        {data.status === 'DRAFT' ? (
-          <LinkCustom to={`/campaign/edit/${data.id}`}>Chỉnh sửa</LinkCustom>
-        ) : (
-          <FormConfirm
-            onSave={() => withDraw(data.id)}
-            buttonText='Rút tiền'
-            message='Mô tả yêu cầu rút tiền, lý do đính kèm file ảnh xác thực hoặc giấy tờ có liên quan'
-            title='Yêu cầu rút tiền'
-            setData={setData}
-            data={dataRequest}
-          />
-        )}
-      </CardActions>
-    </Card>
-  );
 
   return (
     <React.Fragment>
@@ -401,7 +211,11 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
                 item
                 xs={4}
               >
-                {renderCard(item)}
+                <CardCampaign
+                  data={item}
+                  isOwner={true}
+                  isHover={true}
+                />
               </Grid>
             ))}
             <Grid

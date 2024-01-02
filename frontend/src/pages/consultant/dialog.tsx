@@ -7,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Upload from '@services/firebase';
+import { Box } from '@mui/material';
 
 export default function FormConfirm({
   title,
@@ -67,13 +68,16 @@ export default function FormConfirm({
             variant='standard'
           />
           <DialogContentText>File xác thực</DialogContentText>
-          <Upload
-            folder='file'
-            setUrl={(url) => {
-              setData({ ...data, url });
-            }}
-            type='application/pdf'
-          />
+          <Box sx={{ position: 'relative' }}>
+            <Upload
+              folder='file'
+              className='file'
+              setUrl={(url) => {
+                setData({ ...data, url });
+              }}
+              type='application/pdf'
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button

@@ -129,106 +129,124 @@ const UpdateRolePage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: {
-            optional?: React.ReactNode;
-          } = {};
-          if (isStepOptional(index)) {
-            labelProps.optional = <Typography variant='caption'>Optional</Typography>;
-          }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false;
-          }
-          return (
-            <Step
-              key={label}
-              {...stepProps}
-            >
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-      {activeStep === steps.length - 1 ? (
-        <Grid container>
-          <Typography>File xác thực</Typography>
-          <Box
-            sx={{
-              position: 'relative',
-              width: '100%',
-            }}
-          >
-            <object
-              data={data?.achivementDoc}
-              style={{
-                width: '100%',
-                height: '30vh',
-              }}
-              type='application/pdf'
-            />
-            <Upload
-              className='pdf'
-              setUrl={(url: string) => {
-                setData({ ...data, achivementDoc: url });
-              }}
-              type='application/pdf'
-              folder='file'
-            />
-          </Box>
-        </Grid>
-      ) : (
-        <React.Fragment>
-          {activeStep === 0 ? (
-            <CommonForm
-              data={data}
-              setData={setData}
-            />
-          ) : activeStep === 1 ? (
-            <>
-              {data?.type == '1' ? (
-                <PersonalForm
-                  data={data}
-                  setData={setData}
-                />
-              ) : (
-                <OrginazationForm
-                  data={data}
-                  setData={setData}
-                />
-              )}
-            </>
-          ) : (
-            <>
-              <QuestionForm
-                data={question}
-                setData={setQuestion}
-              />
-            </>
-          )}
-        </React.Fragment>
-      )}
-      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-        {activeStep !== 0 && (
-          <Button
-            color='inherit'
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            Quay lại
-          </Button>
-        )}
+    <Grid
+      container
+      sx={{ padding: '20px 100px 20px 100px ' }}
+    >
+      <Box
+        sx={{
+          width: '100%',
 
-        <Box sx={{ flex: '1 1 auto' }} />
+          backgroundColor: 'white',
+          borderRadius: '5px',
+        }}
+      >
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            const stepProps: { completed?: boolean } = {};
+            const labelProps: {
+              optional?: React.ReactNode;
+            } = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = <Typography variant='caption'>Optional</Typography>;
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+            return (
+              <Step
+                key={label}
+                {...stepProps}
+              >
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
         {activeStep === steps.length - 1 ? (
-          <Button onClick={handleSubmit}>Gửi yêu cầu</Button>
+          <Grid container>
+            <Typography>File xác thực</Typography>
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+              }}
+            >
+              <object
+                data={data?.achivementDoc}
+                style={{
+                  width: '100%',
+                  height: '30vh',
+                }}
+                type='application/pdf'
+              />
+              <Upload
+                className='pdf'
+                setUrl={(url: string) => {
+                  setData({ ...data, achivementDoc: url });
+                }}
+                type='application/pdf'
+                folder='file'
+              />
+            </Box>
+          </Grid>
         ) : (
-          <Button onClick={handleNext}>Tiếp theo</Button>
+          <React.Fragment>
+            {activeStep === 0 ? (
+              <CommonForm
+                data={data}
+                setData={setData}
+              />
+            ) : activeStep === 1 ? (
+              <>
+                {data?.type == '1' ? (
+                  <PersonalForm
+                    data={data}
+                    setData={setData}
+                  />
+                ) : (
+                  <OrginazationForm
+                    data={data}
+                    setData={setData}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                <QuestionForm
+                  data={question}
+                  setData={setQuestion}
+                />
+              </>
+            )}
+          </React.Fragment>
         )}
+        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          {activeStep !== 0 && (
+            <Button
+              color='inherit'
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+              variant='outlined'
+            >
+              Quay lại
+            </Button>
+          )}
+
+          <Box sx={{ flex: '1 1 auto' }} />
+          {activeStep === steps.length - 1 ? (
+            <Button onClick={handleSubmit}>Gửi yêu cầu</Button>
+          ) : (
+            <Button
+              onClick={handleNext}
+              variant='contained'
+            >
+              Tiếp theo
+            </Button>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </Grid>
   );
 };
 export default UpdateRolePage;
