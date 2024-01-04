@@ -27,7 +27,7 @@ const MonthlyBarChart = ({
     searchData: ChartStructure[];
   }>({
     startDate: new Date('2023-12-01'),
-    endDate: new Date('2024-01-01'),
+    endDate: new Date('2024-01-06'),
     searchData: [],
   });
 
@@ -39,7 +39,7 @@ const MonthlyBarChart = ({
   useEffect(() => {
     const initData = async () => {
       if (type === 'User') {
-        const user = await campaign.getHistoryByOwner('655885f6b034a37de687bd1a');
+        const user = await campaign.getHistoryByUser(id);
         setRootList(mapHistoryContracts(user));
       }
     };

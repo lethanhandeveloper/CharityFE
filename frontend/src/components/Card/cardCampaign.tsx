@@ -1,5 +1,7 @@
 import ProgressCustom from '@common/Progess';
+import { mapCampainContract } from '@mapdata/contract';
 import { CampainUI } from '@models/campain';
+import { CampaignContractUI } from '@models/contract';
 import ExtendedWindow from '@models/ether';
 import { Box, CardActions } from '@mui/material';
 import Card from '@mui/material/Card';
@@ -11,7 +13,7 @@ import campaign from '@services/ethers/campaign';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const calculatePercent = (current: number, target: number): number => {
@@ -31,6 +33,7 @@ const CardCampaign = ({
 }) => {
   const dispatch = useAppDispatch();
   const [dataWithDraw, setData] = useState<any>();
+  const [contract, setContract] = useState<CampaignContractUI>();
   const withDraw = async (id: string) => {
     try {
       await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
@@ -56,6 +59,15 @@ const CardCampaign = ({
       dispatch(setInfoAlert({ open: true, title: 'Không thể kết nối bây giờ', type: 'error' }));
     }
   };
+  useEffect(() => {
+    const initData = async () => {
+      const contract = await campaign.getCampainDetail(data.id);
+      if (contract) {
+        setContract(mapCampainContract(contract));
+      }
+    };
+    initData();
+  }, [data.id]);
   return (
     <Card
       variant='outlined'
@@ -93,7 +105,11 @@ const CardCampaign = ({
           }}
           fontSize={'13px'}
         >
-          Còn {calculateDayCountDown(data.endDate)} ngày
+          {calculateDayCountDown(data.endDate) > 0 ? (
+            <>Còn {calculateDayCountDown(data.endDate).toFixed(0)} ngày</>
+          ) : (
+            <>Đã kết thúc</>
+          )}
         </Typography>
 
         <Typography
@@ -151,7 +167,7 @@ const CardCampaign = ({
               color='#f54a00'
               fontWeight='bold'
             >
-              {data.targetValue?.toLocaleString()} VNĐ
+              {contract?.donateValue?.toLocaleString()}
             </Typography>
             <Typography
               variant='body2'
@@ -162,11 +178,13 @@ const CardCampaign = ({
             </Typography>
           </Box>
 
-          <Typography fontSize={16}>{calculatePercent(data.targetValue, 10000000000)}%</Typography>
+          <Typography fontSize={16}>
+            {calculatePercent(contract?.donateValue || 0, data.targetValue)}%
+          </Typography>
         </Box>
         <ProgressCustom
           variant='determinate'
-          value={calculatePercent(data.targetValue, 10000000000)}
+          value={calculatePercent(contract?.donateValue || 0, data.targetValue)}
           sx={{ height: '10px', borderRadius: '10px', marginTop: '10px' }}
         />
         <Box
@@ -185,8 +203,6 @@ const CardCampaign = ({
           >
             của mục tiêu {data.targetValue.toLocaleString()} VNĐ
           </Typography>
-
-          <Typography fontSize={16}>953 người ủng hộ</Typography>
         </Box>
       </CardContent>
       <CardActions>

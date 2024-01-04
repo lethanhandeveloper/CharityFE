@@ -1,18 +1,31 @@
 import { Box, CardContent, CardMedia, Typography } from '@mui/material';
 import Card from '@mui/material/Card/Card';
 import ProgressCustom from '@common/Progess';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { CampainUI } from '@models/campain';
 import { Link } from 'react-router-dom';
+import campaign from '@services/ethers/campaign';
+import { mapCampainContract } from '@mapdata/contract';
+import { CampaignContractUI } from '@models/contract';
 interface ICardSlide {
   handleDragStart: (e: { preventDefault: () => any }) => void;
   data: CampainUI;
 }
 const CardSlice: FC<ICardSlide> = (props) => {
   const { handleDragStart, data } = props;
+  const [contract, setContract] = React.useState<CampaignContractUI>();
   const handleGetDay = (endDate: Date): number => {
     return Math.floor((endDate.getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24);
   };
+  useEffect(() => {
+    const initData = async () => {
+      const contract = await campaign.getCampainDetail(data.id);
+      if (contract) {
+        setContract(mapCampainContract(contract));
+      }
+    };
+    initData();
+  }, [data.id]);
   return (
     <React.Fragment>
       <Card
@@ -112,7 +125,7 @@ const CardSlice: FC<ICardSlide> = (props) => {
               color='#f54a00'
               fontWeight='bold'
             >
-              {0} VNĐ
+              {contract?.donateValue}
             </Typography>
             <Typography>{0}%</Typography>
           </Box>

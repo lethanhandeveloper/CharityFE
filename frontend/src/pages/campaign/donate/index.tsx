@@ -173,7 +173,7 @@ const DonatePage = () => {
                 flexDirection={'row'}
                 justifyContent={'space-between'}
               >
-                Đã đạt được{' '}
+                Đã quyên góp{' '}
                 <span style={{ color: '#f54a00' }}>{campaignContract?.donateValue}</span>. Số dư còn
                 lại <span style={{ color: '#f54a00' }}>{campaignContract?.currentValue}</span>
                 <b>
@@ -224,13 +224,13 @@ const DonatePage = () => {
                 fontSize={'13px'}
                 color={'#999'}
               >
-                {countDonate.countUser} người đã ủng hộ
+                {countDonate.countDonate} người đã ủng hộ
               </Typography>
               <Typography
                 fontSize={'13px'}
                 color={'#999'}
               >
-                {countDonate.countDonate} lượt ủng hộ
+                {countDonate.countUser} lượt ủng hộ
               </Typography>
             </Box>
 

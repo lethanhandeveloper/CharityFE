@@ -52,7 +52,7 @@ export default function OppositeContentTimeline({ campaignId }: { campaignId: st
             </TimelineSeparator>
             <TimelineContent>
               Yêu cầu rút {item.value}
-              {!item.timeApprove && (
+              {item.timeApprove === item.time && (
                 <>
                   <ConfirmDialogIcon
                     icon={<CheckCircleIcon />}
@@ -72,7 +72,7 @@ export default function OppositeContentTimeline({ campaignId }: { campaignId: st
               )}
             </TimelineContent>
           </TimelineItem>
-          {item.timeApprove &&
+          {item.timeApprove !== item.time &&
             (item.status === 'Approve' ? (
               <TimelineItem key={item.id}>
                 <TimelineOppositeContent color='text.secondary'>
@@ -93,7 +93,7 @@ export default function OppositeContentTimeline({ campaignId }: { campaignId: st
                   <TimelineDot color='error' />
                   {index < list.length - 1 && <TimelineConnector />}
                 </TimelineSeparator>
-                <TimelineContent>Đã hủy yêu cầu {item.value}</TimelineContent>
+                <TimelineContent>Đã hủy yêu cầu rút tiền {item.value}</TimelineContent>
               </TimelineItem>
             ))}
         </>

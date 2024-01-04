@@ -94,27 +94,23 @@ const addRequest = async (
   message: string,
   fileUrl: string,
 ) => {
-  try {
-    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-    const signer = provider.getSigner();
-    const valueInWei = ethers.utils.parseEther(value.toString());
-    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
-    const tx = await contract.addNewWithdrawRequest(
-      id,
-      createdId,
-      valueInWei,
-      'PENDING',
-      getCurrentDate(),
-      address,
-      message,
-      fileUrl,
-    );
-    await tx.wait();
-    return true;
-  } catch (error) {
-    return false;
-  }
+  const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+  await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+  const signer = provider.getSigner();
+  const valueInWei = ethers.utils.parseEther(value.toString());
+  const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+  const tx = await contract.addNewWithdrawRequest(
+    id,
+    createdId,
+    valueInWei,
+    'Pending',
+    getCurrentDate(),
+    address,
+    message,
+    fileUrl,
+  );
+  await tx.wait();
+  return true;
 };
 
 export default {

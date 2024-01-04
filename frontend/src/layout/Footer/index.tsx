@@ -13,7 +13,7 @@ const Footer = () => {
       >
         <Typography>
           Giải pháp thuộc Đề án Hệ tri thức Việt số hoá (iTrithuc), cấu phần Nền tảng nhân đạo số
-          quốc gia do MBBank xây dựng và vận hành theo Quyết định số 3068/QĐ-BKHCN
+          quốc gia
         </Typography>
 
         <Typography>Powered by VTV</Typography>

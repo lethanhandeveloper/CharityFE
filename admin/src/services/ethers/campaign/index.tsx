@@ -227,6 +227,20 @@ const getRequestByCampaign = async (id: string) => {
     return [];
   }
 };
+
+const getRequestForAdmin = async () => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const tx = await contract.getWithdrawRequestForAdmin();
+    return tx;
+  } catch (error) {
+    return [];
+  }
+};
+
 const withDraw = async (id: string) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
@@ -255,4 +269,5 @@ export default {
   getRequestByCampaign,
   withDraw,
   refund,
+  getRequestForAdmin,
 };
