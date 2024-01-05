@@ -12,6 +12,7 @@ import { Grid } from '@mui/material';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import ConfirmDialog from '@components/ConfirmDialog';
+import ExportToExcelButton from '@components/Excel';
 
 interface UserTableProps {
   isActive: boolean;
@@ -73,6 +74,12 @@ const UserTable = (props: UserTableProps) => {
         columns={columns}
         onRowEvent={handleRowEvent}
         outSideLoad={outSideLoad}
+        buttons={
+          <ExportToExcelButton
+            data={[]}
+            nameFile={''}
+          />
+        }
       />
       {openDetail && data && (
         <PanelDetail

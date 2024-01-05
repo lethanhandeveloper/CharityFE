@@ -16,7 +16,7 @@ interface CampaignTableProps {
 
 const CampaignTable = (props: CampaignTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<CampainUI>();
 
   const columns: Column[] = [
@@ -76,13 +76,14 @@ const CampaignTable = (props: CampaignTableProps) => {
         api={`${apiEndPoint.campain.list}/${props.status}`}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailCampaign
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

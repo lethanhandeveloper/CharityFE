@@ -10,7 +10,7 @@ import { mapFeedbackUI } from '@services/mapdata/feedback';
 
 const FeedbackTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<FeedbackUI>();
 
   const columns: Column[] = [
@@ -55,6 +55,7 @@ const FeedbackTable = () => {
         columns={columns}
         api={apiEndPoint.feedback.list}
         onRowEvent={handleRowEvent}
+        outSideLoad={outSideLoad}
         buttons={<> {renderButton()}</>}
       />
       {openDetail && data && (
@@ -62,7 +63,7 @@ const FeedbackTable = () => {
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('zcxzc');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

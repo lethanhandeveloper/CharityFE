@@ -12,7 +12,7 @@ import ExportToExcelButton from '@components/Excel';
 
 const ProvinceTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<ProvinceUI>();
 
   const columns: Column[] = [
@@ -79,13 +79,14 @@ const ProvinceTable = () => {
         api={apiEndPoint.province.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailProvince
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('zxcxz');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

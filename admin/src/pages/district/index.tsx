@@ -11,7 +11,7 @@ import { mapDistrictUI } from '@services/mapdata/area';
 const DistrictTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
   const [data, setData] = useState<DistrictUI>();
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const columns: Column[] = [
     {
       title: 'Tên đường',
@@ -53,13 +53,14 @@ const DistrictTable = () => {
         api={apiEndPoint.district.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailDistrict
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('xzcxz');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

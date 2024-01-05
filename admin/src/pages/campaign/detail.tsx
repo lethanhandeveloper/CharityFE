@@ -135,7 +135,7 @@ const DetailCampaign = (props: DetailCampaignProps) => {
               item
               gap={3}
             >
-              {(detail.status === 'START' || detail.status === 'END') && (
+              {detail.status === 'START' && (
                 <ConfirmDialog
                   buttonText='Hoàn tiền'
                   message='Xác nhận chiến dịch vi phạm tiêu chuẩn/thông tin không đúng thực tế'
@@ -180,22 +180,24 @@ const DetailCampaign = (props: DetailCampaignProps) => {
                 label='File xác thực'
                 {...a11yProps(1)}
               />
-              <Tab
-                label='Lịch sử rút'
-                {...a11yProps(2)}
-              />
-              <Tab
-                label='Lịch sử quyên góp'
-                {...a11yProps(3)}
-              />
-              <Tab
-                label='Vật phẩm quyên góp'
-                {...a11yProps(4)}
-              />
-              <Tab
-                label='Lịch sử rút tiền'
-                {...a11yProps(5)}
-              />
+              {detail.id && (
+                <Tab
+                  label='Lịch sử rút'
+                  {...a11yProps(2)}
+                />
+              )}
+              {detail.id && (
+                <Tab
+                  label='Lịch sử quyên góp'
+                  {...a11yProps(3)}
+                />
+              )}
+              {detail.id && (
+                <Tab
+                  label='Vật phẩm quyên góp'
+                  {...a11yProps(4)}
+                />
+              )}
             </Tabs>
           </Box>
           <CustomTabPanel

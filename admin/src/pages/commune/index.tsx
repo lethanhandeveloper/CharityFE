@@ -11,7 +11,7 @@ import { mapCommuneUI } from '@services/mapdata/area';
 
 const CampaignTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<CommuneUI>();
 
   const columns: Column[] = [
@@ -55,13 +55,14 @@ const CampaignTable = () => {
         api={apiEndPoint.commune.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailCommune
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('zcxzc');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

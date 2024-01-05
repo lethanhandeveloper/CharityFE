@@ -10,7 +10,7 @@ import { Grid } from '@mui/material';
 
 const BannerTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<BannerUI>();
   const columns: Column[] = [
     {
@@ -55,13 +55,14 @@ const BannerTable = () => {
         api={apiEndPoint.banner.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailBanner
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('zxczx');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />

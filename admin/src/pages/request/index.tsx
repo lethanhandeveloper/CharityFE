@@ -14,6 +14,7 @@ interface RequestTableProps {
 const RequestTable = (props: RequestTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
   console.log(props);
+  const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<RequestUI>();
   const columns: Column[] = [
     {
@@ -57,13 +58,14 @@ const RequestTable = (props: RequestTableProps) => {
         api={apiEndPoint.request.list}
         onRowEvent={handleRowEvent}
         buttons={<> {renderButton()}</>}
+        outSideLoad={outSideLoad}
       />
       {openDetail && data && (
         <DetailRequest
           openDetail={openDetail}
           data={data}
           loadTable={() => {
-            console.log('check');
+            setOutSideLoad({ load: true });
           }}
           onClose={handleClose}
         />
