@@ -1,8 +1,18 @@
-import { FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import {
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
-
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Editor } from '@tinymce/tinymce-react';
 import { useState } from 'react';
+import serviceAPI from '@services/api';
 interface OrginazationFormProps {
   setData: (data: any) => void;
   data: any;
@@ -21,7 +31,7 @@ const OrginazationForm = (props: OrginazationFormProps) => {
           // You can add other headers as needed
         },
       });
-      console.log(response);
+
       if (response.ok) {
         setHelperText('');
       } else {
@@ -50,15 +60,19 @@ const OrginazationForm = (props: OrginazationFormProps) => {
           item
           xs={12}
         >
-          <Typography>Ngày thành lập</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Ngày thành lập
+          </Typography>
           <DateCalendar
             disableFuture
             onChange={(e) => {
               setData({ ...data, establishedDate: e || new Date() });
             }}
-            value={new Date(data?.establishedDate)}
+            value={data?.establishedDate ? new Date(data?.establishedDate) : new Date()}
           />
-          <Typography>Website</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Website
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -69,7 +83,9 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             variant='standard'
             helperText={helperText}
           />
-          <Typography>Lĩnh vực hoạt động</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Lĩnh vực hoạt động
+          </Typography>
           <TextField
             autoFocus
             value={data?.operationField}
@@ -80,7 +96,9 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             variant='standard'
           />
 
-          <Typography>Người đại diện:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Người đại diện:
+          </Typography>
           <TextField
             autoFocus
             value={data?.representativeName}
@@ -90,7 +108,9 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             name='representativeName'
             variant='standard'
           />
-          <Typography>Số điện thoại:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Số điện thoại:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -99,6 +119,19 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             fullWidth
             name='representativePhoneNumber'
             variant='standard'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton
+                    onClick={() => {
+                      serviceAPI.auth.sendPhoneCode('0368485425');
+                    }}
+                  >
+                    <CheckCircleOutlineIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <RadioGroup
             row
@@ -118,7 +151,9 @@ const OrginazationForm = (props: OrginazationFormProps) => {
               label='Instagram'
             />
           </RadioGroup>
-          <Typography>Mô tả chi tiết</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Mô tả chi tiết
+          </Typography>
           <Editor
             apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
             onEditorChange={(e) => {

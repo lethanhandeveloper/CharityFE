@@ -3,7 +3,7 @@ import { styled } from '@mui/styles';
 
 const SearchField = styled(TextField)({
   '& .MuiInputBase-root': {
-    borderRadius: 30
-  }
+    borderRadius: 5,
+  },
 });
 export default SearchField;

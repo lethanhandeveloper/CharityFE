@@ -24,7 +24,9 @@ const QuestionForm = (props: QuestionFormProps) => {
           item
           xs={12}
         >
-          <Typography>Số tiền gây quỹ:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Số tiền gây quỹ:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -35,7 +37,9 @@ const QuestionForm = (props: QuestionFormProps) => {
             type='number'
             variant='standard'
           />
-          <Typography>Mục đích:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Mục đích:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -45,25 +49,37 @@ const QuestionForm = (props: QuestionFormProps) => {
             name='goalName'
             variant='standard'
           />
+          <Grid container>
+            <Grid
+              item
+              xs={6}
+            >
+              <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+                Ngày bắt đầu:
+              </Typography>
 
-          <Typography>Ngày bắt đầu:</Typography>
-
-          <DatePicker
-            label='Controlled picker'
-            value={new Date(data?.startDate)}
-            onChange={(newValue) => {
-              setData({ ...data, startDate: newValue });
-            }}
-          />
-
-          <Typography>Ngày kết thúc:</Typography>
-          <DatePicker
-            label='Controlled picker'
-            value={new Date(data?.endDate)}
-            onChange={(newValue) => {
-              setData({ ...data, endDate: newValue });
-            }}
-          />
+              <DatePicker
+                value={new Date(data?.startDate)}
+                onChange={(newValue) => {
+                  setData({ ...data, startDate: newValue });
+                }}
+              />
+            </Grid>
+            <Grid
+              item
+              xs={6}
+            >
+              <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+                Ngày kết thúc:
+              </Typography>
+              <DatePicker
+                value={new Date(data?.endDate)}
+                onChange={(newValue) => {
+                  setData({ ...data, endDate: newValue });
+                }}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>

@@ -40,12 +40,12 @@ const SiderLink = [
     children: [
       {
         title: 'Đăng ký',
-        link: '/request',
+        link: '/request/pending',
         icon: <PendingIcon />,
       },
       {
         title: 'Đăng ký đã duyệt',
-        link: '/request',
+        link: '/request/done',
         icon: <DoneIcon />,
       },
       {

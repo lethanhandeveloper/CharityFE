@@ -31,18 +31,16 @@ const DistrictTable = () => {
 
   const renderButton = () => {
     return (
-      <Grid container>
-        <Grid item>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setOpenDetail(true);
-              setData(mapDistrictUI({}));
-            }}
-          >
-            Tạo mới
-          </Button>
-        </Grid>
+      <Grid item>
+        <Button
+          variant='contained'
+          onClick={() => {
+            setOpenDetail(true);
+            setData(mapDistrictUI({}));
+          }}
+        >
+          Tạo mới
+        </Button>
       </Grid>
     );
   };
@@ -52,7 +50,7 @@ const DistrictTable = () => {
         columns={columns}
         api={apiEndPoint.district.list}
         onRowEvent={handleRowEvent}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
         outSideLoad={outSideLoad}
       />
       {openDetail && data && (

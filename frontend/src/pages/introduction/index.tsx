@@ -1,6 +1,7 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
-import style from './introduction.module.scss';
+
+import TypographyTitle from '@common/Typography';
 const IntroductionPage = () => {
   return (
     <React.Fragment>
@@ -13,7 +14,7 @@ const IntroductionPage = () => {
             'url(https://thiennguyen.app/_next/static/media/bg_different.241f6c61.png)',
         }}
       >
-        <Typography className={style['typography-title']}>Giới thiệu chung</Typography>
+        <TypographyTitle style={{ marginTop: '10px' }}>Giới thiệu chung</TypographyTitle>
 
         <Typography style={{ marginLeft: '30px', marginRight: '30px' }}>
           Giải pháp công nghệ tích hợp bao gồm App Thiện Nguyện và tài khoản thiện nguyện minh bạch
@@ -64,9 +65,9 @@ const IntroductionPage = () => {
           item
           xs={12}
         >
-          <Typography className={style['typography-title']}>
+          <TypographyTitle style={{ marginTop: '10px' }}>
             Giải pháp thúc đẩy tính minh bạch
-          </Typography>
+          </TypographyTitle>
           <Grid
             container
             justifyContent={'start'}
@@ -80,7 +81,10 @@ const IntroductionPage = () => {
               xs={6}
             >
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                <img src='https://thiennguyen.app/_next/static/media/minhbach.1abe9549.png' />
+                <img
+                  style={{ height: 50, width: 50 }}
+                  src='https://thiennguyen.app/_next/static/media/minhbach.1abe9549.png'
+                />
                 <div>
                   <Typography
                     fontWeight={'bold'}
@@ -99,7 +103,10 @@ const IntroductionPage = () => {
               xs={6}
             >
               <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                <img src='https://thiennguyen.app/_next/static/media/taikhoan4so.053b1dfd.png' />
+                <img
+                  src='https://thiennguyen.app/_next/static/media/taikhoan4so.053b1dfd.png'
+                  style={{ height: 50, width: 50 }}
+                />
                 <div>
                   <Typography fontWeight={'bold'}>Sở hữu miễn phí tài khoản 4 số</Typography>
                   <Typography>
@@ -113,8 +120,19 @@ const IntroductionPage = () => {
               item
               xs={6}
             >
-              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                <img src='https://thiennguyen.app/_next/static/media/dedang.a62cdfbc.png' />
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 2,
+                  marginLeft: '40px',
+                }}
+              >
+                <img
+                  src='https://thiennguyen.app/_next/static/media/dedang.a62cdfbc.png'
+                  style={{ height: 50, width: 50 }}
+                />
                 <div>
                   <Typography fontWeight={'bold'}>Dễ dàng tạo mục tiêu gây quỹ</Typography>
                   <Typography>

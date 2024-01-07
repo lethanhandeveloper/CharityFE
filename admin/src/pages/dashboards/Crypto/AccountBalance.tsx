@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
   styled,
-  Avatar,
+  // Avatar,
   Divider,
   alpha,
   ListItem,
@@ -14,20 +14,19 @@ import {
   List,
   ListItemAvatar,
 } from '@mui/material';
-import TrendingUp from '@mui/icons-material/TrendingUp';
-import Text from '@components/Text';
+// import TrendingUp from '@mui/icons-material/TrendingUp';
 import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
 
-const AvatarSuccess = styled(Avatar)(
-  ({ theme }) => `
-      background-color: ${theme.colors.success.main};
-      color: ${theme.palette.success.contrastText};
-      width: ${theme.spacing(8)};
-      height: ${theme.spacing(8)};
-      box-shadow: ${theme.colors.shadows.success};
-`,
-);
+// const AvatarSuccess = styled(Avatar)(
+//   ({ theme }) => `
+//       background-color: ${theme.colors.success.main};
+//       color: ${theme.palette.success.contrastText};
+//       width: ${theme.spacing(8)};
+//       height: ${theme.spacing(8)};
+//       box-shadow: ${theme.colors.shadows.success};
+// `,
+// );
 
 const ListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `
@@ -55,7 +54,7 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 `,
 );
 
-function AccountBalance() {
+function AccountBalance({ data }: { data: any }) {
   const theme = useTheme();
 
   const chartOptions: ApexOptions = {
@@ -110,7 +109,7 @@ function AccountBalance() {
     fill: {
       opacity: 1,
     },
-    labels: ['Bitcoin', 'Ripple', 'Cardano', 'Ethereum'],
+    labels: ['Đợi duyệt', 'Đang diễn ra', 'Đã kết thúc'],
     legend: {
       labels: {
         colors: theme.colors.alpha.trueWhite[100],
@@ -145,9 +144,9 @@ function AccountBalance() {
               }}
               variant='h4'
             >
-              Account Balance
+              Tổng tiền quyên góp
             </Typography>
-            <Box>
+            {/* <Box>
               <Typography
                 variant='h1'
                 gutterBottom
@@ -159,7 +158,7 @@ function AccountBalance() {
                 fontWeight='normal'
                 color='text.secondary'
               >
-                1.0045983485234 BTC
+                {data?.userDeactiveCount} BTC
               </Typography>
               <Box
                 display='flex'
@@ -186,7 +185,7 @@ function AccountBalance() {
                   </Typography>
                 </Box>
               </Box>
-            </Box>
+            </Box> */}
             <Grid
               container
               spacing={3}
@@ -199,20 +198,13 @@ function AccountBalance() {
                   fullWidth
                   variant='outlined'
                 >
-                  Send
+                  Tạo chiến dịch
                 </Button>
               </Grid>
               <Grid
                 sm
                 item
-              >
-                <Button
-                  fullWidth
-                  variant='contained'
-                >
-                  Receive
-                </Button>
-              </Grid>
+              ></Grid>
             </Grid>
           </Box>
         </Grid>
@@ -282,24 +274,14 @@ function AccountBalance() {
                       />
                     </ListItemAvatarWrapper>
                     <ListItemText
-                      primary='BTC'
+                      primary='Tài khoản cá nhân'
                       primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary='Bitcoin'
+                      secondary={data?.personalCount}
                       secondaryTypographyProps={{
                         variant: 'subtitle2',
                         noWrap: true,
                       }}
                     />
-                    <Box>
-                      <Typography
-                        align='right'
-                        variant='h4'
-                        noWrap
-                      >
-                        20%
-                      </Typography>
-                      <Text color='success'>+2.54%</Text>
-                    </Box>
                   </ListItem>
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
@@ -309,24 +291,14 @@ function AccountBalance() {
                       />
                     </ListItemAvatarWrapper>
                     <ListItemText
-                      primary='XRP'
+                      primary='Tài khoản người dùng'
                       primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary='Ripple'
+                      secondary={data?.userActiveCount}
                       secondaryTypographyProps={{
                         variant: 'subtitle2',
                         noWrap: true,
                       }}
                     />
-                    <Box>
-                      <Typography
-                        align='right'
-                        variant='h4'
-                        noWrap
-                      >
-                        10%
-                      </Typography>
-                      <Text color='error'>-1.22%</Text>
-                    </Box>
                   </ListItem>
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
@@ -336,24 +308,14 @@ function AccountBalance() {
                       />
                     </ListItemAvatarWrapper>
                     <ListItemText
-                      primary='ADA'
+                      primary='Tài khoản trong tháng'
                       primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary='Cardano'
+                      secondary={data?.userInMonth}
                       secondaryTypographyProps={{
                         variant: 'subtitle2',
                         noWrap: true,
                       }}
                     />
-                    <Box>
-                      <Typography
-                        align='right'
-                        variant='h4'
-                        noWrap
-                      >
-                        40%
-                      </Typography>
-                      <Text color='success'>+10.50%</Text>
-                    </Box>
                   </ListItem>
                   <ListItem disableGutters>
                     <ListItemAvatarWrapper>
@@ -363,24 +325,14 @@ function AccountBalance() {
                       />
                     </ListItemAvatarWrapper>
                     <ListItemText
-                      primary='ETH'
+                      primary='Tài khoản không hoạt động'
                       primaryTypographyProps={{ variant: 'h5', noWrap: true }}
-                      secondary='Ethereum'
+                      secondary={data?.userDeactiveCount}
                       secondaryTypographyProps={{
                         variant: 'subtitle2',
                         noWrap: true,
                       }}
                     />
-                    <Box>
-                      <Typography
-                        align='right'
-                        variant='h4'
-                        noWrap
-                      >
-                        30%
-                      </Typography>
-                      <Text color='error'>-12.38%</Text>
-                    </Box>
                   </ListItem>
                 </List>
               </Grid>

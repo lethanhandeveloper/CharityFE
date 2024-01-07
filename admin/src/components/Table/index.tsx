@@ -13,12 +13,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import { Avatar, InputAdornment } from '@mui/material';
+import { Avatar, Grid, IconButton, InputAdornment } from '@mui/material';
 import SearchField from '@common/SearchField';
 import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import { AntSwitch } from '@common/Switch';
+import ExportToExcelButton from '@components/Excel';
 
 interface Data {
   id: number;
@@ -91,8 +92,7 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
     <TableHead
       sx={{
         background: 'rgb(243, 246, 249)',
-        fontSize: '16px',
-        fontWeight: 600,
+
         paddingTop: '8px',
         paddingBottom: '8px',
       }}
@@ -108,7 +108,7 @@ function EnhancedTableHead(props: EnhancedTableHeaderProps) {
             <TableSortLabel
               // active={true}
               // direction={'asc'}
-              sx={{ textTransform: 'none', fontSize: '16px' }}
+              sx={{ textTransform: 'none', fontSize: '16px', color: 'black', fontWeight: 'bold' }}
             >
               {headCell.title}
             </TableSortLabel>
@@ -124,6 +124,8 @@ interface EnhancedTableToolbarProps {
   buttons: React.ReactNode;
   setSearchText: (value: string) => void;
   onLoad: () => void;
+  dataTable: any;
+  columns: Column[];
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -141,7 +143,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {props.buttons}
+      <Grid
+        container
+        spacing={2}
+      >
+        {props.buttons}
+        <Grid item>
+          <ExportToExcelButton
+            data={props.dataTable}
+            fields={props.columns}
+          />
+        </Grid>
+      </Grid>
 
       <SearchField
         sx={{ width: '350px', paddingRight: '30px' }}
@@ -149,7 +162,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         InputProps={{
           endAdornment: (
             <InputAdornment position='end'>
-              <SearchTwoToneIcon />
+              <IconButton>
+                <SearchTwoToneIcon />
+              </IconButton>
             </InputAdornment>
           ),
         }}
@@ -275,6 +290,8 @@ export default function EnhancedTable(props: EnhancedTableProps) {
           onLoad={() => {
             loadTable(page, rowsPerPage, searchText);
           }}
+          columns={props.columns}
+          dataTable={dataTable}
           numSelected={selected.length}
           buttons={props.buttons}
         />
@@ -310,7 +327,7 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    {props.columns?.map((item) => (
+                    {props.columns?.map((item, index) => (
                       <TableCell align='left'>
                         {item.nameField === 'isActive' ? (
                           <>
@@ -330,12 +347,18 @@ export default function EnhancedTable(props: EnhancedTableProps) {
                                   alt='Remy Sharp'
                                   src={handleGetDataImage(row, item.nameField)}
                                 />
-                                <Typography marginLeft={'10px'}>
+                                <Typography
+                                  marginLeft={'10px'}
+                                  style={{ fontWeight: index === 0 ? 'bold' : 'unset' }}
+                                >
                                   {handleGetData(row, item.nameField)}
                                 </Typography>
                               </Box>
                             ) : (
-                              <Typography marginLeft={'10px'}>
+                              <Typography
+                                marginLeft={'10px'}
+                                style={{ fontWeight: index === 0 ? 'bold' : 'unset' }}
+                              >
                                 {item.isDate
                                   ? new Date(handleGetData(row, item.nameField)).toLocaleDateString(
                                       'en-US',

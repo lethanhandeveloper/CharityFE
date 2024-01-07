@@ -130,6 +130,7 @@ const CampaignCreatePage = () => {
             >
               <Box>
                 <Typography
+                  style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
                   variant='h4'
                   gutterBottom
                 >
@@ -139,13 +140,20 @@ const CampaignCreatePage = () => {
             </Box>
             <Divider />
             <CardContent sx={{ p: 4 }}>
-              <Typography variant='subtitle2'>
+              <Typography
+                style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                variant='subtitle2'
+              >
                 <Grid container>
                   <Grid
                     item
                     xs={12}
                   >
-                    <Typography>Tiêu điều</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Tiêu điều
+                    </Typography>
                     <TextField
                       autoFocus
                       margin='dense'
@@ -156,7 +164,11 @@ const CampaignCreatePage = () => {
                       error={Boolean(error?.title)}
                       helperText={error?.title}
                     />
-                    <Typography>Mục tiêu</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Mục tiêu
+                    </Typography>
                     <TextField
                       autoFocus
                       margin='dense'
@@ -168,7 +180,11 @@ const CampaignCreatePage = () => {
                       error={Boolean(error?.target)}
                       helperText={error?.target}
                     />
-                    <Typography>Ngày kết thúc</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Ngày kết thúc
+                    </Typography>
                     <DateCalendar
                       disablePast
                       onChange={(e) => {
@@ -255,7 +271,11 @@ const CampaignCreatePage = () => {
                         </TextField>
                       </Grid>
                     </Grid>
-                    <Typography>Ảnh banner</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Ảnh banner
+                    </Typography>
                     <Box
                       sx={{
                         position: 'relative',
@@ -276,7 +296,11 @@ const CampaignCreatePage = () => {
                         folder='avatar'
                       />
                     </Box>
-                    <Typography>File xác thực của địa phương</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      File xác thực của địa phương
+                    </Typography>
                     <Box
                       sx={{
                         position: 'relative',
@@ -299,7 +323,11 @@ const CampaignCreatePage = () => {
                         folder='file'
                       />
                     </Box>
-                    <Typography>Mô tả chi tiết</Typography>
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Mô tả chi tiết
+                    </Typography>
                     <Editor
                       apiKey='km13aeu743orqcw7bikjee45mf4gymp1zxsnu73aoz6nwbfh'
                       onEditorChange={(e) => {

@@ -13,7 +13,7 @@ interface RequestTableProps {
 
 const RequestTable = (props: RequestTableProps) => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
-  console.log(props);
+
   const [outSideLoad, setOutSideLoad] = useState<any>();
   const [data, setData] = useState<RequestUI>();
   const columns: Column[] = [
@@ -55,9 +55,11 @@ const RequestTable = (props: RequestTableProps) => {
     <>
       <EnhancedTable
         columns={columns}
-        api={apiEndPoint.request.list}
+        api={
+          props.isActive ? apiEndPoint.request.list('done') : apiEndPoint.request.list('pending')
+        }
         onRowEvent={handleRowEvent}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
         outSideLoad={outSideLoad}
       />
       {openDetail && data && (

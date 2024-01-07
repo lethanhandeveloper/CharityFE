@@ -34,18 +34,16 @@ const FeedbackTable = () => {
 
   const renderButton = () => {
     return (
-      <Grid container>
-        <Grid item>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setOpenDetail(true);
-              setData(mapFeedbackUI({}));
-            }}
-          >
-            Tạo mới
-          </Button>
-        </Grid>
+      <Grid item>
+        <Button
+          variant='contained'
+          onClick={() => {
+            setOpenDetail(true);
+            setData(mapFeedbackUI({}));
+          }}
+        >
+          Tạo mới
+        </Button>
       </Grid>
     );
   };
@@ -56,7 +54,7 @@ const FeedbackTable = () => {
         api={apiEndPoint.feedback.list}
         onRowEvent={handleRowEvent}
         outSideLoad={outSideLoad}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
       />
       {openDetail && data && (
         <DetailFeedback

@@ -158,10 +158,9 @@ const CampaignTable = ({ id, isCurrent }: { id: string; isCurrent?: boolean }) =
                     variant='standard'
                   >
                     {[
-                      { id: 'FINISH', value: 'Kết thúc' },
-                      { id: 'PENDING', value: 'Đang thực hiện' },
-                      { id: 'TARGET', value: 'Đã mục tiêu' },
-                      { id: 'TARGET', value: 'Đợi duyệt' },
+                      { id: 'END', value: 'Kết thúc' },
+                      { id: 'START', value: 'Đang ủng hộ' },
+                      { id: 'DRAFT', value: 'Đợi duyệt' },
                     ].map((option) => (
                       <MenuItem
                         key={option.id}

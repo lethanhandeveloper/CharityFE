@@ -93,8 +93,12 @@ const routers: RouteObject[] = [
         element: <BannerPage isActive={false} />,
       },
       {
-        path: 'request',
+        path: 'request/pending',
         element: <RequestPage isActive={false} />,
+      },
+      {
+        path: 'request/done',
+        element: <RequestPage isActive={true} />,
       },
       {
         path: 'feedback',

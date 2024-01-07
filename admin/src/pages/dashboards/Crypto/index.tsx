@@ -1,22 +1,29 @@
 import { Helmet } from 'react-helmet-async';
-import PageHeader from './PageHeader';
+
 import PageTitleWrapper from '@components/PageTitleWrapper';
 import { Container, Grid } from '@mui/material';
 
 import AccountBalance from './AccountBalance';
 import Wallets from './Wallets';
-import AccountSecurity from './AccountSecurity';
-import WatchList from './WatchList';
+
+import { useEffect, useState } from 'react';
+import serviceAPI from '@services/api';
 
 function DashboardCrypto() {
+  const [data, setData] = useState<any>();
+  useEffect(() => {
+    const initData = async () => {
+      const response = await serviceAPI.common.getDataHome();
+      setData(response.data.result);
+    };
+    initData();
+  }, []);
   return (
     <>
       <Helmet>
-        <title>Crypto Dashboard</title>
+        <title>Thống kê</title>
       </Helmet>
-      <PageTitleWrapper>
-        <PageHeader />
-      </PageTitleWrapper>
+      <PageTitleWrapper></PageTitleWrapper>
       <Container maxWidth='lg'>
         <Grid
           container
@@ -29,27 +36,14 @@ function DashboardCrypto() {
             item
             xs={12}
           >
-            <AccountBalance />
+            <AccountBalance data={data} />
           </Grid>
           <Grid
             item
-            lg={8}
+            lg={12}
             xs={12}
           >
-            <Wallets />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            xs={12}
-          >
-            <AccountSecurity />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-          >
-            <WatchList />
+            <Wallets data={data} />
           </Grid>
         </Grid>
       </Container>

@@ -26,6 +26,17 @@ const CampainPage = () => {
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const refInput = useRef<HTMLInputElement | null>(null);
+  const statusList =
+    localStorage.getItem('role') === '2' || localStorage.getItem('role') === '3'
+      ? [
+          { id: 'END', value: 'Kết thúc' },
+          { id: 'START', value: 'Đang ủng hộ' },
+          { id: 'DRAFT', value: 'Đợi duyệt' },
+        ]
+      : [
+          { id: 'END', value: 'Kết thúc' },
+          { id: 'START', value: 'Đang ủng hộ' },
+        ];
   const [searchConfig, setSearchConfig] = useState<SearchStructure>({
     page: 1,
     no_item_per_page: 9,
@@ -148,11 +159,7 @@ const CampainPage = () => {
                 fullWidth
                 variant='standard'
               >
-                {[
-                  { id: 'FINISH', value: 'Kết thúc' },
-                  { id: 'PENDING', value: 'Đang thực hiện' },
-                  { id: 'TARGET', value: 'Đạt mục tiêu' },
-                ].map((option) => (
+                {statusList.map((option) => (
                   <MenuItem
                     key={option.id}
                     value={option.id}

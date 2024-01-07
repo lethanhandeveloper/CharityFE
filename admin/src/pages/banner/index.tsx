@@ -33,18 +33,16 @@ const BannerTable = () => {
 
   const renderButton = () => {
     return (
-      <Grid container>
-        <Grid item>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setOpenDetail(true);
-              setData(mapBannerUI({}));
-            }}
-          >
-            Tạo mới
-          </Button>
-        </Grid>
+      <Grid item>
+        <Button
+          variant='contained'
+          onClick={() => {
+            setOpenDetail(true);
+            setData(mapBannerUI({}));
+          }}
+        >
+          Tạo mới
+        </Button>
       </Grid>
     );
   };
@@ -54,7 +52,7 @@ const BannerTable = () => {
         columns={columns}
         api={apiEndPoint.banner.list}
         onRowEvent={handleRowEvent}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
         outSideLoad={outSideLoad}
       />
       {openDetail && data && (

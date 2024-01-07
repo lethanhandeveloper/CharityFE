@@ -221,10 +221,16 @@ const UpdateRolePage = () => {
             )}
           </React.Fragment>
         )}
-        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            pt: 2,
+            padding: '20px',
+          }}
+        >
           {activeStep !== 0 && (
             <Button
-              color='inherit'
               onClick={handleBack}
               sx={{ mr: 1 }}
               variant='outlined'

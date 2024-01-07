@@ -85,13 +85,23 @@ const RequestPage = () => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        style={{
+                          fontWeight: 'bold',
+
+                          color: 'black',
+                        }}
                         primary={`${item?.commitInfoVerification?.goalName} - ${item?.commitInfoVerification?.targetAmount}`}
                         secondary={`${getCurrentDate(
                           new Date(item?.commitInfoVerification?.startDate),
                         )} - ${getCurrentDate(new Date(item?.commitInfoVerification?.endDate))}`}
                       />
                       <ListItemButton>
-                        <Grid container>
+                        <Grid
+                          container
+                          style={{
+                            color: 'black',
+                          }}
+                        >
                           <Grid
                             item
                             xs={6}

@@ -3,6 +3,7 @@ import {
   Box,
   FormControlLabel,
   Grid,
+  InputAdornment,
   Radio,
   RadioGroup,
   TextField,
@@ -10,7 +11,9 @@ import {
 } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import Upload from '@services/firebase';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useState } from 'react';
+
 interface PersonalFormProps {
   setData: (data: any) => void;
   data: any;
@@ -29,21 +32,19 @@ const PersonalForm = (props: PersonalFormProps) => {
           // You can add other headers as needed
         },
       });
-      console.log(response);
+
       if (response.ok) {
         setHelperText('');
       } else {
         setHelperText('Website không tồn tại');
       }
     } catch (error: any) {
-      console.log('xzcxzcxz');
       setHelperText('Website không tồn tại');
     }
   };
   const handleChange = (event: any) => {
     setData({ ...data, [event.target.name]: event.target.value });
     if (event.target.name === 'socialNetworkLink') {
-      console.log(event.target.value);
       checkLinkExistence(event.target.value);
     }
   };
@@ -58,7 +59,9 @@ const PersonalForm = (props: PersonalFormProps) => {
           item
           xs={12}
         >
-          <Typography>Ngày sinh:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Ngày thành lập:
+          </Typography>
           <DateCalendar
             disableFuture
             value={data?.dateOfBirth ? new Date(data?.dateOfBirth) : new Date()}
@@ -66,7 +69,9 @@ const PersonalForm = (props: PersonalFormProps) => {
               setData({ ...data, dateOfBirth: e || new Date() });
             }}
           />
-          <Typography>Số điện thoại</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Số điện thoại
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -75,8 +80,17 @@ const PersonalForm = (props: PersonalFormProps) => {
             fullWidth
             name='phoneNumber'
             variant='standard'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <CheckCircleOutlineIcon />
+                </InputAdornment>
+              ),
+            }}
           />
-          <Typography>Địa chỉ</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Địa chỉ
+          </Typography>
           <TextField
             autoFocus
             value={data?.address}
@@ -87,7 +101,9 @@ const PersonalForm = (props: PersonalFormProps) => {
             variant='standard'
           />
 
-          <Typography>Mạng xã hội nhóm:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Mạng xã hội nhóm:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -99,7 +115,9 @@ const PersonalForm = (props: PersonalFormProps) => {
             helperText={helperText}
           />
 
-          <Typography>Tên nhóm:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Tên nhóm:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -145,7 +163,9 @@ const PersonalForm = (props: PersonalFormProps) => {
               label='Tổ chức'
             />
           </RadioGroup>
-          <Typography>Logo</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Logo
+          </Typography>
           <Avatar src={data?.logo} />
           <Box
             sx={{

@@ -14,6 +14,7 @@ const apiEndPoint = {
     email: '/user/register/getcode',
     updateByID: (id: string) => `/user/verification/update/${id}`,
     getRequestByUserId: (id: string) => `/user/verification/user/${id}`,
+    sendCode: '/user/phonenumber/getcode',
   },
 
   location: {

@@ -79,7 +79,10 @@ const EmptyOverlayGrid = () => {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>Hiện tại không có dữ liệu để hiển thị</Box>
+      <Box sx={{ mt: 1, marginTop: '-150px', fontWeight: 'bold', fontSize: '20px' }}>
+        Hiện tại không có dữ liệu để hiển thị
+      </Box>
+      <Box sx={{ mt: 1 }}></Box>
     </StyledGridOverlay>
   );
 };

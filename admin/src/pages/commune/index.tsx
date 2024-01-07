@@ -33,18 +33,16 @@ const CampaignTable = () => {
 
   const renderButton = () => {
     return (
-      <Grid container>
-        <Grid item>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setOpenDetail(true);
-              setData(mapCommuneUI({}));
-            }}
-          >
-            Tạo mới
-          </Button>
-        </Grid>
+      <Grid item>
+        <Button
+          variant='contained'
+          onClick={() => {
+            setOpenDetail(true);
+            setData(mapCommuneUI({}));
+          }}
+        >
+          Tạo mới
+        </Button>
       </Grid>
     );
   };
@@ -54,7 +52,7 @@ const CampaignTable = () => {
         columns={columns}
         api={apiEndPoint.commune.list}
         onRowEvent={handleRowEvent}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
         outSideLoad={outSideLoad}
       />
       {openDetail && data && (

@@ -15,7 +15,7 @@ const CommonForm = (props: CommonFormProps) => {
           'Content-Type': 'application/json',
         },
       });
-      console.log(response.status, response);
+
       if (response.ok) {
         setHelperText('');
       } else {
@@ -44,7 +44,9 @@ const CommonForm = (props: CommonFormProps) => {
           item
           xs={12}
         >
-          <Typography>Tên tổ chức</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Tên tổ chức
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -55,7 +57,9 @@ const CommonForm = (props: CommonFormProps) => {
             variant='standard'
           />
 
-          <Typography>Địa chỉ</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Địa chỉ
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -66,7 +70,9 @@ const CommonForm = (props: CommonFormProps) => {
             variant='standard'
           />
 
-          <Typography>Mạng xã hội</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Mạng xã hội
+          </Typography>
           <TextField
             autoFocus
             margin='dense'
@@ -78,7 +84,9 @@ const CommonForm = (props: CommonFormProps) => {
             helperText={helperText}
           />
 
-          <Typography>Email:</Typography>
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Email:
+          </Typography>
           <TextField
             autoFocus
             margin='dense'

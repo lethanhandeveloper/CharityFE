@@ -11,7 +11,9 @@ const apiEndPoint = {
     setactive: (id: string) => `/user/changeactivestatus/${id}`,
     getByID: (id: string) => `/user/getbyid/${id}`,
   },
-
+  home: {
+    list: '/home/admin',
+  },
   location: {
     getProvince: '/area/province/list',
     getCommuneByDistrict: (id: string) => `/area/commune/${id}/district`,
@@ -59,7 +61,7 @@ const apiEndPoint = {
   },
   request: {
     update: (id: string) => `/user/verification/${id}`,
-    list: '/user/verification/paginate',
+    list: (status: string) => `/user/verification/paginate/${status}`,
   },
   feedback: {
     list: '/feedback/paginate',

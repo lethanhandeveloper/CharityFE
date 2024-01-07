@@ -1,7 +1,7 @@
 export default {
-  contractAddress: '0xa217Ec01fADe47f6cA30778B466CEE7ABd7998A5',
-  historyAddress: '0x8cc542b3bE2d28Dad7040c13936BDb2de8B48cda',
-  itemAdress: '0xe16BbA8A480D13B63370A69506Ea7626935d2Ea8',
-  withdrawAddress: '0xa607e671f0dC69A935Bae37A2Ff06ea4a498C897',
-  adminAddress: '0xf584af5FD02feF9472a8B89c5ec8B12F417158B0',
+  contractAddress: '0x2Ea4d44Ef514830917db7babA9E679932289758A',
+  historyAddress: '0xf8978185dDbB72ECAAe331558748AB0505dE0842',
+  itemAdress: '0xADd3317Ed004Cb6d6d2a20029d287C081904CeA4',
+  withdrawAddress: '0x5E7bEeD95D2f331F5cFe40993AFF9Bdc2d3D7d5E',
+  adminAddress: '0xc1A6851615a7C37BC778D3bdEC6f59B930bfBCda',
 };

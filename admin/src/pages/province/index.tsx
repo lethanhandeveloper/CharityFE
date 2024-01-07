@@ -8,7 +8,6 @@ import DetailProvince from './detail';
 import { Grid } from '@mui/material';
 import { ProvinceUI } from '@models/area';
 import { mapProvinceUI } from '@services/mapdata/area';
-import ExportToExcelButton from '@components/Excel';
 
 const ProvinceTable = () => {
   const [openDetail, setOpenDetail] = useState<boolean>(false);
@@ -36,39 +35,16 @@ const ProvinceTable = () => {
 
   const renderButton = () => {
     return (
-      <Grid container>
-        <Grid item>
-          <Button
-            variant='contained'
-            onClick={() => {
-              setOpenDetail(true);
-              setData(mapProvinceUI({}));
-            }}
-          >
-            Tạo mới
-          </Button>
-          <ExportToExcelButton
-            nameFile='campaign'
-            data={[
-              ['Name', 'Age', 'City'],
-              ['John', 25, 'New York'],
-              ['Alice', 30, 'London'],
-              ['Bob', 22, 'Paris'],
-              ['Name', 'Age', 'City'],
-              ['John', 25, 'New York'],
-              ['Alice', 30, 'London'],
-              ['Bob', 22, 'Paris'],
-              ['Name', 'Age', 'City'],
-              ['John', 25, 'New York'],
-              ['Alice', 30, 'London'],
-              ['Bob', 22, 'Paris'],
-              ['Name', 'Age', 'City'],
-              ['John', 25, 'New York'],
-              ['Alice', 30, 'London'],
-              ['Bob', 22, 'Paris'],
-            ]}
-          />
-        </Grid>
+      <Grid item>
+        <Button
+          variant='contained'
+          onClick={() => {
+            setOpenDetail(true);
+            setData(mapProvinceUI({}));
+          }}
+        >
+          Tạo mới
+        </Button>
       </Grid>
     );
   };
@@ -78,7 +54,7 @@ const ProvinceTable = () => {
         columns={columns}
         api={apiEndPoint.province.list}
         onRowEvent={handleRowEvent}
-        buttons={<> {renderButton()}</>}
+        buttons={renderButton()}
         outSideLoad={outSideLoad}
       />
       {openDetail && data && (

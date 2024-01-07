@@ -49,6 +49,9 @@ const sendEmail = async (email: string) => {
 const getRequestByUserId = async (id: string) => {
   return await apiService.get(apiEndPoint.user.getRequestByUserId(id));
 };
+const sendPhoneCode = async (phone: string) => {
+  return await apiService.post(apiEndPoint.user.sendCode, { phoneNumber: phone });
+};
 export default {
   getRequestByUser,
   login,
@@ -63,4 +66,5 @@ export default {
   sendEmail,
   updateRequest,
   getRequestByUserId,
+  sendPhoneCode,
 };
