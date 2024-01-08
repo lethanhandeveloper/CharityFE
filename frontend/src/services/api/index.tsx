@@ -5,6 +5,7 @@ import banner from './banner';
 import map from './map';
 import home from './home';
 import email from './email';
+import file from './file';
 const serviceAPI = {
   auth,
   location,
@@ -13,5 +14,6 @@ const serviceAPI = {
   map,
   home,
   email,
+  file,
 };
 export default serviceAPI;

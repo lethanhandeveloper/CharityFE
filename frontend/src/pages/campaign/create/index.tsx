@@ -56,6 +56,7 @@ const CampaignCreatePage = () => {
     title: '',
     fileUrl: '',
     status: 'DRAFT',
+    addressWallet: '',
   });
   useEffect(() => {
     const initProvince = async () => {
@@ -152,7 +153,7 @@ const CampaignCreatePage = () => {
                     <Typography
                       style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
                     >
-                      Tiêu điều
+                      Tiêu đề
                     </Typography>
                     <TextField
                       autoFocus
@@ -163,6 +164,19 @@ const CampaignCreatePage = () => {
                       variant='standard'
                       error={Boolean(error?.title)}
                       helperText={error?.title}
+                    />
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Địa chỉ ví
+                    </Typography>
+                    <TextField
+                      autoFocus
+                      margin='dense'
+                      onChange={handleChange}
+                      fullWidth
+                      name='addressWallet'
+                      variant='standard'
                     />
                     <Typography
                       style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}

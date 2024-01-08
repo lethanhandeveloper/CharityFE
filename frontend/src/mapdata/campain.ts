@@ -12,6 +12,7 @@ export const mapCampain = (data: any): CampainUI => ({
   thumbnail: data.thumbnail,
   title: data.title,
   status: data.status,
+  addressWallet: data.addressWallet,
 });
 export const mapCampainUIs = (list: any): CampainUI[] => {
   return list.map((item: any) => mapCampain(item));

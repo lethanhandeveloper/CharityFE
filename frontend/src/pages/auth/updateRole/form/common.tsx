@@ -1,5 +1,20 @@
-import { FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
+import {
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from '@mui/material';
+import serviceAPI from '@services/api';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useState } from 'react';
+import ConfirmCode from '@pages/auth/register/dialog';
+import { setInfoAlert } from '@store/redux/alert';
+import { useAppDispatch } from '@store/hook';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 interface CommonFormProps {
   setData: (data: any) => void;
   data: any;
@@ -7,6 +22,9 @@ interface CommonFormProps {
 
 const CommonForm = (props: CommonFormProps) => {
   const { data, setData } = props;
+  const dispatch = useAppDispatch();
+  const [open, setOpenDialog] = useState<boolean>();
+  const [verify, setVerify] = useState<boolean>();
   const [helperText, setHelperText] = useState<string>('');
   const checkLinkExistence = async (url: string) => {
     try {
@@ -31,7 +49,15 @@ const CommonForm = (props: CommonFormProps) => {
       checkLinkExistence(event.target.value);
     }
   };
-
+  const handleVerify = async (code: string) => {
+    const check = await serviceAPI.auth.validateEmail(data.email, code);
+    if (check) {
+      setVerify(true);
+      dispatch(setInfoAlert({ open: true, title: 'Xác thực email thành công', type: 'success' }));
+    } else {
+      dispatch(setInfoAlert({ open: true, title: 'Xác thực email thất bại', type: 'error' }));
+    }
+  };
   return (
     <>
       <Grid
@@ -40,6 +66,16 @@ const CommonForm = (props: CommonFormProps) => {
           padding: '0 60px 0',
         }}
       >
+        {open && (
+          <ConfirmCode
+            handleClose={() => setOpenDialog(false)}
+            handleSubmit={(code) => {
+              handleVerify(code);
+            }}
+            open={open}
+          />
+        )}
+
         <Grid
           item
           xs={12}
@@ -95,6 +131,24 @@ const CommonForm = (props: CommonFormProps) => {
             value={data?.representativeEmail}
             name='representativeEmail'
             variant='standard'
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  {verify ? (
+                    <TaskAltIcon color='success' />
+                  ) : (
+                    <IconButton
+                      onClick={() => {
+                        serviceAPI.auth.sendEmail(data.representativeEmail);
+                        setOpenDialog(true);
+                      }}
+                    >
+                      <CheckCircleOutlineIcon />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              ),
+            }}
           />
           <RadioGroup
             row

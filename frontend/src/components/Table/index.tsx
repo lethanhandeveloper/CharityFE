@@ -80,8 +80,10 @@ export default function TableRender({
         const checkList = [];
         if (isCampaign) {
           for (let index = 0; index < dataList.length; index++) {
-            const data = await serviceAPI.auth.getUserById(dataList[index].userId);
-            checkList.push(mapUserUI(data.data.result));
+            if (!dataList[index].isAnonymous) {
+              const data = await serviceAPI.auth.getUserById(dataList[index].userId);
+              checkList.push(mapUserUI(data.data.result));
+            }
           }
         } else {
           for (let index = 0; index < dataList.length; index++) {
@@ -170,7 +172,12 @@ export default function TableRender({
                           alignItems={'center'}
                           gap={3}
                         >
-                          {isCampaign ? (
+                          {row.isAnonymous ? (
+                            <>
+                              <Avatar>Anonymous</Avatar>
+                              Người ủng hộ ẩn danh
+                            </>
+                          ) : isCampaign ? (
                             <>
                               <Avatar
                                 alt={userList.find((item: any) => item.id === row.userId)?.fullname}

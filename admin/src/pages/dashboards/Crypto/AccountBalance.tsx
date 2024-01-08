@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
   styled,
-  // Avatar,
+  Avatar,
   Divider,
   alpha,
   ListItem,
@@ -14,19 +14,21 @@ import {
   List,
   ListItemAvatar,
 } from '@mui/material';
-// import TrendingUp from '@mui/icons-material/TrendingUp';
+import TrendingUp from '@mui/icons-material/TrendingUp';
 import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
+import campaign from '@services/ethers/campaign';
+import { useState, useEffect } from 'react';
 
-// const AvatarSuccess = styled(Avatar)(
-//   ({ theme }) => `
-//       background-color: ${theme.colors.success.main};
-//       color: ${theme.palette.success.contrastText};
-//       width: ${theme.spacing(8)};
-//       height: ${theme.spacing(8)};
-//       box-shadow: ${theme.colors.shadows.success};
-// `,
-// );
+const AvatarSuccess = styled(Avatar)(
+  ({ theme }) => `
+      background-color: ${theme.colors.success.main};
+      color: ${theme.palette.success.contrastText};
+      width: ${theme.spacing(8)};
+      height: ${theme.spacing(8)};
+      box-shadow: ${theme.colors.shadows.success};
+`,
+);
 
 const ListItemAvatarWrapper = styled(ListItemAvatar)(
   ({ theme }) => `
@@ -56,7 +58,6 @@ const ListItemAvatarWrapper = styled(ListItemAvatar)(
 
 function AccountBalance({ data }: { data: any }) {
   const theme = useTheme();
-
   const chartOptions: ApexOptions = {
     chart: {
       background: 'transparent',
@@ -125,7 +126,15 @@ function AccountBalance({ data }: { data: any }) {
   };
 
   const chartSeries = [10, 20, 25, 45];
-
+  const [balance, setBalance] = useState<any>();
+  useEffect(() => {
+    const initData = async () => {
+      const data = await campaign.getBalacne();
+      setBalance(data);
+      console.log(balance);
+    };
+    initData();
+  }, []);
   return (
     <Card>
       <Grid
@@ -146,7 +155,7 @@ function AccountBalance({ data }: { data: any }) {
             >
               Tổng tiền quyên góp
             </Typography>
-            {/* <Box>
+            <Box>
               <Typography
                 variant='h1'
                 gutterBottom
@@ -185,7 +194,7 @@ function AccountBalance({ data }: { data: any }) {
                   </Typography>
                 </Box>
               </Box>
-            </Box> */}
+            </Box>
             <Grid
               container
               spacing={3}

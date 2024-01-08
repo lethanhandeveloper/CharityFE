@@ -15,8 +15,13 @@ const apiEndPoint = {
     updateByID: (id: string) => `/user/verification/update/${id}`,
     getRequestByUserId: (id: string) => `/user/verification/user/${id}`,
     sendCode: '/user/phonenumber/getcode',
+    validatePhone: '/user/phonenumber/validate',
+    valiadateEmail: '/user/email/validate',
   },
-
+  file: {
+    add: '/file/create',
+    getbyId: (id: string) => `/file/${id}`,
+  },
   location: {
     getProvince: '/area/province/list',
     getDistrict: '/area/district/list',

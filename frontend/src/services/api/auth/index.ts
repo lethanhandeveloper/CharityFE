@@ -52,6 +52,15 @@ const getRequestByUserId = async (id: string) => {
 const sendPhoneCode = async (phone: string) => {
   return await apiService.post(apiEndPoint.user.sendCode, { phoneNumber: phone });
 };
+const validatePhone = async (phone: string, code: string) => {
+  return await apiService.post(apiEndPoint.user.validatePhone, {
+    phoneNumber: phone,
+    code: code,
+  });
+};
+const validateEmail = async (email: string, code: string) => {
+  return await apiService.post(apiEndPoint.user.valiadateEmail, { email: email, code: code });
+};
 export default {
   getRequestByUser,
   login,
@@ -67,4 +76,6 @@ export default {
   updateRequest,
   getRequestByUserId,
   sendPhoneCode,
+  validateEmail,
+  validatePhone,
 };

@@ -9,6 +9,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import FormConfirm from '@pages/consultant/dialog';
+import serviceAPI from '@services/api';
 import campaign from '@services/ethers/campaign';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
@@ -36,6 +37,8 @@ const CardCampaign = ({
   const [contract, setContract] = useState<CampaignContractUI>();
   const withDraw = async (id: string) => {
     try {
+      const fileId = await serviceAPI.file.createFile(dataWithDraw.file);
+
       await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
       const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
       const signer = provider.getSigner();
@@ -46,7 +49,7 @@ const CardCampaign = ({
         address,
         localStorage.getItem('userId') || 'anonymous',
         dataWithDraw.message,
-        dataWithDraw.file,
+        fileId?._id,
       );
       if (check) {
         dispatch(

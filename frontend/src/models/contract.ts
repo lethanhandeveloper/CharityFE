@@ -10,4 +10,5 @@ export interface HistoryContractUI {
   campaignId: string;
   userId: string;
   timeString: string;
+  isAnonymous: boolean;
 }

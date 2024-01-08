@@ -254,6 +254,20 @@ const withDraw = async (id: string) => {
   }
 };
 
+const getBalacne = async () => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const tx = await contract.getContractTotal();
+    const tx2 = await contract.getContractTotal();
+    return { tx, tx2 };
+  } catch (error) {
+    return {};
+  }
+};
+
 export default {
   addNew,
   setHistoryAddress,
@@ -270,4 +284,5 @@ export default {
   withDraw,
   refund,
   getRequestForAdmin,
+  getBalacne,
 };

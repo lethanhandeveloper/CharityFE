@@ -9,10 +9,14 @@ import {
   Typography,
 } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Editor } from '@tinymce/tinymce-react';
 import { useState } from 'react';
 import serviceAPI from '@services/api';
+import { useAppDispatch } from '@store/hook';
+import { setInfoAlert } from '@store/redux/alert';
+import ConfirmCode from '@pages/auth/register/dialog';
 interface OrginazationFormProps {
   setData: (data: any) => void;
   data: any;
@@ -20,6 +24,9 @@ interface OrginazationFormProps {
 
 const OrginazationForm = (props: OrginazationFormProps) => {
   const { data, setData } = props;
+  const [open, setOpenDialog] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const [verify, setVerify] = useState<boolean>(false);
   const [helperText, setHelperText] = useState<string>('');
   const checkLinkExistence = async (url: string) => {
     try {
@@ -47,7 +54,19 @@ const OrginazationForm = (props: OrginazationFormProps) => {
       checkLinkExistence(event.target.value);
     }
   };
-
+  const handleVerify = async (code: string) => {
+    const check = await serviceAPI.auth.validatePhone(data.representativePhoneNumber, code);
+    if (check) {
+      setVerify(true);
+      dispatch(
+        setInfoAlert({ open: true, title: 'Xác thực số điện thoại thành công', type: 'success' }),
+      );
+    } else {
+      dispatch(
+        setInfoAlert({ open: true, title: 'Xác thực số điện thoại thất bại', type: 'error' }),
+      );
+    }
+  };
   return (
     <>
       <Grid
@@ -56,6 +75,17 @@ const OrginazationForm = (props: OrginazationFormProps) => {
           padding: '0 60px 0',
         }}
       >
+        {open && (
+          <ConfirmCode
+            open={open}
+            handleClose={() => {
+              setOpenDialog(false);
+            }}
+            handleSubmit={(code) => {
+              handleVerify(code);
+            }}
+          />
+        )}
         <Grid
           item
           xs={12}
@@ -122,13 +152,18 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             InputProps={{
               endAdornment: (
                 <InputAdornment position='end'>
-                  <IconButton
-                    onClick={() => {
-                      serviceAPI.auth.sendPhoneCode('0368485425');
-                    }}
-                  >
-                    <CheckCircleOutlineIcon />
-                  </IconButton>
+                  {verify ? (
+                    <TaskAltIcon color='success' />
+                  ) : (
+                    <IconButton
+                      onClick={() => {
+                        serviceAPI.auth.sendPhoneCode('0368485425');
+                        setOpenDialog(true);
+                      }}
+                    >
+                      <CheckCircleOutlineIcon />
+                    </IconButton>
+                  )}
                 </InputAdornment>
               ),
             }}

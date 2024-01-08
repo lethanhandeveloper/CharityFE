@@ -1,11 +1,13 @@
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   Divider,
+  FormControlLabel,
   Grid,
   TextField,
   Typography,
@@ -34,6 +36,7 @@ export const calculatePercent = (number1: number, number2: number) =>
 const DonatePage = () => {
   const { id } = useParams();
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [checked, setChecked] = useState<boolean>(false);
   const [number, setNumber] = useState<number>(0);
   const [detail, setDetail] = useState<CampainUI>();
   const [campaignContract, setCampaign] = useState<CampaignContractUI>();
@@ -68,6 +71,7 @@ const DonatePage = () => {
         detail?.id,
         number,
         localStorage.getItem('userId') || 'anonymous',
+        !checked,
       );
       serviceAPI.email.sendEmailDonate(
         detail.endDate.toString(),
@@ -95,12 +99,31 @@ const DonatePage = () => {
         >
           <DialogTitle id='alert-dialog-title'>{'Nhập số tiền muốn ủng hộ'}</DialogTitle>
           <DialogContent>
-            <DialogContentText id='alert-dialog-description'>
+            <DialogContentText
+              id='alert-dialog-description'
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '2',
+              }}
+            >
               <TextField
                 type='number'
                 onChange={(e) => {
                   setNumber(parseFloat(e.target.value));
                 }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={(e) => {
+                      setChecked(e.target.checked);
+                    }}
+                  />
+                }
+                label='Ủng hộ ẩn anh'
               />
             </DialogContentText>
           </DialogContent>

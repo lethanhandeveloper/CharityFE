@@ -13,6 +13,9 @@ import { UserUI } from '@models/user';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import campaign from '@services/ethers/campaign';
+import ExtendedWindow from '@models/ether';
+import { ethers } from 'ethers';
+import ConfirmCode from './dialog';
 
 const UserBoxButton = styled(Button)(
   ({ theme }) => `
@@ -47,6 +50,7 @@ function HeaderUserbox() {
   const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [openDialog, setOpenDialog] = useState<boolean>(true);
   const navigation = useNavigate();
   const dispatch = useAppDispatch();
   const handleOpen = (): void => {
@@ -75,6 +79,18 @@ function HeaderUserbox() {
     localStorage.removeItem('tokenAdmin');
     navigation('/login');
   };
+
+  const handleSetAdminAddress = async () => {
+    try {
+      await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+      const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
+      campaign.setAddress(address);
+    } catch (err) {
+      dispatch(setInfoAlert({ open: true, title: 'Đăng nhập ví để thực hiện', type: 'error' }));
+    }
+  };
   return (
     <>
       <UserBoxButton
@@ -82,6 +98,14 @@ function HeaderUserbox() {
         ref={ref}
         onClick={handleOpen}
       >
+        {openDialog && (
+          <ConfirmCode
+            open={openDialog}
+            handleClose={() => setOpenDialog(false)}
+            handleSubmit={handleSetAdminAddress}
+          />
+        )}
+
         <Avatar
           variant='rounded'
           alt={user?.fullname}
@@ -134,7 +158,16 @@ function HeaderUserbox() {
               campaign.setHistoryAddress();
             }}
           >
-            Thêm địa chỉ ví
+            Thiết lập địa chỉ contract
+          </Button>
+          <Button
+            color='primary'
+            fullWidth
+            onClick={() => {
+              setOpenDialog(true);
+            }}
+          >
+            Thiết lập địa chỉ admin
           </Button>
           <Button
             color='primary'

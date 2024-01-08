@@ -11,6 +11,7 @@ export interface Campain {
   thumbnail: string;
   fileUrl: string;
   status: string;
+  addressWallet: string;
 }
 export interface CampainUI {
   id: string;
@@ -25,4 +26,5 @@ export interface CampainUI {
   thumbnail: string;
   countdown: number;
   status: string;
+  addressWallet: string;
 }

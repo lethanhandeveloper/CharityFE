@@ -16,16 +16,22 @@ const getCurrentDate = (): string => {
     hour12: false,
   });
 };
-const donateCampaign = async (id: string, value: number, userId: string) => {
+const donateCampaign = async (id: string, value: number, userId: string, isAnonymous: boolean) => {
   try {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const valueInWei = ethers.utils.parseEther(value.toString());
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
-    const tx = await contract.donate(id, userId, getCurrentDate(), {
-      value: valueInWei,
-    });
+    const tx = await contract.donate(
+      id,
+      userId,
+      getCurrentDate(),
+      {
+        value: valueInWei,
+      },
+      isAnonymous,
+    );
     await tx.wait();
     return true;
   } catch (error) {
