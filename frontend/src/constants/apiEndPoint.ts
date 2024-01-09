@@ -17,6 +17,8 @@ const apiEndPoint = {
     sendCode: '/user/phonenumber/getcode',
     validatePhone: '/user/phonenumber/validate',
     valiadateEmail: '/user/email/validate',
+    updatePass: '/user/updatepass',
+    forgetPass: '/user/forgetpass',
   },
   file: {
     add: '/file/create',

@@ -13,8 +13,8 @@ import { UserUI } from '@models/user';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import campaign from '@services/ethers/campaign';
-import ExtendedWindow from '@models/ether';
-import { ethers } from 'ethers';
+// import ExtendedWindow from '@models/ether';
+// import { ethers } from 'ethers';
 import ConfirmCode from './dialog';
 
 const UserBoxButton = styled(Button)(
@@ -80,13 +80,13 @@ function HeaderUserbox() {
     navigation('/login');
   };
 
-  const handleSetAdminAddress = async () => {
+  const handleSetAdminAddress = async (code: string) => {
     try {
-      await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
-      const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
-      const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      campaign.setAddress(address);
+      // await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+      // const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+      // const signer = provider.getSigner();
+      // const address = await signer.getAddress();
+      campaign.setAddress(code);
     } catch (err) {
       dispatch(setInfoAlert({ open: true, title: 'Đăng nhập ví để thực hiện', type: 'error' }));
     }

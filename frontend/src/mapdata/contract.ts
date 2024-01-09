@@ -25,6 +25,7 @@ export const mapHistoryContract = (data: any): HistoryContractUI => ({
   value: parseFloat(ethers.utils.formatEther(BigNumber.from(data.value).toString())),
   timeString: data.time,
   isAnonymous: data.isAnonymous,
+  isRefund: data.isRefund,
 });
 
 export const mapHistoryContracts = (list: any): HistoryContractUI[] => {

@@ -120,7 +120,7 @@ const PersonalForm = (props: PersonalFormProps) => {
                   ) : (
                     <IconButton
                       onClick={() => {
-                        serviceAPI.auth.sendPhoneCode('0368485425');
+                        serviceAPI.auth.sendPhoneCode(data?.representativePhoneNumber);
                         setOpenDialog(true);
                       }}
                     >

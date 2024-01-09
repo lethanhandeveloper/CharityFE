@@ -15,6 +15,7 @@ import serviceAPI from '@services/api';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
 import { ButtonCancel, ButtonConfirm } from '@common/Button';
+import DialogChangePass from './Password';
 interface EditInfoDialogProps {
   data: UserUI;
 }
@@ -106,11 +107,12 @@ const EditInfoDialog = (props: EditInfoDialogProps) => {
     <React.Fragment>
       <Button
         onClick={handleClickOpen}
-        variant='text'
+        variant='contained'
         startIcon={<EditTwoTone />}
       >
         Cập nhật
       </Button>
+      <DialogChangePass />
       <Dialog
         open={open}
         onClose={handleClose}

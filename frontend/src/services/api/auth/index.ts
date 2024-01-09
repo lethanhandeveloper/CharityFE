@@ -61,6 +61,12 @@ const validatePhone = async (phone: string, code: string) => {
 const validateEmail = async (email: string, code: string) => {
   return await apiService.post(apiEndPoint.user.valiadateEmail, { email: email, code: code });
 };
+const changePassword = async (data: any) => {
+  return await apiService.post(apiEndPoint.user.updatePass, data);
+};
+const forgetPassword = async (data: any) => {
+  return await apiService.post(apiEndPoint.user.forgetPass, data);
+};
 export default {
   getRequestByUser,
   login,
@@ -78,4 +84,6 @@ export default {
   sendPhoneCode,
   validateEmail,
   validatePhone,
+  changePassword,
+  forgetPassword,
 };

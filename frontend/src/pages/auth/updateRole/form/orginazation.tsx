@@ -157,7 +157,7 @@ const OrginazationForm = (props: OrginazationFormProps) => {
                   ) : (
                     <IconButton
                       onClick={() => {
-                        serviceAPI.auth.sendPhoneCode('0368485425');
+                        serviceAPI.auth.sendPhoneCode(data?.representativePhoneNumber);
                         setOpenDialog(true);
                       }}
                     >

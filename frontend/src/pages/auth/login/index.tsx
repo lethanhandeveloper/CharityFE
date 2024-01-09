@@ -3,7 +3,6 @@ import { Link, useNavigate, Navigate } from 'react-router-dom';
 
 import { Divider, Grid, Typography, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import FacebookIcon from '@mui/icons-material/Facebook';
 
 import { ButtonStyle2 } from '@common/Button';
 import { BoxColum } from '@common/Box';
@@ -14,6 +13,7 @@ import serviceAPI from '@services/api/index';
 import { UserAPI } from 'models/user';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import DialogChangePass from './dialog';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -167,16 +167,9 @@ const LoginPage = () => {
                   },
                 }}
               >
-                hoặc tiếp tục với
+                <DialogChangePass />
               </Divider>
             </div>
-
-            <FacebookIcon
-              className={`${style['mt-40']} ${style['icon']}`}
-              sx={{
-                margin: '0 auto',
-              }}
-            />
           </BoxColum>
         </Grid>
         <Grid

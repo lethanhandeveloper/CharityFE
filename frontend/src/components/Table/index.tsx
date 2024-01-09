@@ -74,13 +74,13 @@ export default function TableRender({
         } else {
           history = await campaign.getHistoryByUser(id);
         }
+
         const dataList = mapHistoryContracts(history);
         setList(dataList);
-
         const checkList = [];
         if (isCampaign) {
           for (let index = 0; index < dataList.length; index++) {
-            if (!dataList[index].isAnonymous) {
+            if (dataList[index].isAnonymous) {
               const data = await serviceAPI.auth.getUserById(dataList[index].userId);
               checkList.push(mapUserUI(data.data.result));
             }
@@ -172,10 +172,10 @@ export default function TableRender({
                           alignItems={'center'}
                           gap={3}
                         >
-                          {row.isAnonymous ? (
+                          {!row.isAnonymous ? (
                             <>
                               <Avatar>Anonymous</Avatar>
-                              Người ủng hộ ẩn danh
+                              Người ủng hộ ẩn danh {row.isRefund && 'Đã hoàn tiền'}
                             </>
                           ) : isCampaign ? (
                             <>

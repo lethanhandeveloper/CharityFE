@@ -50,7 +50,7 @@ const CommonForm = (props: CommonFormProps) => {
     }
   };
   const handleVerify = async (code: string) => {
-    const check = await serviceAPI.auth.validateEmail(data.email, code);
+    const check = await serviceAPI.auth.validateEmail(data?.representativeEmail, code);
     if (check) {
       setVerify(true);
       dispatch(setInfoAlert({ open: true, title: 'Xác thực email thành công', type: 'success' }));

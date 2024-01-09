@@ -23,15 +23,9 @@ const donateCampaign = async (id: string, value: number, userId: string, isAnony
     const valueInWei = ethers.utils.parseEther(value.toString());
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
-    const tx = await contract.donate(
-      id,
-      userId,
-      getCurrentDate(),
-      {
-        value: valueInWei,
-      },
-      isAnonymous,
-    );
+    const tx = await contract.donate(id, userId, getCurrentDate(), isAnonymous, {
+      value: valueInWei,
+    });
     await tx.wait();
     return true;
   } catch (error) {
