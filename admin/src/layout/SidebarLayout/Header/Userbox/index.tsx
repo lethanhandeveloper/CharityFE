@@ -50,7 +50,7 @@ function HeaderUserbox() {
   const [user, setUser] = useState<UserUI>();
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [openDialog, setOpenDialog] = useState<boolean>(true);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigation = useNavigate();
   const dispatch = useAppDispatch();
   const handleOpen = (): void => {

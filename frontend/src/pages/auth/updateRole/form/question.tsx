@@ -1,5 +1,5 @@
 import { Grid, TextField, Typography } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers';
+import { DateCalendar } from '@mui/x-date-pickers';
 interface QuestionFormProps {
   setData: (data: any) => void;
   data: any;
@@ -49,7 +49,12 @@ const QuestionForm = (props: QuestionFormProps) => {
             name='goalName'
             variant='standard'
           />
-          <Grid container>
+          <Grid
+            container
+            alignItems={'center'}
+            justifyContent={'center'}
+            textAlign={'center'}
+          >
             <Grid
               item
               xs={6}
@@ -58,11 +63,12 @@ const QuestionForm = (props: QuestionFormProps) => {
                 Ngày bắt đầu:
               </Typography>
 
-              <DatePicker
-                value={new Date(data?.startDate)}
-                onChange={(newValue) => {
-                  setData({ ...data, startDate: newValue });
+              <DateCalendar
+                disableFuture
+                onChange={(e) => {
+                  setData({ ...data, startDate: e || new Date() });
                 }}
+                value={data?.startDate ? new Date(data?.startDate) : new Date()}
               />
             </Grid>
             <Grid
@@ -72,11 +78,13 @@ const QuestionForm = (props: QuestionFormProps) => {
               <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
                 Ngày kết thúc:
               </Typography>
-              <DatePicker
-                value={new Date(data?.endDate)}
-                onChange={(newValue) => {
-                  setData({ ...data, endDate: newValue });
+
+              <DateCalendar
+                disableFuture
+                onChange={(e) => {
+                  setData({ ...data, endDate: e || new Date() });
                 }}
+                value={data?.endDate ? new Date(data?.endDate) : new Date()}
               />
             </Grid>
           </Grid>

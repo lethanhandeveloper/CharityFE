@@ -22,7 +22,7 @@ const UpdateRolePage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const { id } = useParams();
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const [data, setData] = React.useState<any>();
+  const [data, setData] = React.useState<any>({ type: 2 });
   const [question, setQuestion] = React.useState<any>();
   const dispatch = useAppDispatch();
   const isStepOptional = (step: number) => {

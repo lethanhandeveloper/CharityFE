@@ -19,6 +19,7 @@ import Chart from 'react-apexcharts';
 import type { ApexOptions } from 'apexcharts';
 import campaign from '@services/ethers/campaign';
 import { useState, useEffect } from 'react';
+import { BigNumber, ethers } from 'ethers';
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -130,8 +131,10 @@ function AccountBalance({ data }: { data: any }) {
   useEffect(() => {
     const initData = async () => {
       const data = await campaign.getBalacne();
-      setBalance(data);
-      console.log(balance);
+      setBalance({
+        total: parseFloat(ethers.utils.formatEther(BigNumber.from(data.tx).toString())),
+        balance: parseFloat(ethers.utils.formatEther(BigNumber.from(data.tx2).toString())),
+      });
     };
     initData();
   }, []);
@@ -160,14 +163,14 @@ function AccountBalance({ data }: { data: any }) {
                 variant='h1'
                 gutterBottom
               >
-                $54,584.23
+                {balance?.total}
               </Typography>
               <Typography
                 variant='h4'
                 fontWeight='normal'
                 color='text.secondary'
               >
-                {data?.userDeactiveCount} BTC
+                {balance?.balance} Số dư
               </Typography>
               <Box
                 display='flex'

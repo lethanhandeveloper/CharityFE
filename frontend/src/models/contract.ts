@@ -12,4 +12,5 @@ export interface HistoryContractUI {
   timeString: string;
   isAnonymous: boolean;
   isRefund: boolean;
+  timeRefund: string;
 }

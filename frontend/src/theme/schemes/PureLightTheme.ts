@@ -423,21 +423,21 @@ export const PureLightTheme = createTheme({
         },
       },
     },
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
-            paddingRight: 6,
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: colors.alpha.black[50],
-          },
-          '&.Mui-focused:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: colors.primary.main,
-          },
-        },
-      },
-    },
+    // MuiOutlinedInput: {
+    //   styleOverrides: {
+    //     root: {
+    //       '& .MuiInputAdornment-positionEnd.MuiInputAdornment-outlined': {
+    //         paddingRight: 6,
+    //       },
+    //       '&:hover .MuiOutlinedInput-notchedOutline': {
+    //         borderColor: colors.alpha.black[50],
+    //       },
+    //       '&.Mui-focused:hover .MuiOutlinedInput-notchedOutline': {
+    //         borderColor: colors.primary.main,
+    //       },
+    //     },
+    //   },
+    // },
     MuiListSubheader: {
       styleOverrides: {
         colorPrimary: {
@@ -567,6 +567,7 @@ export const PureLightTheme = createTheme({
           textTransform: 'none',
           paddingLeft: 16,
           paddingRight: 16,
+          borderRadius: '5px',
 
           '.MuiSvgIcon-root': {
             transition: 'all .2s',
@@ -888,36 +889,36 @@ export const PureLightTheme = createTheme({
         },
       },
     },
-    MuiAutocomplete: {
-      styleOverrides: {
-        tag: {
-          margin: 1,
-        },
-        root: {
-          '.MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
-            right: 14,
-          },
-        },
-        clearIndicator: {
-          background: colors.error.lighter,
-          color: colors.error.main,
-          marginRight: 8,
+    // MuiAutocomplete: {
+    //   styleOverrides: {
+    //     tag: {
+    //       margin: 1,
+    //     },
+    //     root: {
+    //       '.MuiAutocomplete-inputRoot.MuiOutlinedInput-root .MuiAutocomplete-endAdornment': {
+    //         right: 14,
+    //       },
+    //     },
+    //     clearIndicator: {
+    //       background: colors.error.lighter,
+    //       color: colors.error.main,
+    //       marginRight: 8,
 
-          '&:hover': {
-            background: colors.error.lighter,
-            color: colors.error.dark,
-          },
-        },
-        popupIndicator: {
-          color: colors.alpha.black[50],
+    //       '&:hover': {
+    //         background: colors.error.lighter,
+    //         color: colors.error.dark,
+    //       },
+    //     },
+    //     popupIndicator: {
+    //       color: colors.alpha.black[50],
 
-          '&:hover': {
-            background: colors.primary.lighter,
-            color: colors.primary.main,
-          },
-        },
-      },
-    },
+    //       '&:hover': {
+    //         background: colors.primary.lighter,
+    //         color: colors.primary.main,
+    //       },
+    //     },
+    //   },
+    // },
     MuiTablePagination: {
       styleOverrides: {
         toolbar: {

@@ -66,6 +66,7 @@ export default function DialogChangePass() {
               <TextField
                 size='small'
                 type='email'
+                fullWidth
                 onChange={(e) => {
                   setCode({ ...code, email: e.target.value });
                 }}
@@ -88,6 +89,7 @@ export default function DialogChangePass() {
             <Grid container>
               <TextField
                 size='small'
+                fullWidth
                 onChange={(e) => {
                   setCode({ ...code, code: e.target.value });
                 }}
@@ -97,6 +99,7 @@ export default function DialogChangePass() {
             <Grid container>
               <TextField
                 size='small'
+                fullWidth
                 type='password'
                 onChange={(e) => {
                   setCode({ ...code, password: e.target.value });

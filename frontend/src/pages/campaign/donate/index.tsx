@@ -73,12 +73,15 @@ const DonatePage = () => {
         localStorage.getItem('userId') || 'anonymous',
         !checked,
       );
-      serviceAPI.email.sendEmailDonate(
-        detail.endDate.toString(),
-        detail.title,
-        number.toString(),
-        localStorage.getItem('userId') || '',
-      );
+      if (localStorage.getItem('userId')) {
+        serviceAPI.email.sendEmailDonate(
+          detail.endDate.toString(),
+          detail.title,
+          number.toString(),
+          localStorage.getItem('userId') || '',
+        );
+      }
+
       if (check) {
         dispatch(setInfoAlert({ open: true, title: 'Giao dịch thành công', type: 'success' }));
       } else {

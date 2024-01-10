@@ -261,7 +261,7 @@ const getBalacne = async () => {
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
     const tx = await contract.getContractTotal();
-    const tx2 = await contract.getContractTotal();
+    const tx2 = await contract.getContractBalance();
     return { tx, tx2 };
   } catch (error) {
     return {};

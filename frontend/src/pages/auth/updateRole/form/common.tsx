@@ -65,6 +65,7 @@ const CommonForm = (props: CommonFormProps) => {
         sx={{
           padding: '0 60px 0',
         }}
+        spacing={2}
       >
         {open && (
           <ConfirmCode
@@ -75,10 +76,9 @@ const CommonForm = (props: CommonFormProps) => {
             open={open}
           />
         )}
-
         <Grid
           item
-          xs={12}
+          xs={6}
         >
           <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
             Tên tổ chức
@@ -92,34 +92,11 @@ const CommonForm = (props: CommonFormProps) => {
             name='name'
             variant='standard'
           />
-
-          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
-            Địa chỉ
-          </Typography>
-          <TextField
-            autoFocus
-            margin='dense'
-            onChange={handleChange}
-            value={data?.address}
-            fullWidth
-            name='address'
-            variant='standard'
-          />
-
-          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
-            Mạng xã hội
-          </Typography>
-          <TextField
-            autoFocus
-            margin='dense'
-            onChange={handleChange}
-            fullWidth
-            value={data?.actionDescSocialLink}
-            name='actionDescSocialLink'
-            variant='standard'
-            helperText={helperText}
-          />
-
+        </Grid>
+        <Grid
+          item
+          xs={6}
+        >
           <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
             Email:
           </Typography>
@@ -150,6 +127,38 @@ const CommonForm = (props: CommonFormProps) => {
               ),
             }}
           />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+        >
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Địa chỉ
+          </Typography>
+          <TextField
+            autoFocus
+            margin='dense'
+            onChange={handleChange}
+            value={data?.address}
+            fullWidth
+            name='address'
+            variant='standard'
+          />
+
+          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+            Mạng xã hội
+          </Typography>
+          <TextField
+            autoFocus
+            margin='dense'
+            onChange={handleChange}
+            fullWidth
+            value={data?.actionDescSocialLink}
+            name='actionDescSocialLink'
+            variant='standard'
+            helperText={helperText}
+          />
+
           <RadioGroup
             row
             aria-labelledby='demo-row-radio-buttons-group-label'

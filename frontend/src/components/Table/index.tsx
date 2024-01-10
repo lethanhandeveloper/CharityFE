@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { SearchInputWrapper } from '@layout/Header/SearchBox';
-import { Avatar, Box, InputAdornment } from '@mui/material';
+import { Avatar, Box, IconButton, InputAdornment } from '@mui/material';
 import campaign from '@services/ethers/campaign';
 import { mapHistoryContracts } from '@mapdata/contract';
 import serviceAPI from '@services/api';
@@ -56,6 +56,7 @@ export default function TableRender({
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [list, setList] = React.useState<HistoryContractUI[]>();
   const [userList, setUserList] = React.useState<any>([]);
+
   const dispatch = useAppDispatch();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -65,54 +66,57 @@ export default function TableRender({
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  React.useEffect(() => {
-    const initData = async () => {
-      try {
-        let history;
-        if (isCampaign) {
-          history = await campaign.getHistoryByCampaign(id);
-        } else {
-          history = await campaign.getHistoryByUser(id);
-        }
 
-        const dataList = mapHistoryContracts(history);
-        setList(dataList);
-        const checkList = [];
-        if (isCampaign) {
-          for (let index = 0; index < dataList.length; index++) {
-            if (dataList[index].isAnonymous) {
-              const data = await serviceAPI.auth.getUserById(dataList[index].userId);
-              checkList.push(mapUserUI(data.data.result));
-            }
-          }
-        } else {
-          for (let index = 0; index < dataList.length; index++) {
-            const data = await serviceAPI.campain.getCampainDetail(dataList[index].campaignId);
-            checkList.push(mapCampain(data.data.result));
-          }
-        }
-        setUserList(checkList);
-        if (isCampaign) {
-          const uniqueValues = new Set(dataList.map((item) => item.userId));
-          const count = Array.from(uniqueValues).length;
-          if (setCount) setCount(dataList.length, count);
-        } else {
-          const total = dataList.reduce((acc, item) => acc + item.value, 0);
-          if (setCount) setCount(dataList.length, total);
-        }
-      } catch (e) {
-        setList([]);
-        dispatch(
-          setInfoAlert({
-            open: true,
-            title: 'Đăng nhập ví MetaMask để kiểm tra thông tin',
-            type: 'error',
-          }),
-        );
+  const initData = async () => {
+    try {
+      let history;
+      if (isCampaign) {
+        history = await campaign.getHistoryByCampaign(id);
+      } else {
+        history = await campaign.getHistoryByUser(id);
       }
-    };
+
+      const dataList = mapHistoryContracts(history);
+
+      const checkList = [];
+      if (isCampaign) {
+        for (let index = 0; index < dataList.length; index++) {
+          if (dataList[index].isAnonymous) {
+            const data = await serviceAPI.auth.getUserById(dataList[index].userId);
+            checkList.push(mapUserUI(data.data.result));
+          }
+        }
+      } else {
+        for (let index = 0; index < dataList.length; index++) {
+          const data = await serviceAPI.campain.getCampainDetail(dataList[index].campaignId);
+          checkList.push(mapCampain(data.data.result));
+        }
+      }
+      setUserList(checkList);
+      if (isCampaign) {
+        const uniqueValues = new Set(dataList.map((item) => item.userId));
+        const count = Array.from(uniqueValues).length;
+        if (setCount) setCount(dataList.length, count);
+      } else {
+        const total = dataList.reduce((acc, item) => acc + item.value, 0);
+        if (setCount) setCount(dataList.length, total);
+      }
+      setList(dataList);
+    } catch (e) {
+      setList([]);
+      dispatch(
+        setInfoAlert({
+          open: true,
+          title: 'Đăng nhập ví MetaMask để kiểm tra thông tin',
+          type: 'error',
+        }),
+      );
+    }
+  };
+
+  React.useEffect(() => {
     initData();
-  }, []);
+  }, [id, isCampaign]);
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -123,7 +127,9 @@ export default function TableRender({
             InputProps={{
               startAdornment: (
                 <InputAdornment position='start'>
-                  <SearchTwoToneIcon />
+                  <IconButton>
+                    <SearchTwoToneIcon />
+                  </IconButton>
                 </InputAdornment>
               ),
             }}
@@ -175,7 +181,8 @@ export default function TableRender({
                           {!row.isAnonymous ? (
                             <>
                               <Avatar>Anonymous</Avatar>
-                              Người ủng hộ ẩn danh {row.isRefund && 'Đã hoàn tiền'}
+                              Người ủng hộ ẩn danh(
+                              {row.isRefund && 'Đã hoàn tiền - ' + row.timeRefund})
                             </>
                           ) : isCampaign ? (
                             <>

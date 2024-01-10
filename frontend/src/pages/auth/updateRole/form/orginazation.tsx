@@ -125,49 +125,64 @@ const OrginazationForm = (props: OrginazationFormProps) => {
             name='operationField'
             variant='standard'
           />
+          <Grid
+            container
+            spacing={2}
+          >
+            <Grid
+              item
+              xs={6}
+            >
+              <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+                Người đại diện:
+              </Typography>
+              <TextField
+                autoFocus
+                value={data?.representativeName}
+                margin='dense'
+                onChange={handleChange}
+                fullWidth
+                name='representativeName'
+                variant='standard'
+              />
+            </Grid>
+            <Grid
+              item
+              xs={6}
+            >
+              <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
+                Số điện thoại:
+              </Typography>
+              <TextField
+                autoFocus
+                margin='dense'
+                value={data?.representativePhoneNumber}
+                onChange={handleChange}
+                fullWidth
+                name='representativePhoneNumber'
+                variant='standard'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      {verify ? (
+                        <TaskAltIcon color='success' />
+                      ) : (
+                        <IconButton
+                          onClick={() => {
+                            serviceAPI.auth.sendPhoneCode(data?.representativePhoneNumber);
+                            setOpenDialog(true);
+                          }}
+                        >
+                          <CheckCircleOutlineIcon />
+                        </IconButton>
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
 
-          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
-            Người đại diện:
-          </Typography>
-          <TextField
-            autoFocus
-            value={data?.representativeName}
-            margin='dense'
-            onChange={handleChange}
-            fullWidth
-            name='representativeName'
-            variant='standard'
-          />
-          <Typography style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}>
-            Số điện thoại:
-          </Typography>
-          <TextField
-            autoFocus
-            margin='dense'
-            value={data?.representativePhoneNumber}
-            onChange={handleChange}
-            fullWidth
-            name='representativePhoneNumber'
-            variant='standard'
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='end'>
-                  {verify ? (
-                    <TaskAltIcon color='success' />
-                  ) : (
-                    <IconButton
-                      onClick={() => {
-                        serviceAPI.auth.sendPhoneCode(data?.representativePhoneNumber);
-                        setOpenDialog(true);
-                      }}
-                    >
-                      <CheckCircleOutlineIcon />
-                    </IconButton>
-                  )}
-                </InputAdornment>
-              ),
-            }}
-          />
           <RadioGroup
             row
             aria-labelledby='demo-row-radio-buttons-group-label'
