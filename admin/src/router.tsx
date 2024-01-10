@@ -80,6 +80,15 @@ const routers: RouteObject[] = [
         ),
       },
       {
+        path: 'campaign/cancel',
+        element: (
+          <CampaignPage
+            isActive={false}
+            status='CANCEL'
+          />
+        ),
+      },
+      {
         path: 'campaign/start',
         element: (
           <CampaignPage
@@ -93,7 +102,11 @@ const routers: RouteObject[] = [
         element: <BannerPage isActive={false} />,
       },
       {
-        path: 'request/pending',
+        path: 'request/origin',
+        element: <RequestPage isActive={false} />,
+      },
+      {
+        path: 'request/personl',
         element: <RequestPage isActive={false} />,
       },
       {

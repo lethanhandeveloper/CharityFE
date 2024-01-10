@@ -29,7 +29,12 @@ const SiderLink = [
       },
       {
         title: 'Đã kết thúc',
-        link: '/campaign/finish',
+        link: '/campaign/end',
+        icon: <DoneIcon />,
+      },
+      {
+        title: 'Đã hủy',
+        link: '/campaign/cancel',
         icon: <DoneIcon />,
       },
     ],
