@@ -224,7 +224,12 @@ export default function TableRender({
                       <TableCell>{row.timeString}</TableCell>
                       {objectID[row.id] && (
                         <TableCell>
-                          <a href={`https://sepolia.etherscan.io/tx/${objectID[row.id]}`}>Xem</a>
+                          <a
+                            target='_blank'
+                            href={`https://sepolia.etherscan.io/tx/${objectID[row.id]}`}
+                          >
+                            Xem
+                          </a>
                         </TableCell>
                       )}
                     </TableRow>

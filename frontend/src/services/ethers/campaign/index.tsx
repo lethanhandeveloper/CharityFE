@@ -27,7 +27,6 @@ const donateCampaign = async (id: string, value: number, userId: string, isAnony
       value: valueInWei,
     });
     const hash = await tx.wait();
-
     return hash;
   } catch (error) {
     return false;
