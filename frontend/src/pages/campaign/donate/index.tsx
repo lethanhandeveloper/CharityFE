@@ -81,7 +81,10 @@ const DonatePage = () => {
           localStorage.getItem('userId') || '',
         );
       }
-
+      serviceAPI.campain.addCampainTransactionId(
+        check.events[0].args[0]._hex,
+        check.transactionHash,
+      );
       if (check) {
         dispatch(setInfoAlert({ open: true, title: 'Giao dịch thành công', type: 'success' }));
       } else {

@@ -23,7 +23,7 @@ const setAddress = async (address: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.adminAddress, adminContract.abi, signer);
+    const contract = new Contract(campaignAddress.adminAddress, adminContract, signer);
     const tx = await contract.setAdminAddress(address);
     await tx.wait();
     return true;
@@ -38,7 +38,7 @@ const setHistoryAddress = async () => {
     const signer = provider.getSigner();
 
     //campaign
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     let tx = await contract.settransactionHistoryContractAddress(campaignAddress.historyAddress);
     await tx.wait();
     tx = await contract.setAdminContractAddress(campaignAddress.adminAddress);
@@ -49,17 +49,17 @@ const setHistoryAddress = async () => {
     //history
     const contractHistory = new Contract(
       campaignAddress.historyAddress,
-      transactionContract.abi,
+      transactionContract,
       signer,
     );
     tx = await contractHistory.setCampaignAddress(campaignAddress.contractAddress);
     await tx.wait();
     //item
-    const contractItem = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+    const contractItem = new Contract(campaignAddress.itemAdress, itemContract, signer);
     tx = await contractItem.setAdminContractAddress(campaignAddress.adminAddress);
     await tx.wait();
     //withDraw
-    const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const contractWith = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
     tx = await contractWith.setAdminContractAddress(campaignAddress.adminAddress);
     await tx.wait();
     tx = await contractWith.setContractAddress(campaignAddress.contractAddress);
@@ -75,7 +75,7 @@ const addNew = async (data: CampainUI) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     const tx = await contract.addNewCampaign(
       data.id,
       data.creatorId,
@@ -97,7 +97,7 @@ const addItem = async (campaignId: string, creatorId: string, message: string) =
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+    const contract = new Contract(campaignAddress.itemAdress, itemContract, signer);
     const tx = await contract.addNewItem(campaignId, message, creatorId, getCurrentDate());
     await tx.wait();
     return true;
@@ -111,7 +111,7 @@ const getCampainDetail = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     const tx = await contract.getCampaignById(id);
 
     return tx;
@@ -125,7 +125,7 @@ const getHistoryByUser = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.historyAddress, transactionContract.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transactionContract, signer);
     const tx = await contract.getDonateByUser(id);
 
     return tx;
@@ -139,7 +139,7 @@ const getHistoryByCampaign = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.historyAddress, transactionContract.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transactionContract, signer);
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
@@ -151,7 +151,7 @@ const refund = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     const tx = await contract.refundAllByCampaignId(id, getCurrentDate());
     await tx.wait();
     return true;
@@ -165,7 +165,7 @@ const getItemByCampaign = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+    const contract = new Contract(campaignAddress.itemAdress, itemContract, signer);
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
@@ -178,7 +178,7 @@ const getItemByUser = async (id: string) => {
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
 
-    const contract = new Contract(campaignAddress.itemAdress, itemContract.abi, signer);
+    const contract = new Contract(campaignAddress.itemAdress, itemContract, signer);
     const tx = await contract.getTransactionHistoryByCreatorId(id);
     return tx;
   } catch (error) {
@@ -192,7 +192,7 @@ const addRequest = async (id: string, value: number, address: string) => {
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
     const valueInWei = ethers.utils.parseEther(value.toString());
-    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
     const tx = await contract.addNewWithdrawRequest(id, valueInWei, address);
     await tx.wait();
     return true;
@@ -206,7 +206,7 @@ const approveRequest = async (id: string, status: string, message: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
     const tx = await contract.approveWithdrawRequest(id, status, message, getCurrentDate());
     await tx.wait();
     return true;
@@ -220,7 +220,7 @@ const getRequestByCampaign = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
     const tx = await contract.getWithdrawRequestByCampaignId(id);
     return tx;
   } catch (error) {
@@ -233,7 +233,7 @@ const getRequestForAdmin = async () => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
     const tx = await contract.getWithdrawRequestForAdmin();
     return tx;
   } catch (error) {
@@ -246,7 +246,7 @@ const withDraw = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     const tx = await contract.withdraw(id);
     return tx;
   } catch (error) {
@@ -259,7 +259,7 @@ const getBalacne = async () => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaignContract.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaignContract, signer);
     const tx = await contract.getContractTotal();
     const tx2 = await contract.getContractBalance();
     return { tx, tx2 };

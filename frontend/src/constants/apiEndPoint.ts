@@ -41,6 +41,8 @@ const apiEndPoint = {
     create: '/campaign',
     getDetail: (id: string) => `/campaign/${id}`,
     home: '/campaign/home',
+    addTransaction: '/campaign/donation/addtransactionhash',
+    getTransactionHash: (id: string) => `/campaign/donation/gettransactionhash/${id}`,
   },
 
   banner: {

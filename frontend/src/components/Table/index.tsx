@@ -41,6 +41,11 @@ const columns: readonly Column[] = [
     label: 'Thời gian',
     minWidth: 170,
   },
+  {
+    id: 'time',
+    label: 'View on change',
+    minWidth: 170,
+  },
 ];
 
 export default function TableRender({
@@ -56,12 +61,15 @@ export default function TableRender({
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [list, setList] = React.useState<HistoryContractUI[]>();
   const [userList, setUserList] = React.useState<any>([]);
-
+  const [objectID, setObject] = React.useState<any>();
   const dispatch = useAppDispatch();
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
-
+  const handleGetTransactionID = async (id: string) => {
+    const data = await serviceAPI.campain.getCampainTransactionDetail(id);
+    return data;
+  };
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -75,12 +83,13 @@ export default function TableRender({
       } else {
         history = await campaign.getHistoryByUser(id);
       }
-
       const dataList = mapHistoryContracts(history);
-
       const checkList = [];
+      let objectData: any = {};
       if (isCampaign) {
         for (let index = 0; index < dataList.length; index++) {
+          const hash = await handleGetTransactionID(dataList[index].id);
+          objectData = { ...objectData, [dataList[index].id]: hash.data.result?.transactionHash };
           if (dataList[index].isAnonymous) {
             const data = await serviceAPI.auth.getUserById(dataList[index].userId);
             checkList.push(mapUserUI(data.data.result));
@@ -88,10 +97,14 @@ export default function TableRender({
         }
       } else {
         for (let index = 0; index < dataList.length; index++) {
+          const hash = await handleGetTransactionID(dataList[index].id);
+          objectData = { ...objectData, [dataList[index].id]: hash.data.result?.transactionHash };
           const data = await serviceAPI.campain.getCampainDetail(dataList[index].campaignId);
           checkList.push(mapCampain(data.data.result));
         }
       }
+
+      setObject(objectData);
       setUserList(checkList);
       if (isCampaign) {
         const uniqueValues = new Set(dataList.map((item) => item.userId));
@@ -209,6 +222,11 @@ export default function TableRender({
                       </TableCell>
                       <TableCell>{row.value}</TableCell>
                       <TableCell>{row.timeString}</TableCell>
+                      {objectID[row.id] && (
+                        <TableCell>
+                          <a href={`https://sepolia.etherscan.io/tx/${objectID[row.id]}`}>Xem</a>
+                        </TableCell>
+                      )}
                     </TableRow>
                   );
                 })}

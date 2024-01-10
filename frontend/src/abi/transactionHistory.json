@@ -1,496 +1,549 @@
 [
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "campaignId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ownerId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "donatorId",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "donatorAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "time",
-				"type": "string"
-			}
-		],
-		"name": "addNewTransactionHistory",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_campaignContractAddress",
-				"type": "address"
-			}
-		],
-		"name": "setCampaignAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"inputs": [],
-		"name": "campaignContractAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deployerAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAllTransaction",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "campaignId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "donatorId",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "donatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isRefund",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "timeRefund",
-						"type": "string"
-					}
-				],
-				"internalType": "struct TransactionHistory.TransactionInfo[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_ownerId",
-				"type": "string"
-			}
-		],
-		"name": "getDonateByOwner",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "campaignId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "donatorId",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "donatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isRefund",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "timeRefund",
-						"type": "string"
-					}
-				],
-				"internalType": "struct TransactionHistory.TransactionInfo[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_donatorId",
-				"type": "string"
-			}
-		],
-		"name": "getDonateByUser",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "campaignId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "donatorId",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "donatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isRefund",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "timeRefund",
-						"type": "string"
-					}
-				],
-				"internalType": "struct TransactionHistory.TransactionInfo[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_campaignId",
-				"type": "string"
-			}
-		],
-		"name": "getTransactionHistoryByCampaignId",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "campaignId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "donatorId",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "donatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isRefund",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "timeRefund",
-						"type": "string"
-					}
-				],
-				"internalType": "struct TransactionHistory.TransactionInfo[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_campaignId",
-				"type": "string"
-			}
-		],
-		"name": "getTransactionHistoryByCampaignIdAndRefund",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "campaignId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "ownerId",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "donatorId",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "donatorAddress",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"internalType": "bool",
-						"name": "isRefund",
-						"type": "bool"
-					},
-					{
-						"internalType": "string",
-						"name": "time",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "timeRefund",
-						"type": "string"
-					}
-				],
-				"internalType": "struct TransactionHistory.TransactionInfo[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_donatorAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_campaignId",
-				"type": "string"
-			}
-		],
-		"name": "isDonatedtoCampaign",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "transactionInfoArray",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "id",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "campaignId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "ownerId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "donatorId",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "donatorAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "isRefund",
-				"type": "bool"
-			},
-			{
-				"internalType": "string",
-				"name": "time",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "timeRefund",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	}
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "campaignId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "ownerId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "donatorId",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "donatorAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "time",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "isAnonymous",
+        "type": "bool"
+      }
+    ],
+    "name": "addNewTransactionHistory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_campaignContractAddress",
+        "type": "address"
+      }
+    ],
+    "name": "setCampaignAddress",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_campaignId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_timeRefund",
+        "type": "string"
+      }
+    ],
+    "name": "updateRefundStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "campaignContractAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "deployerAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllTransaction",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "campaignId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "donatorId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "donatorAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRefund",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "time",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "timeRefund",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAnonymous",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct TransactionHistory.TransactionInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_ownerId",
+        "type": "string"
+      }
+    ],
+    "name": "getDonateByOwner",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "campaignId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "donatorId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "donatorAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRefund",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "time",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "timeRefund",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAnonymous",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct TransactionHistory.TransactionInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_donatorId",
+        "type": "string"
+      }
+    ],
+    "name": "getDonateByUser",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "campaignId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "donatorId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "donatorAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRefund",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "time",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "timeRefund",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAnonymous",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct TransactionHistory.TransactionInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_campaignId",
+        "type": "string"
+      }
+    ],
+    "name": "getTransactionHistoryByCampaignId",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "campaignId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "donatorId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "donatorAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRefund",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "time",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "timeRefund",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAnonymous",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct TransactionHistory.TransactionInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_campaignId",
+        "type": "string"
+      }
+    ],
+    "name": "getTransactionHistoryByCampaignIdAndRefund",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "campaignId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ownerId",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "donatorId",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "donatorAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isRefund",
+            "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "time",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "timeRefund",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAnonymous",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct TransactionHistory.TransactionInfo[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_donatorAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_campaignId",
+        "type": "string"
+      }
+    ],
+    "name": "isDonatedtoCampaign",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "transactionInfoArray",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "campaignId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "ownerId",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "donatorId",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "donatorAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "value",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "isRefund",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "time",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "timeRefund",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "isAnonymous",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
 ]

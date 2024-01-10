@@ -150,7 +150,7 @@ function HeaderUserbox() {
 
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button
+          {/* <Button
             color='primary'
             fullWidth
             onClick={() => {
@@ -159,7 +159,7 @@ function HeaderUserbox() {
             }}
           >
             Thiết lập địa chỉ contract
-          </Button>
+          </Button> */}
           <Button
             color='primary'
             fullWidth
@@ -167,7 +167,7 @@ function HeaderUserbox() {
               setOpenDialog(true);
             }}
           >
-            Thiết lập địa chỉ admin
+            Thiết lập ví admi
           </Button>
           <Button
             color='primary'

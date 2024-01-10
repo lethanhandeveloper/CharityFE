@@ -22,12 +22,13 @@ const donateCampaign = async (id: string, value: number, userId: string, isAnony
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const valueInWei = ethers.utils.parseEther(value.toString());
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaign, signer);
     const tx = await contract.donate(id, userId, getCurrentDate(), isAnonymous, {
       value: valueInWei,
     });
-    await tx.wait();
-    return true;
+    const hash = await tx.wait();
+
+    return hash;
   } catch (error) {
     return false;
   }
@@ -38,7 +39,7 @@ const getCampainDetail = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.contractAddress, campaign.abi, signer);
+    const contract = new Contract(campaignAddress.contractAddress, campaign, signer);
     const tx = await contract.getCampaignById(id);
 
     return tx;
@@ -52,7 +53,7 @@ const getHistoryByUser = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.historyAddress, transitionHistory.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transitionHistory, signer);
     const tx = await contract.getDonateByUser(id);
 
     return tx;
@@ -66,7 +67,7 @@ const getHistoryByCampaign = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.historyAddress, transitionHistory.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transitionHistory, signer);
     const tx = await contract.getTransactionHistoryByCampaignId(id);
     return tx;
   } catch (error) {
@@ -78,7 +79,7 @@ const getHistoryByOwner = async (id: string) => {
     const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
-    const contract = new Contract(campaignAddress.historyAddress, transitionHistory.abi, signer);
+    const contract = new Contract(campaignAddress.historyAddress, transitionHistory, signer);
     const tx = await contract.getDonateByOwner(id);
     return tx;
   } catch (error) {
@@ -98,7 +99,7 @@ const addRequest = async (
   await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
   const signer = provider.getSigner();
   const valueInWei = ethers.utils.parseEther(value.toString());
-  const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth.abi, signer);
+  const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
   const tx = await contract.addNewWithdrawRequest(
     id,
     createdId,

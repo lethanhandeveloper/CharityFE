@@ -27,6 +27,7 @@ export const mapHistoryContract = (data: any): HistoryContractUI => ({
   isAnonymous: data.isAnonymous,
   isRefund: data.isRefund,
   timeRefund: data.timeRefund,
+  id: data.id._hex,
 });
 
 export const mapHistoryContracts = (list: any): HistoryContractUI[] => {

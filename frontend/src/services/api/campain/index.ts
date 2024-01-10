@@ -26,6 +26,15 @@ const getListForHome = async () => {
 const getCampainDetail = async (id: string) => {
   return await apiService.get(apiEndPoint.campain.getDetail(id));
 };
+const getCampainTransactionDetail = async (id: string) => {
+  return await apiService.get(apiEndPoint.campain.getTransactionHash(id));
+};
+const addCampainTransactionId = async (id: string, hash: string) => {
+  return await apiService.post(apiEndPoint.campain.addTransaction, {
+    transactionId: id,
+    transactionHash: hash,
+  });
+};
 export default {
   getCategory,
   getCampainDetail,
@@ -35,4 +44,6 @@ export default {
   getListForHome,
   getCampainListByUser,
   getCampainListByCurentUser,
+  addCampainTransactionId,
+  getCampainTransactionDetail,
 };
