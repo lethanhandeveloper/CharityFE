@@ -25,4 +25,5 @@ export interface WithDrawUI {
   time: string;
   status: string;
   timeApprove: string;
+  fileUrl: string;
 }

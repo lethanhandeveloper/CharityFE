@@ -30,6 +30,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { ButtonCancel, ButtonConfirm } from '@common/Button';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
+import OppositeContentTimeline from '@components/TimeLine';
 
 export const calculatePercent = (number1: number, number2: number) =>
   Math.floor((number1 / number2) * 100).toFixed(2);
@@ -299,6 +300,9 @@ const DonatePage = () => {
             </Box>
           </Box>
           <Box> {parse(detail?.description || '')}</Box>
+          <Box>
+            <OppositeContentTimeline campaignId={id || ''} />
+          </Box>
         </Grid>
         <Grid
           item

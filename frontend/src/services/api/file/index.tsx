@@ -7,7 +7,12 @@ const createFile = async (fileUrl: string) => {
   });
   return responde.data.result;
 };
+const getFile = async (fileUrl: string) => {
+  const responde = await apiService.get(apiEndPoint.file.getbyId(fileUrl));
+  return responde.data.result;
+};
 
 export default {
   createFile,
+  getFile,
 };

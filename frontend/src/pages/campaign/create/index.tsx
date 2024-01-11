@@ -9,6 +9,8 @@ import {
   TextField,
   MenuItem,
   CardActions,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
@@ -21,24 +23,27 @@ import { Campain } from 'models/campain';
 import { ButtonStyle1 } from '@common/Button';
 import { setInfoAlert } from '@store/redux/alert';
 import { useAppDispatch } from '@store/hook';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { useNavigate } from 'react-router';
-
-const validationSchema = Yup.object({
-  categoryId: Yup.string().required('Chọn danh mục'),
-  description: Yup.string().required('Nhập mô tả chiến dịch'),
-  endDate: Yup.date().required('Chọn ngày kết thúc'),
-  itemTypeId: Yup.string().required('Chọn loại'),
-  provinceId: Yup.string().required('Chọn tỉnh thành'),
-  targetValue: Yup.number().min(10000000, 'Chiến dịch không thấp hơn 10,000,000'),
-  thumbnail: Yup.string().required('Chọn ảnh'),
-  title: Yup.string().required('Nhập tiêu đề'),
-  fileUrl: Yup.string().required('Chọn file xác thực'),
-});
+import MapCampaignPage, { getAddress } from '@pages/map/indexcampaign';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+// const validationSchema = Yup.object({
+//   categoryId: Yup.string().required('Chọn danh mục'),
+//   description: Yup.string().required('Nhập mô tả chiến dịch'),
+//   // endDate: Yup.date().required('Chọn ngày kết thúc'),
+//   itemTypeId: Yup.string().required('Chọn loại'),
+//   provinceId: Yup.string().required('Chọn tỉnh thành'),
+//   targetValue: Yup.number().min(10000000, 'Chiến dịch không thấp hơn 10,000,000'),
+//   thumbnail: Yup.string().required('Chọn ảnh'),
+//   title: Yup.string().required('Nhập tiêu đề'),
+//   fileUrl: Yup.string().required('Chọn file xác thực'),
+// });
 const CampaignCreatePage = () => {
   const [provinceList, setProvinceList] = useState<SimpleValueKey[]>([]);
   const [categoryList, setCategoryList] = useState<SimpleValueKey[]>([]);
   const [itemTypeList, setItemTypeList] = useState<SimpleValueKey[]>([]);
+
   const [error, setErrors] = useState<any>({});
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -56,7 +61,11 @@ const CampaignCreatePage = () => {
     title: '',
     fileUrl: '',
     status: 'DRAFT',
-    addressWallet: '',
+    addressCreator: '',
+    specialAddress: '',
+    lat: 0,
+    long: 0,
+    type: '',
   });
   useEffect(() => {
     const initProvince = async () => {
@@ -80,9 +89,9 @@ const CampaignCreatePage = () => {
 
   const handleSubmit = async () => {
     try {
-      await validationSchema.validate(data, { abortEarly: false });
+      // await validationSchema.validate(data, { abortEarly: false });
       const response = await serviceAPI.campain.createCampain(data);
-      if (response.status === 200) {
+      if (response.status === 201) {
         dispatch(setInfoAlert({ open: true, title: 'Tạo chiến dịch thành công', type: 'success' }));
         setTimeout(() => {
           navigate('/home');
@@ -103,7 +112,14 @@ const CampaignCreatePage = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-
+  const handleSearch = async () => {
+    const address = await getAddress(data.specialAddress);
+    if (address) {
+      setData({ ...data, lat: address.lat, long: address.long });
+    } else {
+      setData({ ...data, lat: 0, long: 0 });
+    }
+  };
   return (
     <React.Fragment>
       <Card>
@@ -178,46 +194,43 @@ const CampaignCreatePage = () => {
                       name='addressWallet'
                       variant='standard'
                     />
-                    <Typography
-                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
-                    >
-                      Mục tiêu
-                    </Typography>
-                    <TextField
-                      autoFocus
-                      margin='dense'
-                      onChange={handleChange}
-                      type='number'
-                      fullWidth
-                      name='target'
-                      variant='standard'
-                      error={Boolean(error?.target)}
-                      helperText={error?.target}
-                    />
-                    <Typography
-                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
-                    >
-                      Ngày kết thúc
-                    </Typography>
-                    <DateCalendar
-                      disablePast
-                      onChange={(e) => {
-                        setData({ ...data, endDate: e || new Date() });
-                      }}
-                      defaultValue={new Date()}
-                    />
-
                     <Grid
                       container
                       spacing={3}
+                      alignItems={'center'}
                     >
                       <Grid
                         item
-                        xs={4}
+                        xs={3}
                       >
+                        <Typography
+                          style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                        >
+                          Mục tiêu
+                        </Typography>
+                        <TextField
+                          autoFocus
+                          margin='dense'
+                          onChange={handleChange}
+                          type='number'
+                          fullWidth
+                          name='target'
+                          variant='standard'
+                          error={Boolean(error?.target)}
+                          helperText={error?.target}
+                        />
+                      </Grid>
+                      <Grid
+                        item
+                        xs={3}
+                      >
+                        <Typography
+                          style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                        >
+                          Tỉnh/TP
+                        </Typography>
                         <TextField
                           id='standard-select-currency'
-                          label='Tỉnh/TP'
                           select
                           name='provinceId'
                           onChange={handleChange}
@@ -236,11 +249,15 @@ const CampaignCreatePage = () => {
                       </Grid>
                       <Grid
                         item
-                        xs={4}
+                        xs={3}
                       >
+                        <Typography
+                          style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                        >
+                          Danh mục
+                        </Typography>
                         <TextField
                           id='standard-select-currency'
-                          label='Danh mục'
                           select
                           name='categoryId'
                           onChange={handleChange}
@@ -261,11 +278,15 @@ const CampaignCreatePage = () => {
                       </Grid>
                       <Grid
                         item
-                        xs={4}
+                        xs={3}
                       >
+                        <Typography
+                          style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                        >
+                          Loại
+                        </Typography>
                         <TextField
                           id='standard-select-currency'
-                          label='Loại'
                           select
                           name='itemTypeId'
                           onChange={handleChange}
@@ -284,7 +305,60 @@ const CampaignCreatePage = () => {
                           ))}
                         </TextField>
                       </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                      >
+                        <Typography
+                          style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                        >
+                          Địa chỉ cụ thể
+                        </Typography>
+                        <TextField
+                          autoFocus
+                          margin='dense'
+                          onChange={handleChange}
+                          fullWidth
+                          name='specialAddress'
+                          variant='standard'
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position='end'>
+                                {data.lat !== 0 ? (
+                                  <TaskAltIcon color='success' />
+                                ) : (
+                                  <IconButton
+                                    onClick={() => {
+                                      handleSearch();
+                                    }}
+                                  >
+                                    <CheckCircleOutlineIcon />
+                                  </IconButton>
+                                )}
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                        <MapCampaignPage
+                          lat={data?.lat || 0}
+                          long={data?.long || 0}
+                        />
+                      </Grid>
                     </Grid>
+
+                    <Typography
+                      style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
+                    >
+                      Ngày kết thúc
+                    </Typography>
+                    <DateCalendar
+                      disablePast
+                      onChange={(e) => {
+                        setData({ ...data, endDate: e || new Date() });
+                      }}
+                      value={data?.endDate ? new Date(data?.endDate) : new Date()}
+                    />
+
                     <Typography
                       style={{ fontWeight: 'bold', marginTop: '10px', marginBottom: '5px' }}
                     >

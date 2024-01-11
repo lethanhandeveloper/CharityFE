@@ -23,6 +23,9 @@ const getCampaignList = async () => {
 const updateStatus = async (id: string, status: CampaignStatus) => {
   return await apiService.patch(apiEndPoint.campain.updateStatus, { id, status });
 };
+const file = async (id: string) => {
+  return await apiService.get(`/file/${id}`);
+};
 export default {
   getCategory,
   getCampainDetail,
@@ -31,4 +34,5 @@ export default {
   getCampainPendingByPage,
   getCampaignList,
   updateStatus,
+  file,
 };

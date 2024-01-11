@@ -128,7 +128,7 @@ const MapPage = () => {
   }, [postionSearch]);
   useEffect(() => {
     const initData = async () => {
-      const response = await serviceAPI.map.list();
+      const response = await serviceAPI.campain.getCampainPendingByPage('');
       setListMap(mapUIs(response.data.result));
     };
     initData();

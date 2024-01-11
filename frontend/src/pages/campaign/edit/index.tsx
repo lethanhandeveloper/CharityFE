@@ -56,7 +56,11 @@ const CampaignEditPage = () => {
     title: '',
     fileUrl: '',
     status: 'DRAFT',
-    addressWallet: '',
+    addressCreator: '',
+    specialAddress: '',
+    lat: 0,
+    long: 0,
+    type: '',
   });
   useEffect(() => {
     const initProvince = async () => {
@@ -184,7 +188,7 @@ const CampaignEditPage = () => {
                       margin='dense'
                       onChange={handleChange}
                       fullWidth
-                      value={data.addressWallet}
+                      value={data.addressCreator}
                       name='addressWallet'
                       variant='standard'
                       error={Boolean(error?.title)}

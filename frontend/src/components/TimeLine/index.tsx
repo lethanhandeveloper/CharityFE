@@ -8,12 +8,9 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import campaign from '@services/ethers/campaign';
 import { useAppDispatch } from '@store/hook';
 import { setInfoAlert } from '@store/redux/alert';
-import { mapWithDaws } from '@services/mapdata/requestDraw';
-import { WithDrawUI } from '@models/contract';
 import TimelineDot from '@mui/lab/TimelineDot';
-import { ConfirmDialogIcon } from '@components/ConfirmDialog';
-import UnpublishedIcon from '@mui/icons-material/Unpublished';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { WithDrawUI } from '@models/withdraw';
+import { mapWithDaws } from '@mapdata/withdraw';
 import serviceAPI from '@services/api';
 import { TypeSpecimenTwoTone } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
@@ -21,7 +18,6 @@ import { Tooltip } from '@mui/material';
 export default function OppositeContentTimeline({ campaignId }: { campaignId: string }) {
   const dispatch = useAppDispatch();
   const [list, setList] = React.useState<WithDrawUI[]>([]);
-  const [message, setMessage] = React.useState<string>('');
 
   React.useEffect(() => {
     const initData = async () => {
@@ -37,21 +33,14 @@ export default function OppositeContentTimeline({ campaignId }: { campaignId: st
     initData();
   }, [campaignId]);
   const handleOpenFile = async (fileId: string) => {
-    const data = await serviceAPI.campain.file(fileId);
+    const data = await serviceAPI.file.getFile(fileId);
 
     window.open(
       data.data.result?.fileUrl,
       '_blank', // <- This is what makes it open in a new window.
     );
   };
-  const onTransfer = async (id: string, status: string) => {
-    try {
-      await campaign.approveRequest(id, status, message);
-      await campaign.withDraw(id);
-    } catch (error) {
-      dispatch(setInfoAlert({ title: 'Không thể thực hiện rút tiền!', open: true, type: 'error' }));
-    }
-  };
+
   return (
     <Timeline position='alternate'>
       {list.map((item, index) => (
@@ -74,27 +63,7 @@ export default function OppositeContentTimeline({ campaignId }: { campaignId: st
 
               {item.timeApprove && <TimelineConnector />}
             </TimelineSeparator>
-            <TimelineContent>
-              Yêu cầu rút {item.value}
-              {item.timeApprove === item.time && (
-                <>
-                  <ConfirmDialogIcon
-                    icon={<CheckCircleIcon />}
-                    message='Xác nhận duyệt yêu cầu rút tiền'
-                    setMessage={setMessage}
-                    onSucess={() => onTransfer(item.id, 'Approve')}
-                    title='Xác nhận rút tiền'
-                  />
-                  <ConfirmDialogIcon
-                    icon={<UnpublishedIcon />}
-                    setMessage={setMessage}
-                    message='Xác nhận từ chối yêu cầu rút tiền'
-                    onSucess={() => onTransfer(item.id, 'Reject')}
-                    title='Xác nhận rút tiền'
-                  />
-                </>
-              )}
-            </TimelineContent>
+            <TimelineContent>Yêu cầu rút {item.value}</TimelineContent>
           </TimelineItem>
           {item.timeApprove !== item.time &&
             (item.status === 'Approve' ? (

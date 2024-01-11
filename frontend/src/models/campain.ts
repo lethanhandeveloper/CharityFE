@@ -11,7 +11,11 @@ export interface Campain {
   thumbnail: string;
   fileUrl: string;
   status: string;
-  addressWallet: string;
+  addressCreator: string;
+  specialAddress: string;
+  lat: number;
+  long: number;
+  type: string;
 }
 export interface CampainUI {
   id: string;

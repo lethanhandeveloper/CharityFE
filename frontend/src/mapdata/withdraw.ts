@@ -1,4 +1,4 @@
-import { WithDrawUI } from '@models/contract';
+import { WithDrawUI } from '@models/withdraw';
 import { BigNumber, ethers } from 'ethers';
 
 const mapWithDaw = (data: any): WithDrawUI => ({

@@ -112,7 +112,18 @@ const addRequest = async (
   await tx.wait();
   return true;
 };
-
+const getRequestByCampaign = async (id: string) => {
+  try {
+    const provider = new ethers.providers.Web3Provider((window as ExtendedWindow).ethereum);
+    await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
+    const signer = provider.getSigner();
+    const contract = new Contract(campaignAddress.withdrawAddress, campaignWidth, signer);
+    const tx = await contract.getWithdrawRequestByCampaignId(id);
+    return tx;
+  } catch (error) {
+    return [];
+  }
+};
 export default {
   donateCampaign,
   getCampainDetail,
@@ -120,4 +131,5 @@ export default {
   getHistoryByCampaign,
   addRequest,
   getHistoryByOwner,
+  getRequestByCampaign,
 };
