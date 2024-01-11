@@ -71,7 +71,7 @@ const getListDataDay = (startDate: Date, endDate: Date, list: HistoryContractUI[
     );
     listReturn.push({
       count: total.count,
-      name: `${day.getDate()}/${day.getMonth()}`,
+      name: `${day.getDate()}/${day.getMonth() + 1}`,
       value: total.total,
     });
   });

@@ -44,13 +44,13 @@ const SiderLink = [
     icon: <HowToRegIcon />,
     children: [
       {
-        title: 'Đăng ký',
-        link: '/request/pending',
+        title: 'Đăng ký tổ chức',
+        link: 'request/personl',
         icon: <PendingIcon />,
       },
       {
-        title: 'Đăng ký đã duyệt',
-        link: '/request/done',
+        title: 'Đăng ký cá nhân',
+        link: 'request/origin',
         icon: <DoneIcon />,
       },
       {

@@ -53,7 +53,7 @@ const getHistoryByUser = async (id: string) => {
     await (window as ExtendedWindow).ethereum.request({ method: 'eth_requestAccounts' });
     const signer = provider.getSigner();
     const contract = new Contract(campaignAddress.historyAddress, transitionHistory, signer);
-    const tx = await contract.getDonateByUser(id);
+    const tx = await contract.getDonateByOwner(id);
 
     return tx;
   } catch (error) {

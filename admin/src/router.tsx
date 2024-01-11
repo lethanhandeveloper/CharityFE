@@ -71,7 +71,7 @@ const routers: RouteObject[] = [
         ),
       },
       {
-        path: 'campaign/finish',
+        path: 'campaign/end',
         element: (
           <CampaignPage
             isActive={false}

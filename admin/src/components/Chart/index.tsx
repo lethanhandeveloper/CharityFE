@@ -47,6 +47,7 @@ const MonthlyBarChart = ({
       } else {
         const user = await campaign.getHistoryByCampaign(id);
         setRootList(mapHistoryContracts(user));
+        console.log(user, 'xcx');
       }
     };
     initData();

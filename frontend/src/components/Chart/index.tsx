@@ -34,12 +34,12 @@ const MonthlyBarChart = ({
   const info = theme.palette.info.light;
   useEffect(() => {
     setData({ ...data, searchData: Search(data.startDate, data.endDate, rootList) });
-    console.log(Search(data.startDate, data.endDate, rootList), rootList, data.endDate);
   }, [data.startDate, data.endDate, rootList]);
   useEffect(() => {
     const initData = async () => {
       if (type === 'User') {
         const user = await campaign.getHistoryByUser(id);
+        console.log(user, 'id', id);
         setRootList(mapHistoryContracts(user));
       }
     };

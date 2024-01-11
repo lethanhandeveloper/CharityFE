@@ -12,11 +12,14 @@ const DetailAccount = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>();
   const dispatch = useAppDispatch();
+  const [email, setEmail] = useState<string>('');
   useEffect(() => {
     const initData = async () => {
       try {
         if (id) {
           const data = await serviceAPI.auth.getRequestByUserId(id);
+          const userAPI = await serviceAPI.auth.getUserById(id);
+          setEmail(userAPI.data.result?.email || '');
           if (data.data.result.type === 1) {
             setData({
               ...data.data.result.commitInfoVerification,
@@ -91,7 +94,7 @@ const DetailAccount = () => {
         <MonthlyBarChart
           isLine={false}
           type='User'
-          id={data?.userId}
+          id={email}
         />
       </Grid>
       <Grid
