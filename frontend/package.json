@@ -6,6 +6,7 @@
   "cracoConfig": "craco.config.js",
   "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@casl/ability": "^6.5.0",
     "@casl/react": "^3.1.0",
     "@craco/craco": "^7.1.0",
@@ -34,6 +35,7 @@
     "@types/react-dom": "^18.2.14",
     "apexcharts": "^3.44.2",
     "axios": "^1.6.1",
+    "craco": "^0.0.3",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
     "ethers": "^5.7.2",
